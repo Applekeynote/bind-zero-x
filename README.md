@@ -2,6 +2,18 @@
 
 A retro pixel-style field workspace for cardboard photos and observations. The interface is in English and adapts to phone, tablet, and desktop screens.
 
+## Quick flow
+
+**MFA sign-in → New observation → Analyze → Record the next view → Review history/evidence → Export JSON**
+
+1. Sign in with your password and the current authenticator code. An expired sign-in challenge is refreshed automatically.
+2. Select **New observation**. Choose **Launch the demo** for synthetic inputs, or **Analyze paired frames** for two PNG frames, upper/lower ROI masks, and a calibration/model configuration.
+3. OpenCV 5 measures relative layer motion. The research model updates possible worlds and selects the next observation.
+4. Record that observation, or analyze a follow-up capture. The session and evidence trace are saved.
+5. Reopen **History**, verify **Evidence**, and export the decision witness/trace as JSON.
+
+The photo board displays the five demo photos; browsing a photo does not run motion analysis.
+
 ## Start
 
 ```powershell

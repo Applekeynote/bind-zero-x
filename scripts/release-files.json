@@ -158,9 +158,9 @@
   "scripts/verify.py",
   "scripts/verify_aws_evidence.py",
   "scripts/verify_opencv5.py",
+  "tests/auth_flow.test.cjs",
   "tests/test_console.py",
   "tests/test_physical_gt_workflow.py",
   "tests/test_security.py",
   "tests/test_sqlite_scope.py"
 ]
-

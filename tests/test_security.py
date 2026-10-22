@@ -76,6 +76,20 @@ class Authentication(unittest.TestCase):
         self.assertIsNotNone(self.store.session(token))
         with self.assertRaisesRegex(AuthError,'INVALID_CREDENTIALS'):
             self.store.login(PASSWORD,'000000','other')
+    def test_expired_login_challenge_refresh_preserves_unused_totp(self):
+        self.enroll()
+        self.client.cookies.clear()
+        self.challenge()
+        self.now[0]+=601
+        code=totp(self.secret,int(self.now[0]//30))
+        payload={'password':PASSWORD,'code':code}
+        stale=self.client.post('/auth/login',json=payload)
+        self.assertEqual(stale.status_code,403)
+        self.assertEqual(stale.json()['detail'],'INVALID_CSRF')
+        self.challenge()
+        fresh=self.client.post('/auth/login',json=payload)
+        self.assertEqual(fresh.status_code,200,fresh.text)
+        self.assertEqual(self.client.get('/api/console/runtime').status_code,200)
     def test_expiry_restart_and_secret_storage(self):
         self.enroll()
         token=self.client.cookies.get(server.SESSION_COOKIE)
