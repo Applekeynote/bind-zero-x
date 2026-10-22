@@ -169,7 +169,7 @@ $('#history-list').onclick = async e => { const button = e.target.closest('[data
 $('#expand-view').onclick = () => toggleExpanded(!$('#scene').classList.contains('view-expanded')); $('#collapse-view').onclick = () => toggleExpanded(false);
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('#scene').classList.contains('view-expanded')) toggleExpanded(false); if (e.key.toLowerCase() === 'n' && !e.ctrlKey && !e.metaKey && !e.altKey && !$('#modal').open && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) newSessionModal(); });
 window.addEventListener('beforeunload', () => { stopCamera(); ui.urls.forEach(url => URL.revokeObjectURL(url)); });
-async function init() { renderSession(); try { const access = await (await fetch('/auth/session')).json(); if (!access.authenticated) return location.replace('/'); ui.csrf = access.csrf; ui.runtime = await api('runtime'); await refreshSessions(); if (!ui.runtime.mobile_url) $('#phone-button').textContent = 'Phone setup ↗'; } catch (error) { toast(friendlyError(error)); } }
+async function init() { renderSession(); try { const access = await (await fetch('/auth/session')).json(); if (!access.authenticated) return location.replace('/'); ui.csrf = access.csrf; ui.runtime = await api('runtime'); document.dispatchEvent(new Event('console-ready')); await refreshSessions(); if (!ui.runtime.mobile_url) $('#phone-button').textContent = 'Phone setup ↗'; } catch (error) { toast(friendlyError(error)); } }
 init();
 
 function pixelGuide(view) {

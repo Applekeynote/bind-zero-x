@@ -51,7 +51,7 @@
       </div>
       <section class="panel packing-panel" id="packing-lab" aria-label="Packing navigator">
         <div class="panel-header"><h2><span class="title-square"></span>Packing navigator <small>COLOR · FOLD · STACK · TIE</small></h2><span class="live-tag">OPENCV 5</span></div>
-        <div class="packing-welcome"><div><h3>Give every piece its place.</h3><p>Color the visible surfaces, check their shape, and follow your animated packing guide.</p></div><button class="button primary" id="segment-photo">Segment & guide →</button></div>
+        <div class="packing-welcome"><div><h3>Give every piece its place.</h3><p>Color the visible surfaces, check their shape, and follow your animated packing guide.</p></div><button class="button primary" id="segment-photo" disabled>Segment & guide →</button></div>
         <p class="packing-message" id="packing-message" role="status" hidden></p>
         <div id="packing-analysis" hidden><div class="packing-summary"><span id="packing-count"></span><span>Visible surfaces · review flat / open</span><button class="text-button" id="packing-clear">Clear selection</button></div>
           <div class="packing-grid"><div><div class="packing-image" id="packing-image"><img id="packing-overlay" alt="Color segmentation of cardboard surfaces"><svg id="packing-hit-map" viewBox="0 0 1 1" preserveAspectRatio="none" aria-label="Select segmented regions"></svg></div><div class="packing-image-tools"><span>Tap a region to select it.</span><button class="text-button" id="packing-add">＋ Draw a missing region</button></div></div><div><div class="packing-region-list" id="packing-regions"></div><button class="button primary" id="packing-build" disabled>Review pieces to continue →</button></div></div>

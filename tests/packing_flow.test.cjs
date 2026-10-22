@@ -4,7 +4,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 function harness(){
  const elements=new Map(),exports=[];
  const element=id=>{if(!elements.has(id))elements.set(id,{hidden:false,disabled:false,dataset:{},classList:{toggle(){},remove(){}},getBoundingClientRect(){return {left:0,top:0,width:100,height:100};}});return elements.get(id);};
- const context=vm.createContext({document:{getElementById:element},MutationObserver:class{observe(){}},ui:{photo:null},escapeHTML:s=>s,downloadJSON:value=>exports.push(value)});
+ const context=vm.createContext({document:{getElementById:element,addEventListener(){}},MutationObserver:class{observe(){}},ui:{photo:null},escapeHTML:s=>s,downloadJSON:value=>exports.push(value)});
  vm.runInContext(fs.readFileSync(path.join(__dirname,'../app/static/packing.js'),'utf8'),context);
  return {context,element,exports,run:code=>vm.runInContext(code,context)};
 }

@@ -131,3 +131,7 @@ packEl('packing-pause').onclick=()=>{packing.paused=!packing.paused;packEl('pack
 packEl('packing-replay').onclick=renderPackingStep;
 packEl('packing-edit').onclick=()=>{packEl('packing-player').hidden=true;packEl('packing-analysis').hidden=false;packing.steps=[];};
 packEl('packing-export').onclick=()=>downloadJSON({schema:'BZX-PACKING-GUIDE-V1',source_sha256:packing.result.source_sha256,input_tier:packing.result.input_tier,opencv_version:packing.result.opencv_version,segmentation_scope:packing.result.segmentation_scope,order_basis:'UNCALIBRATED_IMAGE_AREA_USER_MUST_CHECK_REAL_SIZES',pieces:packing.ordered,steps:packing.steps.map(({kind,title,done})=>({kind,title,completed_by_user:packing.result.input_tier!=='USER_PROVIDED_DEMO_ONLY'&&!!done,completed_in_demo:packing.result.input_tier==='USER_PROVIDED_DEMO_ONLY'&&!!done})),physical_action_authorized:false},'bind-zero-packing-guide.json');
+
+function enablePackingAnalysis() { if(ui.csrf && ui.runtime) packEl('segment-photo').disabled=false; }
+document.addEventListener('console-ready',enablePackingAnalysis);
+enablePackingAnalysis();
