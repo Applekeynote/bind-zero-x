@@ -3,6 +3,18 @@ const form = document.querySelector('#auth-form');
 let authState, setupStage = 0;
 const error = document.querySelector('#auth-error');
 const button = document.querySelector('#auth-submit');
+const judgePage=location.pathname==='/judge';
+function chooseLoginMode(){
+  if(setupStage)return;
+  const field=document.querySelector('#auth-username');
+  if(judgePage){field.value='judge';document.querySelector('#username-field').hidden=true;}
+  const judge=judgePage||(field.value&&field.value!=='operator');
+  document.querySelector('#code-field').hidden=!!judge;
+  document.querySelector('#auth-code').required=!judge;
+  document.querySelector('#auth-title').textContent=judge?'Judge sign in':'Sign in to your lab';
+  document.querySelector('#auth-intro').textContent=judge?'Enter your judge password.':'Your password. Your authenticator.';
+}
+document.querySelector('#auth-username').oninput=chooseLoginMode;
 function showError(message) { error.textContent = message; error.hidden = false; }
 async function refreshAuthState() {
   const response = await fetch('/auth/session', {cache:'no-store'});
@@ -35,10 +47,12 @@ async function initialize() {
       document.querySelector('#auth-title').textContent = 'Set up MFA';
       document.querySelector('#auth-intro').textContent = 'Choose a password with 14–128 characters, then link your authenticator app.';
       document.querySelector('#auth-password').autocomplete = 'new-password';
+      document.querySelector('#username-field').hidden=true;
       document.querySelector('#code-field').hidden = true;
       document.querySelector('#auth-code').required = false;
       button.textContent = 'Link authenticator →';
     }
+    chooseLoginMode();
     button.disabled = false;
   } catch (exception) { showError(exception.message); button.disabled = true; }
 }
@@ -51,11 +65,13 @@ form.onsubmit = async event => {
     }
     const password = document.querySelector('#auth-password').value;
     const code = document.querySelector('#auth-code').value;
-    const path = setupStage === 1 ? '/auth/setup/begin' : setupStage === 2 ? '/auth/setup/finish' : '/auth/login';
-    const body = setupStage === 1 ? {password} : setupStage === 2 ? {code} : {password,code};
+    const prefix='/auth/setup';
+    const path = setupStage === 1 ? prefix+'/begin' : setupStage === 2 ? prefix+'/finish' : '/auth/login';
+    const username=document.querySelector('#auth-username').value||'operator';
+    const body = setupStage === 1 ? {password} : setupStage === 2 ? {code} : {username,password,...(username==='operator'?{code}:{})};
     const {response,result} = await submitAuth(path,body);
     if (!response.ok) {
-      const messages = {INVALID_CREDENTIALS:setupStage === 2 ? 'Enter the current six-digit code from the account you just scanned. Enable automatic date and time on both devices.' : 'Check your password and use a new authenticator code. Each code can be used once.',TRY_AGAIN_LATER:'Too many attempts. Try again in 15 minutes.',LOGIN_BUSY:'Sign-in is busy. Try again shortly.',INVALID_CSRF:setupStage ? 'Your setup session expired. Reload this page and start again.' : 'Your sign-in session changed. Please try signing in again.',MFA_ALREADY_CONFIGURED:'MFA is already configured. Reload to sign in.',LOCAL_INITIAL_SETUP_ONLY:'Setup is already complete or unavailable here. Reload to sign in.'};
+      const messages = {INVALID_CREDENTIALS:setupStage === 2 ? 'Enter the current six-digit code from the account you just scanned. Enable automatic date and time on both devices.' : (document.querySelector('#auth-username').value==='operator'?'Check your password and use a new authenticator code. Each code can be used once.':'Check your judge password.'),TRY_AGAIN_LATER:'Too many attempts. Try again in 15 minutes.',LOGIN_BUSY:'Sign-in is busy. Try again shortly.',INVALID_CSRF:setupStage ? 'Your setup session expired. Reload this page and start again.' : 'Your sign-in session changed. Please try signing in again.',MFA_ALREADY_CONFIGURED:'MFA is already configured. Reload to sign in.',LOCAL_INITIAL_SETUP_ONLY:'Setup is already complete or unavailable here. Reload to sign in.'};
       throw new Error(messages[result.detail] || 'Unable to sign in. Check your details and try again.');
     }
     document.querySelector('#auth-password').value = '';

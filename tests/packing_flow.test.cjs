@@ -5,6 +5,7 @@ function harness(){
  const elements=new Map(),exports=[];
  const element=id=>{if(!elements.has(id))elements.set(id,{hidden:false,disabled:false,dataset:{},classList:{toggle(){},remove(){}},getBoundingClientRect(){return {left:0,top:0,width:100,height:100};}});return elements.get(id);};
  const context=vm.createContext({document:{getElementById:element,addEventListener(){}},MutationObserver:class{observe(){}},ui:{photo:null},escapeHTML:s=>s,downloadJSON:value=>exports.push(value)});
+ vm.runInContext(fs.readFileSync(path.join(__dirname,'../app/static/packing-model.js'),'utf8'),context);
  vm.runInContext(fs.readFileSync(path.join(__dirname,'../app/static/packing.js'),'utf8'),context);
  return {context,element,exports,run:code=>vm.runInContext(code,context)};
 }
@@ -28,6 +29,10 @@ test('animation never advances physical work without a user completion check',()
  const h=harness();h.run(`packing.pieces=[{id:1,pixel_area:100,color:'#61dcb1',selected:true,review:'OPEN'}]`);
  h.element('packing-build').onclick();h.element('packing-next').onclick();
  assert.equal(h.run('packing.step'),0);
+ assert.equal(h.element('packing-done').disabled,true);
+ h.element('packing-done').onchange({target:{checked:true}});h.element('packing-next').onclick();
+ assert.equal(h.run('packing.step'),0);
+ h.run(`packing.steps[0].piece.flatCapture={source_sha256:'fixture'};`);
  h.element('packing-done').onchange({target:{checked:true}});h.element('packing-next').onclick();
  assert.equal(h.run('packing.steps[packing.step].kind'),'STACK');
  assert.equal(h.element('packing-next').disabled,true);
@@ -63,7 +68,7 @@ test('orientation and reordering rebuild the actual per-layer directions',()=>{
 test('export preserves reproducible navigation instructions and orientation',()=>{
  const h=harness();h.run(`packing.result={input_tier:'USER_PROVIDED_DEMO_ONLY'};packing.ordered=[{id:1,pixel_area:100,review:'FLAT',orientation:90,foldEdge:'toward you'}];packing.steps=makePackingSteps(packing.ordered,true);`);
  h.element('packing-export').onclick();
- assert.equal(h.exports[0].schema,'BZX-PACKING-GUIDE-V2');
+ assert.equal(h.exports[0].schema,'BZX-PACKING-GUIDE-V3');
  assert.equal(h.exports[0].pieces[0].orientation,90);
  assert.match(h.exports[0].steps.find(s=>s.kind==='WRAP_CROSS').instruction,/under ALL layers/);
  assert.match(h.exports[0].steps.find(s=>s.kind==='KNOT_SECOND').instruction,/LEFT end over the RIGHT/);

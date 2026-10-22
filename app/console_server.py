@@ -66,14 +66,23 @@ def metadata_db():
     db = connect(str(DATA / 'console.db'))
     db.row_factory = sqlite3.Row
     db.execute('CREATE TABLE IF NOT EXISTS metadata (id TEXT PRIMARY KEY, body TEXT NOT NULL)')
+    db.execute('CREATE TABLE IF NOT EXISTS session_owners (id TEXT PRIMARY KEY, username TEXT NOT NULL)')
     return db
 
 
-def save_metadata(sid, label, mode, measurement=None):
+def save_metadata(sid, label, mode, measurement=None, username='operator'):
     body = dict(label=label, mode=mode, created_at=datetime.now(timezone.utc).isoformat(),
                 measurement=measurement)
     with metadata_db() as db:
         db.execute('INSERT INTO metadata VALUES (?,?)', (sid, json.dumps(body)))
+        db.execute('INSERT INTO session_owners VALUES (?,?)',(sid,username))
+
+
+def require_session_owner(request,sid):
+    if request.state.session['role']=='operator':return
+    with metadata_db() as db:
+        owned=db.execute('SELECT 1 FROM session_owners WHERE id=? AND username=?',(sid,request.state.session['username'])).fetchone()
+    if not owned:raise HTTPException(404,'SESSION_NOT_FOUND')
 
 
 def loopback(request):
@@ -112,6 +121,8 @@ async def local_console_boundary(request: Request, call_next):
     protected = path.startswith('/api/console/')
     if protected and request.state.session is None:
         return reject('MFA_SESSION_REQUIRED', 401)
+    if protected and request.state.session['role']=='judge' and path in {'/api/console/audit','/api/console/capture','/api/console/reobserve-image'}:
+        return reject('JUDGE_DEMO_WORKSPACE_ONLY',403)
     if request.method not in ('GET', 'HEAD', 'OPTIONS'):
         if request.headers.get('origin') != str(request.base_url).rstrip('/'):
             return reject('SAME_ORIGIN_REQUIRED', 403)
@@ -137,7 +148,7 @@ async def local_console_boundary(request: Request, call_next):
 
 def session_cookie(response, request, token):
     response.set_cookie(SESSION_COOKIE, token, httponly=True, secure=request.url.scheme == 'https',
-                        samesite='strict', max_age=SESSION_SECONDS, path='/')
+                        samesite='strict', max_age=SESSION_SECONDS if AUTH.session(token,touch=False)['role']=='operator' else 3600, path='/')
     response.delete_cookie(BOOT_COOKIE, path='/')
     return response
 
@@ -146,7 +157,7 @@ def session_cookie(response, request, token):
 def auth_status(request: Request):
     state = request.state.session
     if state:
-        return dict(authenticated=True, configured=True, csrf=state['csrf'], expires=state['expires'])
+        return dict(authenticated=True, configured=True, csrf=state['csrf'], expires=state['expires'],username=state['username'],role=state['role'])
     token, csrf = AUTH.challenge(request.cookies.get(BOOT_COOKIE), request.client.host)
     response = JSONResponse(dict(authenticated=False, configured=AUTH.configured(),
                                  setup_allowed=loopback(request) and not AUTH.configured(), csrf=csrf))
@@ -158,7 +169,8 @@ def auth_status(request: Request):
 class LoginRequest(BaseModel):
     model_config = ConfigDict(extra='forbid')
     password: str = Field(min_length=14, max_length=128)
-    code: str = Field(pattern=r'^[0-9]{6}$')
+    code: str | None = Field(default=None,pattern=r'^[0-9]{6}$')
+    username: str = Field(default='operator',pattern=r'^[a-z][a-z0-9_-]{2,31}$')
 
 
 class SetupRequest(BaseModel):
@@ -200,7 +212,7 @@ def setup_finish(request: Request, data: CodeRequest):
 @app.post('/auth/login')
 def login(request: Request, data: LoginRequest):
     try:
-        token = AUTH.login(data.password, data.code, request.client.host)
+        token = AUTH.login(data.password, data.code, request.client.host,username=data.username)
     except AuthError as exc:
         auth_error(exc)
     return session_cookie(JSONResponse({'authenticated': True}), request, token)
@@ -232,6 +244,7 @@ async def model_error(request, exc):
 
 
 @app.get('/')
+@app.get('/judge')
 def index(request: Request):
     name = 'index.html' if request.state.session else 'login.html'
     return FileResponse(ROOT / 'app' / 'static' / name)
@@ -241,8 +254,9 @@ def index(request: Request):
 def runtime(request: Request):
     cv5 = cv2.__version__.split('.')[0] == '5'
     return dict(version='4.9.0', opencv_version=cv2.__version__, opencv5=cv5,
-                captured_analysis_ready=cv5, storage='LOCAL_SQLITE', aws_verified=False,
-                aws_execution_record=aws_execution_record(),
+                captured_analysis_ready=cv5 and request.state.session['role']=='operator', storage='LOCAL_SQLITE', aws_verified=False,
+                aws_execution_record=aws_execution_record() if request.state.session['role']=='operator' else None,
+                username=request.state.session['username'],role=request.state.session['role'],
                 mobile_url=app.state.mobile_url if loopback(request) else None,
                 gt_verified=False, physical_action_authorized=False, max_views=2)
 
@@ -285,11 +299,14 @@ def session_result(sid):
 
 
 @app.get('/api/console/sessions')
-def list_sessions():
+def list_sessions(request:Request):
     repository = store()
     with connect(repository.path) as db:
         ids = [r[0] for r in db.execute('SELECT session_id FROM research_loops ORDER BY rowid DESC LIMIT 100')]
     result = []
+    if request.state.session['role']=='judge':
+        with metadata_db() as db:
+            ids=[r[0] for r in db.execute('SELECT id FROM session_owners WHERE username=? ORDER BY rowid DESC LIMIT 100',(request.state.session['username'],))]
     for sid in ids:
         try:
             result.append(session_result(sid))
@@ -299,19 +316,22 @@ def list_sessions():
 
 
 @app.get('/api/console/sessions/{sid}')
-def get_session(sid: str):
+def get_session(sid: str,request:Request):
+    require_session_owner(request,sid)
     return session_result(sid)
 
 
 @app.get('/api/console/sessions/{sid}/export')
-def export_session(sid: str):
+def export_session(sid: str,request:Request):
+    require_session_owner(request,sid)
     result = session_result(sid)
     result['export_scope'] = 'LOCAL_RESEARCH_NOT_PHYSICAL_AUTHORIZATION'
     return JSONResponse(result, headers={'Content-Disposition': 'attachment; filename="bind-zero-trace.json"'})
 
 
 @app.get('/api/console/sessions/{sid}/frame0')
-def original_frame(sid: str):
+def original_frame(sid: str,request:Request):
+    require_session_owner(request,sid)
     _, state = store().read(sid)  # Verifies all original bytes before serving one.
     if state.initial_capture_origin != 'SERVER_CAPTURED_PNG':
         raise HTTPException(404, 'NO_CAPTURED_ORIGINAL')
@@ -409,16 +429,16 @@ def synthetic_measurement():
 
 
 @app.post('/api/console/demo')
-def create_demo(data: DemoRequest):
+def create_demo(data: DemoRequest,request:Request):
     if not EXPENSIVE_GATE.acquire(blocking=False):
         raise HTTPException(429, 'ANALYSIS_BUSY')
     try:
-        return _create_demo(data)
+        return _create_demo(data,username=request.state.session['username'])
     finally:
         EXPENSIVE_GATE.release()
 
 
-def _create_demo(data):
+def _create_demo(data,username='operator'):
     sid = 'DEMO-' + secrets.token_hex(4).upper()
     worlds = ['LAYER_ONLY', 'LAYER_AND_ROPE']
     losses = {'REORDER': {'LAYER_ONLY': 0, 'LAYER_AND_ROPE': 6},
@@ -428,7 +448,7 @@ def _create_demo(data):
     image_hash = hashlib.sha256(('SYNTHETIC:' + sid).encode()).hexdigest()
     state = start_research_loop(sid, 'OBS-' + sid, worlds, losses, views, {'ROPE_PATH': .25}, image_hash)
     store().start(state)
-    save_metadata(sid, data.label, 'SYNTHETIC', synthetic_measurement())
+    save_metadata(sid, data.label, 'SYNTHETIC', synthetic_measurement(),username=username)
     return session_result(sid)
 
 
@@ -441,7 +461,8 @@ class ObservationRequest(BaseModel):
 
 
 @app.post('/api/console/sessions/{sid}/observe')
-def observe(sid: str, data: ObservationRequest):
+def observe(sid: str, data: ObservationRequest,request:Request):
+    require_session_owner(request,sid)
     # A manual report remains a manual report, including in synthetic sessions.
     store().advance(sid, data.expected_version, data.view, data.signature,
                     data.capture_sha256, source='HUMAN_REPORTED')

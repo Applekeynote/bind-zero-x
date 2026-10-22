@@ -161,10 +161,10 @@ FRONTは作業者に一番近い辺、BACKは奥。LEFT/RIGHTは作業者から�
 各PLACEステップは番号、何段目、長辺の方向、厚い折り目の側を明示する。
 画像の長軸から目標への概算の時計回り回転角を表示し、上面図と積層図で示す。
 これは画像上の概算であり、撮影の透視変形や折り畳み後には再調整する。
-積層図は模式図で寸法通りの3D再構成ではない。
+実画像の切り抜き輪郭と質感を使う立体表示へ更新した。隠れた面の復元や力学シミュレーションではない。
 ALIGNでは段の中心と端をそろえ、飛び出したピースを内側へ戻す。
 WRAP_LONG: 紐の中央を全段の下、手前→奥の中心線に通す。両端を前辺・
-後辺から上げ、上面中央で合わせる。下側は点線、上側は実線で示す。
+後辺から上げ、上面中央で合わせる。下側も連続した3Dの紐として描画し、Underneath視点で確認する。
 WRAP_CROSS: 上面中央で交差し90度方向を変え、一端を左辺から下へ、
 全段の下を左→右へ通し、右辺から上面中央へ戻す。他端は交点で保持。
 KNOT_FIRST: 右の端を左の端の上に置き、下へ回して輪を通し、引き寄せる。
@@ -176,7 +176,7 @@ CHECK: 二方向の輪が全段を含み、結び目が収まり、抜け落ち�
 Pause / Play / Replay / Back / Edit piecesあり。低減モーション設定にも対応。
 
 11. エクスポート
-Export packing plan JSONの形式はBZX-PACKING-GUIDE-V2。
+Export packing plan JSONの形式はBZX-PACKING-GUIDE-V3。
 source_sha256、input_tier、opencv_version、orientation_reference、order_basis、
 pieces（順番、orientation、foldEdge含む）、steps（piece_id、instruction含む）。
 デモ: completed_in_demo=true/false、completed_by_user=false。
@@ -212,9 +212,9 @@ DB・キャプチャ・整合性鍵をまとめて、停止中にアクセス制
 14. テストと再現コマンド
 プロジェクトルートで:
   .\.venv5\Scripts\python.exe scripts\verify.py
-  node --test tests/auth_flow.test.cjs tests/packing_flow.test.cjs
-2026-10-22の本更新: 研究コア398件（397成功、1 skip）、アプリ32件成功、
-JS 14件成功。合計443成功、1 skip。以後の変更時は実際の出力で更新する。
+  node --test tests/auth_flow.test.cjs tests/packing_flow.test.cjs tests/packing_model.test.cjs
+2026-10-22の本更新: 研究コア398件（397成功、1 skip）、アプリ38件成功、
+JS 21件成功。合計456成功、1 skip。以後の変更時は実際の出力で更新する。
 アプリテストは一時DBとテスト認証を使う。本番DBでテストを実行しない。
 test_packing_vision.pyは本物のOpenCV 5で9枚を解析し、認証、CSRF、
 許可リスト、PNG爆弾、上限、色領域分離、アップロード由来の契約を確認。
@@ -272,3 +272,68 @@ Segmentが無効: runtime初期化と認証を確認。ページ再読込後の�
   作り直して既存の証拠を正しいことにしない。
 
 以上。実行秘密、個人パス、実測値を含まない公開可能な引き継ぎ文書。
+
+
+18. 最新更新: 実写3Dと状況別の結び方（2026-10-22）
+旧パッキング用SVGの一般的な板・紐の模式アニメーションを廃止。
+packing-real.jsが実際の写真とOpenCVラベルマップから選択領域を切り出し、
+外周輪郭・検出した穴を立体表示する。表面は原写真の画素、裏面と断面は
+単色の段ボール材質。見えない裏面を撮影済みとして偽造しない。
+Three.js 0.186.1は公式npmの固定tarballをSHA512検証してローカル配信。
+app/static/vendor/three/にLICENSEとprovenance.jsonを含む。CDN通信はない。
+前・上・横・下のカメラ、ドラッグ/矢印キーの回転、速度、再生停止、
+タイムライン操作を持つ。紐は現在の束の幅・奥行き・高さから連続3D経路を算出。
+材質の繊維表現と奥行きで、下側への回り込みや二つの端の上下関係を示す。
+2回目の交差でも1回目を残し、逆向きの交差を加える。
+新しいpacking-model.jsには純粋関数として寸法・積層・紐経路・結び方の規則を置いた。
+各ピースの長辺・短辺・厚さをmmで入力できる。全ピースが測定済みのときだけ
+mmの共通尺度で表示し、測定した面積順・矩形支持の重なりから向き候補を決める。
+混在時は全体を写真上の相対尺度へ統一し、mmとピクセルを混ぜない。
+部分的な寸法入力は解決するまでガイドを開始できない。
+利用者が紐の材質と、押した束が戻るかを選ぶ。画像から材質や反発力を断定しない。
+紙/綿で平らな束: 本結び。紙/綿で反発する束: 最初を二重にした外科結び。
+滑るプラスチック/ナイロン: 紐の変更を案内し、既存の結束手順を適用しない。
+規則の根拠と適用範囲はdocs/real-navigation.mdの参照元に記載。
+これは強度や吊り上げを保証する結束設計ではなく、既存の物理認可ゲートはfalse。
+OPENは畳んだ後の新写真を入れるまでFOLD完了不可。STACKの各ピースにも
+Add individual flat photoがあり、重なりで見えない輪郭を個別写真へ差し替えられる。
+新写真はOpenCVへ再送し、最大領域を表示対象にするため、利用者が対象を確認する。
+写真はブラウザメモリ内で保持し、JSONは画素を含めずハッシュを保持。
+V3出力にはbinding_condition、knot、layout（unitsと寸法比）、個別撮影のハッシュを追加。
+一般的なSVGへのフォールバックはしない。WebGL非対応なら実写真と案内文を表示。
+
+19. 審査員アカウントと配布テキスト
+実際のアカウント名: judge。専用URLの /judge ではパスワードだけでログイン。
+ユーザーの最新指示に従い、審査員のQR/TOTP登録は不要とした。
+管理者は従来のoperatorとして、既存パスワードとTOTPを使用する。
+runtime/security/judge-login.txtにコピーできるURL・ユーザー名・パスワードを保存。
+秘密値はこの文書・README・GitHub・公開ZIPへ転記しない。審査員本人へ直接渡す。
+生成パスワードはランダム32文字。DBはscryptで保持。アカウントは原則30日で失効。
+セッションは最大1時間、15分無操作で失効。管理者のセッションは従来どおり。
+Wi-FiはHTTPSと信頼済みCAが必要。管理者と別ブラウザプロファイルで使用する。
+AuthStoreは既存credentials表のoperatorを保持。accounts/session_principalsで
+アカウントとセッションを結び付け、console.dbのsession_ownersで合成履歴を隔離。
+審査員はデモ・色分け・ガイド・自分の合成履歴を利用できる。
+他人の履歴の一覧/読込/JSON/画像/観察更新は拒否。実物キャプチャ解析・全体監査も拒否。
+他端末のサインアウトは同一アカウントだけ。失効・無効化は既存セッションにも適用。
+運用コマンドはサーバー停止中に実行する（AuthStore読込で全セッション失効）。
+  python scripts/create_judge_account.py --username judge --days 30 --base-url https://YOUR_PRIVATE_IPV4:8766
+未使用の旧招待だけは変換可能。招待トークンと旧配布ファイルは無効化/削除する。
+有効/失効済みアカウントの上書きと配布ファイルの上書きは拒否。無効化は--revoke。
+旧招待登録APIは削除し、旧テーブルは移行時の削除処理のため保持。
+
+20. 最新版の検証と残る範囲
+自動テスト: 研究397成功+1 skip、アプリ38成功、JS21成功、合計456成功+1 skip。
+審査員のパスワード単独ログイン、管理者MFA必須、試行制限、期限/無効化、履歴隔離を検証。
+JSはmm/相対尺度の分離、支持面に基づく方向、紐の下側経路、交差した紐同士の
+空間的な分離、審査員のパスワード専用ログイン画面を検証する。
+実物の隠れた形状、力学・摩擦、結び目の保持力、実機スマホのCA設定・撮影は別途検証。
+実写3Dは可視領域と入力寸法を忠実に扱う表示であり、校正済みの完全3Dスキャンではない。
+新しい実装詳細はdocs/real-navigation.mdを優先し、以前のSVG版の画面確認は履歴として扱う。
+本番Chromeで審査員のパスワード単独ログイン、Primary sheetsの5領域色分け、
+全12デモ手順、下面の紐経路、反発HIGHでの二重の最初の結び/逆向きの最後の結びを確認。
+390px幅ではclientWidth=scrollWidth=375px。案内文字はPixelフォント。
+実ダウンロードしたV3 JSONを検証し、runtime/demo-results/real-guide-v3.jsonへ保存。
+全12手順はcompleted_in_demo=true、completed_by_user=false、実物作業の許可はfalse。
+現在の3D画面証拠はreal-guide-surgeon.png、real-guide-underneath.png、real-guide-mobile.png。
+これらはローカルのruntime/demo-results内。審査員の秘密値とともに公開しない。

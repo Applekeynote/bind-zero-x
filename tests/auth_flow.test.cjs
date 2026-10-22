@@ -8,7 +8,7 @@ const source = fs.readFileSync(path.join(__dirname,'../app/static/auth.js'),'utf
 const state = csrf => ({authenticated:false,configured:true,csrf});
 const reply = (body,status=200) => ({status,ok:status>=200&&status<300,json:async()=>body});
 
-async function screen(responses) {
+async function screen(responses,pathname='/') {
   const elements = new Map(), calls = [], redirects = [];
   function element(selector) {
     if (!elements.has(selector)) elements.set(selector,{value:'',hidden:true,disabled:false,focus(){}});
@@ -19,7 +19,7 @@ async function screen(responses) {
     assert.ok(responses.length,'unexpected network call');
     return responses.shift();
   };
-  vm.runInNewContext(source,{document:{querySelector:element},fetch,location:{replace:url=>redirects.push(url)}});
+  vm.runInNewContext(source,{document:{querySelector:element},fetch,location:{pathname,replace:url=>redirects.push(url)}});
   await new Promise(setImmediate);
   element('#auth-password').value='fixture-only-password-1234';
   element('#auth-code').value='123456';
@@ -75,4 +75,22 @@ test('expired enrollment is not silently restarted with a different secret',asyn
   await h.submit();
   assert.deepEqual(h.calls.map(c=>c.url),['/auth/session','/auth/setup/begin','/auth/setup/finish']);
   assert.match(h.element('#auth-error').textContent,/setup session expired/);
+});
+
+test('judge login submits its own username without an OTP',async()=>{
+ const h=await screen([reply(state('first')),reply(state('fresh')),reply({authenticated:true})]);
+ h.element('#auth-username').value='judge';await h.submit();
+ const payload=JSON.parse(h.calls.find(c=>c.method==='POST').body);
+ assert.equal(payload.username,'judge');assert.equal(payload.code,undefined);
+});
+
+test('dedicated judge page asks only for its password',async()=>{
+ const h=await screen([reply(state('first')),reply(state('fresh')),reply({authenticated:true})],'/judge');
+ assert.equal(h.element('#username-field').hidden,true);
+ assert.equal(h.element('#code-field').hidden,true);
+ assert.equal(h.element('#auth-code').required,false);
+ await h.submit();
+ const payload=JSON.parse(h.calls.find(c=>c.method==='POST').body);
+ assert.equal(payload.username,'judge');assert.equal(payload.code,undefined);
+ assert.deepEqual(h.redirects,['/']);
 });

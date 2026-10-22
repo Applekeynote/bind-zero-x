@@ -50,7 +50,7 @@ def shape_features(image,mask):
     hypothesis='OPEN_BOX_CANDIDATE' if score>=.72 and compact>.45 else 'SHAPE_UNCERTAIN'
     return (x,y,w,h),dict(compactness=round(compact,3),internal_line_directions=len(directions),
         vertical_crease_lines=vertical,edge_fraction=round(edge_fraction,4),geometry_score=round(score,3),
-        image_long_axis_degrees=round(long_axis,1)),hypothesis
+        image_long_axis_degrees=round(long_axis,1),image_long_edge_px=round(max(rw,rh),2),image_short_edge_px=round(min(rw,rh),2)),hypothesis
 
 
 def segment_cardboard(raw):
@@ -124,6 +124,15 @@ def segment_cardboard(raw):
         contours,_=cv2.findContours(region,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
         contour=max(contours,key=cv2.contourArea)
         polygon=np.asarray(cv2.approxPolyDP(contour,max(1.5,cv2.arcLength(contour,True)*.007),True)).reshape(-1,2)[:80]
+        all_contours,hierarchy=cv2.findContours(region,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
+        holes=[]
+        if hierarchy is not None:
+            outer=max((i for i,hrow in enumerate(hierarchy.reshape(-1,4)) if hrow[3]<0),key=lambda i:cv2.contourArea(all_contours[i]))
+            for i,hrow in enumerate(hierarchy.reshape(-1,4)):
+                if hrow[3]!=outer or cv2.contourArea(all_contours[i])<8:continue
+                hole=np.asarray(cv2.approxPolyDP(all_contours[i],1.2,True)).reshape(-1,2)[:80]
+                holes.append([[round(float(px)/w,5),round(float(py)/h,5)] for px,py in hole])
+                if len(holes)>=8:break
         cv2.drawContours(output,[contour],-1,rgb[::-1],2)
         center=cv2.moments(region)
         cx=int(center['m10']/center['m00']);cy=int(center['m01']/center['m00'])
@@ -132,6 +141,7 @@ def segment_cardboard(raw):
         regions.append(dict(id=number,color=color,pixel_area=area,area_fraction=round(area/(w*h),4),
             bbox=[round(v,5) for v in (x/w,y/h,rw/w,rh/h)],centroid=[cx/w,cy/h],
             polygon=[[round(float(px)/w,5),round(float(py)/h,5)] for px,py in polygon],
+            holes=holes,
             shape_hypothesis=kind,shape_evidence=features,review_required=True,
             instruction='Fold this box' if kind=='OPEN_BOX_CANDIDATE' else 'Check flat / open'))
     jpeg=cv2.imencode('.jpg',output,[cv2.IMWRITE_JPEG_QUALITY,88])[1].tobytes()
