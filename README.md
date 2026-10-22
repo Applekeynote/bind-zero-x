@@ -14,6 +14,12 @@ A retro pixel-style field workspace for cardboard photos and observations. The i
 
 The photo board displays the five demo photos; browsing a photo does not run motion analysis.
 
+## Color, fold, stack and tie
+
+Select a demo photo or add your own photo, then choose **Segment & guide**. OpenCV 5 uses HSV/Lab color evidence, edge markers and watershed to color visible cardboard surface regions. Select the pieces you want to bundle and choose **Flat sheet**, **Open / assembled box**, or **Not cardboard / duplicate face**. Use **Draw a missing region** for a missed or white cardboard surface.
+
+Geometric crease evidence produces **Fold this box · candidate** callouts. It is a reviewable heuristic, not a trained box classifier or a calibrated probability; surfaces may merge or split and a single photo cannot establish depth, hidden pieces, or physical dimensions. Confirm the shapes before building the guide. The animated guide folds open boxes first, stacks and aligns sheets, routes paper twine in two directions, and demonstrates the two opposite crossings of a square knot. Adjust the suggested image-area order to actual sheet sizes with the order arrows. Each physical step requires your completion check. Play/pause, replay, back, mobile layouts, reduced motion, and JSON plan export are supported. The guide does not change the research physical-action authorization gate.
+
 ## Start
 
 ```powershell

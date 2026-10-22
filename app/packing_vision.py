@@ -1,0 +1,113 @@
+"""Bounded OpenCV 5 surface segmentation and reviewable shape hypotheses.
+
+These are image regions, not calibrated object instances, dimensions or GT.
+The packing guide is independent of the research physical-authorization gate.
+"""
+import base64
+import hashlib
+import struct
+import cv2
+import numpy as np
+
+PALETTE = ['#61dcb1','#79b7ff','#efb45f','#cb9ef5','#f38c99','#8bd3e1',
+           '#c7d76e','#ec9cc7','#8fc4a2','#a8b7fa','#dbac8b','#b7dbed']
+MAX_IMAGE_BYTES = 5_000_000
+
+
+def decode_png(raw):
+    if len(raw)>MAX_IMAGE_BYTES or len(raw)<33 or raw[:8]!=b'\x89PNG\r\n\x1a\n' or raw[12:16]!=b'IHDR':
+        raise ValueError('PNG_REQUIRED_UP_TO_5_MB')
+    width,height=struct.unpack('>II',raw[16:24])
+    if not 32<=width<=4096 or not 32<=height<=4096 or width*height>3_000_000:
+        raise ValueError('IMAGE_DIMENSIONS_OUT_OF_RANGE')
+    image=cv2.imdecode(np.frombuffer(raw,np.uint8),cv2.IMREAD_COLOR)
+    if image is None or image.shape[:2]!=(height,width):raise ValueError('INVALID_PNG')
+    return image
+
+
+def shape_features(image,mask):
+    """Return observable geometry, never a learned confidence probability."""
+    contours,_=cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+    contour=max(contours,key=cv2.contourArea)
+    x,y,w,h=cv2.boundingRect(contour)
+    gray=cv2.cvtColor(image[y:y+h,x:x+w],cv2.COLOR_BGR2GRAY)
+    edges=cv2.Canny(gray,55,140)
+    inside=cv2.erode(mask[y:y+h,x:x+w],np.ones((7,7),np.uint8))
+    edges=cv2.bitwise_and(edges,inside)
+    lines=cv2.HoughLinesP(edges,1,np.pi/180,threshold=18,minLineLength=max(12,min(w,h)//4),maxLineGap=7)
+    directions=set();vertical=0
+    for line in ([] if lines is None else np.asarray(lines).reshape(-1,4)[:160]):
+        x1,y1,x2,y2=map(int,line); angle=abs(np.degrees(np.arctan2(y2-y1,x2-x1)))%180
+        directions.add(int(angle//30));vertical+=int(65<angle<115)
+    compact=min(w,h)/max(w,h)
+    edge_fraction=float(np.count_nonzero(edges)/max(1,np.count_nonzero(inside)))
+    # Several crease directions inside a compact face suggest retained volume.
+    # A single view cannot prove the object is a box, so review remains explicit.
+    score=min(1., .38*compact+.13*min(len(directions),4)+.1*min(vertical,2))
+    if edge_fraction<.015:score*=.65
+    hypothesis='OPEN_BOX_CANDIDATE' if score>=.72 and compact>.45 else 'SHAPE_UNCERTAIN'
+    return (x,y,w,h),dict(compactness=round(compact,3),internal_line_directions=len(directions),
+        vertical_crease_lines=vertical,edge_fraction=round(edge_fraction,4),geometry_score=round(score,3)),hypothesis
+
+
+def segment_cardboard(raw):
+    if cv2.__version__.split('.')[0]!='5':raise RuntimeError('OPENCV5_RUNTIME_REQUIRED')
+    image=decode_png(raw)
+    scale=min(1.,960/max(image.shape[:2]))
+    image=cv2.resize(image,None,fx=scale,fy=scale,interpolation=cv2.INTER_AREA)
+    h,w=image.shape[:2]
+    hsv=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
+    lab=cv2.cvtColor(image,cv2.COLOR_BGR2LAB)
+    # Brown/tan surface evidence; white/printed cardboard is reviewed via manual ROI.
+    mask=cv2.inRange(hsv,np.array([5,27,30]),np.array([38,205,250]))
+    mask=cv2.bitwise_and(mask,cv2.inRange(lab[:,:,2],136,215))
+    mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,np.ones((5,5),np.uint8))
+    mask=cv2.morphologyEx(mask,cv2.MORPH_OPEN,np.ones((3,3),np.uint8))
+    smooth=cv2.bilateralFilter(image,7,45,45)
+    edges=cv2.Canny(smooth,45,110)
+    edges=cv2.dilate(edges,np.ones((3,3),np.uint8))
+    interiors=cv2.bitwise_and(mask,cv2.bitwise_not(edges))
+    distance=cv2.distanceTransform(interiors,cv2.DIST_L2,5)
+    peaks=(distance>max(4.,float(distance.max())*.10)).astype(np.uint8)
+    count,labels,stats,_=cv2.connectedComponentsWithStats(peaks,8)
+    seeds=sorted((i for i in range(1,count) if stats[i,cv2.CC_STAT_AREA]>max(25,w*h*.0004)),
+                 key=lambda i:int(stats[i,cv2.CC_STAT_AREA]),reverse=True)[:36]
+    markers=np.zeros((h,w),np.int32);markers[mask==0]=1
+    for index,label in enumerate(seeds,2):markers[labels==label]=index
+    if seeds:cv2.watershed(smooth,markers)
+    candidates=[]
+    for index in range(2,len(seeds)+2):
+        region=((markers==index)&(mask>0)).astype(np.uint8)*255
+        area=int(np.count_nonzero(region))
+        if area<w*h*.004:continue
+        box,features,kind=shape_features(image,region)
+        candidates.append((area,region,box,features,kind))
+    candidates.sort(key=lambda item:item[0],reverse=True)
+    output=image.copy();regions=[];label_map=np.zeros((h,w),np.uint8)
+    for number,(area,region,(x,y,rw,rh),features,kind) in enumerate(candidates[:12],1):
+        color=PALETTE[number-1];rgb=tuple(int(color[i:i+2],16) for i in (1,3,5));bgr=np.array(rgb[::-1])
+        selected=region>0
+        output[selected]=(image[selected]*.46+bgr*.54).astype(np.uint8)
+        label_map[selected]=number
+        contours,_=cv2.findContours(region,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        contour=max(contours,key=cv2.contourArea)
+        polygon=np.asarray(cv2.approxPolyDP(contour,max(1.5,cv2.arcLength(contour,True)*.007),True)).reshape(-1,2)[:80]
+        cv2.drawContours(output,[contour],-1,rgb[::-1],2)
+        center=cv2.moments(region)
+        cx=int(center['m10']/center['m00']);cy=int(center['m01']/center['m00'])
+        cv2.rectangle(output,(cx-17,cy-12),(cx+18,cy+9),(27,35,48),-1)
+        cv2.putText(output,f'{number:02}',(cx-12,cy+4),cv2.FONT_HERSHEY_SIMPLEX,.45,(245,249,240),1,cv2.LINE_AA)
+        regions.append(dict(id=number,color=color,pixel_area=area,area_fraction=round(area/(w*h),4),
+            bbox=[round(v,5) for v in (x/w,y/h,rw/w,rh/h)],centroid=[cx/w,cy/h],
+            polygon=[[round(float(px)/w,5),round(float(py)/h,5)] for px,py in polygon],
+            shape_hypothesis=kind,shape_evidence=features,review_required=True,
+            instruction='Fold this box' if kind=='OPEN_BOX_CANDIDATE' else 'Check flat / open'))
+    jpeg=cv2.imencode('.jpg',output,[cv2.IMWRITE_JPEG_QUALITY,88])[1].tobytes()
+    png=cv2.imencode('.png',label_map)[1].tobytes()
+    return dict(schema='BZX-PACKING-VISION-V1',opencv_version=cv2.__version__,
+        source_sha256=hashlib.sha256(raw).hexdigest(),width=w,height=h,
+        algorithm='HSV_LAB_EDGE_MARKER_WATERSHED',segmentation_scope='VISIBLE_SURFACE_REGIONS_NOT_OBJECT_INSTANCES',
+        shape_method='UNCALIBRATED_GEOMETRIC_HEURISTIC',regions=regions,
+        overlay='data:image/jpeg;base64,'+base64.b64encode(jpeg).decode(),
+        labels_png='data:image/png;base64,'+base64.b64encode(png).decode(),
+        physical_action_authorized=False)

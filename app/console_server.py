@@ -34,6 +34,7 @@ from operations_audit import inspect
 from sqlite_scope import connect
 from capture_archive import verify_capture
 from auth_security import AuthStore, AuthError, SESSION_SECONDS
+from packing_vision import segment_cardboard
 import io
 import threading
 import qrcode
@@ -325,6 +326,35 @@ def original_frame(sid: str):
 class DemoRequest(BaseModel):
     model_config = ConfigDict(extra='forbid')
     label: str = Field(default='Cardboard bundle / Demo', min_length=1, max_length=80)
+
+
+class SegmentationRequest(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    demo_photo: str | None = Field(default=None,max_length=40)
+    image_png_b64: str | None = Field(default=None,max_length=6_666_668)
+
+
+@app.post('/api/console/segment')
+def segment_photo(data: SegmentationRequest):
+    if bool(data.demo_photo)==bool(data.image_png_b64):
+        raise HTTPException(422,'CHOOSE_ONE_IMAGE_SOURCE')
+    if not EXPENSIVE_GATE.acquire(blocking=False):raise HTTPException(429,'ANALYSIS_BUSY')
+    try:
+        if data.demo_photo:
+            allowed={'stacked-boxes','flattened-cartons','sorted-sheets','loose-stack','folded-panels'}
+            if data.demo_photo not in allowed:raise HTTPException(422,'UNKNOWN_DEMO_PHOTO')
+            raw=(ROOT/'app/static/photos'/(data.demo_photo+'.png')).read_bytes()
+        else:
+            raw=base64.b64decode(data.image_png_b64,validate=True)
+        result=segment_cardboard(raw)
+        result['input_tier']='USER_PROVIDED_DEMO_ONLY' if data.demo_photo else 'USER_IMAGE_UNVERIFIED'
+        return result
+    except (ValueError,binascii.Error) as exc:
+        raise HTTPException(422,str(exc)[:100])
+    except RuntimeError as exc:
+        raise HTTPException(503,str(exc)[:100])
+    finally:
+        EXPENSIVE_GATE.release()
 
 
 def bounded_metadata(value):
