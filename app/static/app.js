@@ -3,13 +3,44 @@ const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 // User-supplied demo assets: never measurement or independent ground truth.
 const photos = [
-  { file: 'stacked-boxes', label: 'Stacked boxes' },
-  { file: 'flattened-cartons', label: 'Flattened cartons' },
-  { file: 'sorted-sheets', label: 'Sorted sheets' },
-  { file: 'loose-stack', label: 'Loose stack' },
-  { file: 'folded-panels', label: 'Folded panels' },
+  {
+    "file": "open-boxes-group",
+    "label": "Open boxes group"
+  },
+  {
+    "file": "open-boxes-trio",
+    "label": "Open boxes trio"
+  },
+  {
+    "file": "flat-jewel",
+    "label": "Jewel sheets"
+  },
+  {
+    "file": "flat-pastel",
+    "label": "Pastel sheets"
+  },
+  {
+    "file": "flat-primary",
+    "label": "Primary sheets"
+  },
+  {
+    "file": "flat-brown-spread",
+    "label": "Brown sheets spread"
+  },
+  {
+    "file": "flat-brown-pile",
+    "label": "Brown sheets pile"
+  },
+  {
+    "file": "flat-brown-five",
+    "label": "Brown sheets five"
+  },
+  {
+    "file": "flat-brown-three",
+    "label": "Brown sheets three"
+  }
 ].map((p, index) => ({ ...p, index, url: `/assets/photos/${p.file}.png`, width: 1448, height: 1086, type: 'PNG' }));
-const ui = { session: null, runtime: null, sessions: [], page: 'overview', view: 'PHOTOS', camera: null, csrf: null, urls: [], photo: photos[1], selectedImage: null };
+const ui = { session: null, runtime: null, sessions: [], page: 'overview', view: 'PHOTOS', camera: null, csrf: null, urls: [], photo: photos[2], selectedImage: null };
 const worlds = { LAYER_ONLY: ['Layer slip only', 'LAYER SLIP ONLY', '▱'], LAYER_AND_ROPE: ['Layer slip + rope shift', 'LAYER SLIP + ROPE SHIFT', '⌁'] };
 const views = { SIDE: 'Side', TOP: 'Top', ROPE_PATH: 'Rope path', KNOT_CLOSEUP: 'Knot close-up' };
 const actions = { REORDER: 'Reorder the layers', REPOSITION_TWINE: 'Reposition the twine', RE_TIE: 'Review the knot', SPLIT_2: 'Split into two bundles', KEEP: 'Keep the current arrangement', ABSTAIN: 'Pause for more evidence' };
@@ -64,17 +95,17 @@ function renderSession() {
   renderWorlds(s?.possible_worlds || []);
   $('#export-button').disabled = !s; $('#proof-button').disabled = !s;
   if (!s) {
-    const p = ui.photo || photos[1];
+    const p = ui.photo || photos[2];
     $('#mode-tag').textContent = 'DEMO LIBRARY'; $('#scene-session').textContent = p.index === undefined ? 'YOUR PHOTO' : `PHOTO ${String(p.index + 1).padStart(2, '0')}`;
-    $('#view-status').textContent = p.index === undefined ? '● YOUR PHOTO' : `● PHOTO ${String(p.index + 1).padStart(2, '0')} / 05`;
+    $('#view-status').textContent = p.index === undefined ? '● YOUR PHOTO' : `● PHOTO ${String(p.index + 1).padStart(2, '0')} / ${String(photos.length).padStart(2, '0')}`;
     $('#observation-state').textContent = p.label; $('#evidence-source').textContent = p.local ? 'YOUR PHOTO' : 'DEMO PHOTO COLLECTION';
     $('#snapshot-title').innerHTML = 'Frame details <span>AT A GLANCE</span>';
     setMetric(0, 'Image size', `${p.width}<span>× ${p.height} px</span>`, p.type, 'Original resolution');
-    setMetric(1, 'Collection', '05<span>photos</span>', 'LIBRARY', 'Ready to explore');
-    setMetric(2, 'Selected frame', p.index === undefined ? 'NEW' : `${String(p.index + 1).padStart(2, '0')}<span>/ 05</span>`, p.local ? 'PHOTO' : 'DEMO', p.label);
+    setMetric(1, 'Collection', `${String(photos.length).padStart(2, '0')}<span>photos</span>`, 'LIBRARY', 'Ready to explore');
+    setMetric(2, 'Selected frame', p.index === undefined ? 'NEW' : `${String(p.index + 1).padStart(2, '0')}<span>/ ${String(photos.length).padStart(2, '0')}</span>`, p.local ? 'PHOTO' : 'DEMO', p.label);
     $('#disposition-tag').textContent = 'READY TO EXPLORE'; $('#next-title').textContent = 'Every stack has a story.';
     $('#next-description').textContent = 'Pick a photo, inspect the layers, and start your next observation.';
-    $('#method-label').textContent = 'Current collection'; $('#next-method').textContent = 'Cardboard / 5 photos';
+    $('#method-label').textContent = 'Current collection'; $('#next-method').textContent = `Cardboard / ${photos.length} photos`;
     $('#budget-label').textContent = 'Next step'; $('#remaining-views').textContent = 'Add a paired capture';
     $('#quest-action').textContent = 'Start an observation →'; $('#trace-proof').textContent = 'CERTIFICATE —';
     $('#trace-list').innerHTML = `<div class="trace-entry"><span class="trace-time">PHOTO</span><i></i><div>${escapeHTML(p.label)}<small>${p.width} × ${p.height} px · ${p.type}</small></div></div><div class="trace-entry"><span class="trace-time">READY</span><i></i><div>Your collection is ready.<small>Choose New observation to continue.</small></div></div>`;

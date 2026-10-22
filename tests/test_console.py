@@ -140,11 +140,11 @@ class ConsoleJourney(unittest.TestCase):
             phone = TestClient(server.app, base_url='https://localhost', client=('192.168.0.88',55555))
             self.assertEqual(phone.get('/api/console/runtime').status_code,401)
             for alias in ('photos/','/photos/','PHOTOS/','photos%5c'):
-                self.assertEqual(phone.get('/assets/'+alias+'flattened-cartons.png').status_code,401)
+                self.assertEqual(phone.get('/assets/'+alias+'flat-jewel.png').status_code,401)
             self.assertFalse(phone.get('/auth/session').json()['setup_allowed'])
             token=server.AUTH.issue_session('Phone fixture')
             phone.cookies.set(server.SESSION_COOKIE,token)
-            self.assertEqual(phone.get('/assets/photos/flattened-cartons.png').status_code,200)
+            self.assertEqual(phone.get('/assets/photos/flat-jewel.png').status_code,200)
             self.assertIsNone(phone.get('/api/console/runtime').json()['mobile_url'])
 
     def test_mobile_digest_fallback_hashes_exact_bytes_without_persisting(self):

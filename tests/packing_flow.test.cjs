@@ -10,7 +10,7 @@ function harness(){
 }
 test('open boxes get an explicit fold step before stacking and cross ties',()=>{
  const h=harness();const kinds=h.run(`makePackingSteps([{id:1,pixel_area:100,review:'FLAT'},{id:2,pixel_area:50,review:'OPEN'}]).map(s=>s.kind).join(',')`);
- assert.equal(kinds,'FOLD,STACK,ALIGN,WRAP_LONG,WRAP_CROSS,KNOT_FIRST,KNOT_SECOND,CHECK');
+ assert.equal(kinds,'FOLD,STACK,PLACE,PLACE,ALIGN,WRAP_LONG,WRAP_CROSS,KNOT_FIRST,KNOT_SECOND,CHECK');
 });
 test('an unreviewed surface cannot silently become a packing piece',()=>{
  const h=harness();h.run(`packing.pieces=[{id:1,pixel_area:100,selected:true,review:'REVIEW'}]`);
@@ -47,4 +47,24 @@ test('demo confirmations never export as real physical completion',()=>{
  assert.equal(h.exports[0].physical_action_authorized,false);
  assert.equal(h.exports[0].steps[0].completed_by_user,false);
  assert.equal(h.exports[0].steps[0].completed_in_demo,true);
+});
+
+test('orientation and reordering rebuild the actual per-layer directions',()=>{
+ const h=harness();h.run(`packing.pieces=[{id:1,pixel_area:100,color:'#61dcb1',selected:true,review:'FLAT',shape_evidence:{image_long_axis_degrees:25}},{id:2,pixel_area:200,color:'#79b7ff',selected:true,review:'FLAT'}]`);
+ h.element('packing-build').onclick();
+ h.element('packing-order').onchange({target:{dataset:{packOrient:'1'},value:'90'}});
+ assert.match(h.run(`packing.steps.find(s=>s.kind==='PLACE'&&s.piece.id===1).copy`),/front to back.*65 degrees/);
+ const button={disabled:false,dataset:{packMove:'1',direction:'-1'}};
+ h.element('packing-order').onclick({target:{closest:()=>button}});
+ assert.equal(h.run(`packing.steps.filter(s=>s.kind==='PLACE').map(s=>s.piece.id).join()`),'1,2');
+ assert.match(h.run(`packing.steps.find(s=>s.kind==='PLACE').title`),/Layer 1: region 01/);
+ assert.equal(h.element('packing-next').disabled,true);
+});
+test('export preserves reproducible navigation instructions and orientation',()=>{
+ const h=harness();h.run(`packing.result={input_tier:'USER_PROVIDED_DEMO_ONLY'};packing.ordered=[{id:1,pixel_area:100,review:'FLAT',orientation:90,foldEdge:'toward you'}];packing.steps=makePackingSteps(packing.ordered,true);`);
+ h.element('packing-export').onclick();
+ assert.equal(h.exports[0].schema,'BZX-PACKING-GUIDE-V2');
+ assert.equal(h.exports[0].pieces[0].orientation,90);
+ assert.match(h.exports[0].steps.find(s=>s.kind==='WRAP_CROSS').instruction,/under ALL layers/);
+ assert.match(h.exports[0].steps.find(s=>s.kind==='KNOT_SECOND').instruction,/LEFT end over the RIGHT/);
 });

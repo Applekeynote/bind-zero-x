@@ -1,32 +1,74 @@
 [
   {
-    "file": "stacked-boxes.png",
-    "label": "Stacked boxes",
-    "sha256": "c1c94ab2535a5e728152660ce6fd23eda982ec418151eab72c9b0cf910379d05",
+    "file": "open-boxes-group.png",
+    "label": "Open boxes group",
+    "sha256": "13f6640fdc3b480a7ebfddbdbfcd8c5796405ac3858d260ac814a2f7f97a5e34",
+    "width": 1448,
+    "height": 1086,
     "provenance": "USER_PROVIDED_DEMO_ONLY"
   },
   {
-    "file": "flattened-cartons.png",
-    "label": "Flattened cartons",
-    "sha256": "f7653f513c2394b1b93fa33c292e14011cde90971eb73b9f9e574b2c754a717a",
+    "file": "open-boxes-trio.png",
+    "label": "Open boxes trio",
+    "sha256": "f5c4ae6265f34fadea7692d910de0828fb67fc4f04fab24d81c706571824e564",
+    "width": 1448,
+    "height": 1086,
     "provenance": "USER_PROVIDED_DEMO_ONLY"
   },
   {
-    "file": "sorted-sheets.png",
-    "label": "Sorted sheets",
-    "sha256": "706d1edb6b82ee26431d138018c4faccf5864b5b35565f9ee2408b180c77c16d",
+    "file": "flat-jewel.png",
+    "label": "Jewel sheets",
+    "sha256": "c2d8477c602359f924947f0677c54c64a31a03ffeada7b00f443017abe7da8e3",
+    "width": 1448,
+    "height": 1086,
     "provenance": "USER_PROVIDED_DEMO_ONLY"
   },
   {
-    "file": "loose-stack.png",
-    "label": "Loose stack",
-    "sha256": "bd1ec51d03d7a75dd66d6fcdbf1d6add9ef863df7cf7b50090b4d7cc658f8b79",
+    "file": "flat-pastel.png",
+    "label": "Pastel sheets",
+    "sha256": "da88ed6fdcba20582145d08a53ee86c06a55ecf49e84aab46692cb1476aa0d87",
+    "width": 1448,
+    "height": 1086,
     "provenance": "USER_PROVIDED_DEMO_ONLY"
   },
   {
-    "file": "folded-panels.png",
-    "label": "Folded panels",
-    "sha256": "8f53f4908246ee3260950dbcf8e4db04d7121d95eac1849aa43be0d09d27f71e",
+    "file": "flat-primary.png",
+    "label": "Primary sheets",
+    "sha256": "924a094a0ac0bd5c72c4fd641767d004d9fb364223b1eaebaea4ffa79a88f162",
+    "width": 1448,
+    "height": 1086,
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  },
+  {
+    "file": "flat-brown-spread.png",
+    "label": "Brown sheets spread",
+    "sha256": "85867a2cca4376c63ea4ae949be143c1cb6800b3bea0a7bb7fdc95ca5e23e13b",
+    "width": 1448,
+    "height": 1086,
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  },
+  {
+    "file": "flat-brown-pile.png",
+    "label": "Brown sheets pile",
+    "sha256": "7e2e77bc6963ad7253efdc54b1309e16e111b57f661f71d621e8e8eabb6bf614",
+    "width": 1448,
+    "height": 1086,
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  },
+  {
+    "file": "flat-brown-five.png",
+    "label": "Brown sheets five",
+    "sha256": "8a4c8d23f2eae99a06159fdad1ae64200e4198734f9bfa069a3cc1a2175b7c60",
+    "width": 1448,
+    "height": 1086,
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  },
+  {
+    "file": "flat-brown-three.png",
+    "label": "Brown sheets three",
+    "sha256": "34fe1ced6897b6e67a8a24158a281d12936a8da21b09e28768d2e957beace540",
+    "width": 1448,
+    "height": 1086,
     "provenance": "USER_PROVIDED_DEMO_ONLY"
   }
 ]

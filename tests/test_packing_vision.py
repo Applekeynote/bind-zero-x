@@ -13,7 +13,7 @@ from packing_vision import segment_cardboard,decode_png,shape_features
 class PackingVision(unittest.TestCase):
     def png(self,image):return cv2.imencode('.png',image)[1].tobytes()
     def test_non_cardboard_background_has_no_invented_regions(self):
-        image=np.full((200,300,3),(200,50,20),np.uint8)
+        image=np.full((200,300,3),170,np.uint8)
         result=segment_cardboard(self.png(image))
         self.assertEqual(result['regions'],[])
         self.assertFalse(result['physical_action_authorized'])
@@ -27,6 +27,13 @@ class PackingVision(unittest.TestCase):
         self.assertEqual(set(np.unique(labels)),{0,1,2})
         self.assertNotEqual(result['regions'][0]['color'],result['regions'][1]['color'])
         self.assertTrue(all(r['review_required'] for r in result['regions']))
+    def test_blue_red_and_pastel_surfaces_are_included(self):
+        image=np.full((300,600,3),170,np.uint8)
+        for x,color in [(20,(190,80,20)),(215,(40,40,210)),(410,(185,210,180))]:
+            cv2.rectangle(image,(x,40),(x+160,260),color,-1)
+        result=segment_cardboard(self.png(image))
+        self.assertEqual(len(result['regions']),3)
+        self.assertTrue(all('image_long_axis_degrees' in r['shape_evidence'] for r in result['regions']))
     def test_crease_geometry_is_a_reviewable_fold_candidate(self):
         image=np.full((220,220,3),(100,160,200),np.uint8)
         for a,b in [((50,25),(50,195)),((30,50),(185,50)),((30,35),(185,190)),((35,185),(185,35))]:
@@ -51,13 +58,13 @@ class PackingVision(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'DIMENSIONS'):decode_png(bad)
     def test_api_requires_auth_csrf_and_allowlisted_sources(self):
         anonymous=TestClient(server.app,base_url='http://localhost',client=('127.0.0.1',54000))
-        self.assertEqual(anonymous.post('/api/console/segment',json={'demo_photo':'stacked-boxes'}).status_code,401)
+        self.assertEqual(anonymous.post('/api/console/segment',json={'demo_photo':'open-boxes-group'}).status_code,401)
         client=authenticated_client()
         self.assertEqual(client.post('/api/console/segment',json={'demo_photo':'../../runtime/security/auth.db'}).status_code,422)
-        self.assertEqual(client.post('/api/console/segment',json={'demo_photo':'stacked-boxes','image_png_b64':'bad'}).status_code,422)
+        self.assertEqual(client.post('/api/console/segment',json={'demo_photo':'open-boxes-group','image_png_b64':'bad'}).status_code,422)
         self.assertEqual(client.post('/api/console/segment',json={'image_png_b64':'!bad'}).status_code,422)
-        self.assertEqual(client.post('/api/console/segment',json={'demo_photo':'stacked-boxes'},headers={'X-CSRF-Token':'bad'}).status_code,403)
-        response=client.post('/api/console/segment',json={'demo_photo':'stacked-boxes'})
+        self.assertEqual(client.post('/api/console/segment',json={'demo_photo':'open-boxes-group'},headers={'X-CSRF-Token':'bad'}).status_code,403)
+        response=client.post('/api/console/segment',json={'demo_photo':'open-boxes-group'})
         self.assertEqual(response.status_code,200,response.text[:300])
         self.assertEqual(response.json()['input_tier'],'USER_PROVIDED_DEMO_ONLY')
         self.assertEqual(response.json()['opencv_version'].split('.')[0],'5')
@@ -66,7 +73,7 @@ class PackingVision(unittest.TestCase):
         client=authenticated_client()
         with patch.object(server,'EXPENSIVE_GATE') as gate:
             gate.acquire.return_value=False
-            response=client.post('/api/console/segment',json={'demo_photo':'stacked-boxes'})
+            response=client.post('/api/console/segment',json={'demo_photo':'open-boxes-group'})
         self.assertEqual(response.status_code,429)
     def test_uploaded_png_uses_the_same_pipeline_without_demo_provenance(self):
         image=np.full((160,240,3),220,np.uint8)

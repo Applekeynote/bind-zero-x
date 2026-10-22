@@ -341,7 +341,7 @@ def segment_photo(data: SegmentationRequest):
     if not EXPENSIVE_GATE.acquire(blocking=False):raise HTTPException(429,'ANALYSIS_BUSY')
     try:
         if data.demo_photo:
-            allowed={'stacked-boxes','flattened-cartons','sorted-sheets','loose-stack','folded-panels'}
+            allowed={'flat-brown-pile', 'flat-primary', 'flat-brown-five', 'flat-pastel', 'flat-brown-three', 'open-boxes-group', 'open-boxes-trio', 'flat-jewel', 'flat-brown-spread'}
             if data.demo_photo not in allowed:raise HTTPException(422,'UNKNOWN_DEMO_PHOTO')
             raw=(ROOT/'app/static/photos'/(data.demo_photo+'.png')).read_bytes()
         else:

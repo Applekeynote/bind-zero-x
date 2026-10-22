@@ -12,13 +12,13 @@ A retro pixel-style field workspace for cardboard photos and observations. The i
 4. Record that observation, or analyze a follow-up capture. The session and evidence trace are saved.
 5. Reopen **History**, verify **Evidence**, and export the decision witness/trace as JSON.
 
-The photo board displays the five demo photos; browsing a photo does not run motion analysis.
+The photo board displays the nine demo photos; browsing a photo does not run motion analysis.
 
 ## Color, fold, stack and tie
 
-Select a demo photo or add your own photo, then choose **Segment & guide**. OpenCV 5 uses HSV/Lab color evidence, edge markers and watershed to color visible cardboard surface regions. Select the pieces you want to bundle and choose **Flat sheet**, **Open / assembled box**, or **Not cardboard / duplicate face**. Use **Draw a missing region** for a missed or white cardboard surface.
+Select a demo photo or add your own photo, then choose **Segment & guide**. OpenCV 5 uses HSV chroma, border-relative Lab color, adaptive hue peaks, edge markers and watershed to color visible cardboard surface regions. Select the pieces you want to bundle and choose **Flat sheet**, **Open / assembled box**, or **Not cardboard / duplicate face**. Use **Draw a missing region** for a missed or white cardboard surface.
 
-Geometric crease evidence produces **Fold this box · candidate** callouts. It is a reviewable heuristic, not a trained box classifier or a calibrated probability; surfaces may merge or split and a single photo cannot establish depth, hidden pieces, or physical dimensions. Confirm the shapes before building the guide. The animated guide folds open boxes first, stacks and aligns sheets, routes paper twine in two directions, and demonstrates the two opposite crossings of a square knot. Adjust the suggested image-area order to actual sheet sizes with the order arrows. Each physical step requires your completion check. Play/pause, replay, back, mobile layouts, reduced motion, and JSON plan export are supported. The guide does not change the research physical-action authorization gate.
+Geometric crease evidence produces **Fold this box · candidate** callouts. It is a reviewable heuristic, not a trained box classifier or a calibrated probability; surfaces may merge or split and a single photo cannot establish depth, hidden pieces, or physical dimensions. Confirm the shapes before building the guide. The animated guide folds open boxes first, stacks and aligns sheets, routes paper twine in two directions, and demonstrates the two opposite crossings of a square knot. Adjust the suggested image-area order to actual sheet sizes with the order arrows. The planning step sets each layer's order, long-edge direction and bulky-fold side. Individual placement steps show the numbered piece, rotation and orientation. Under-stack twine paths are dotted; the guide demonstrates right-over-left, then left-over-right for a square knot. Navigation uses the original pixel font. Each physical step requires your completion check. Play/pause, replay, back, mobile layouts, reduced motion, and JSON plan export are supported. The guide does not change the research physical-action authorization gate.
 
 ## Start
 
@@ -40,7 +40,7 @@ The phone HTTPS port is 8766; desktop loopback stays at 8765. Mobile startup req
 
 ## Explore the collection
 
-- The five supplied cardboard photos are demo-only and included as original PNGs. Switch photos with the thumbnail strip and expand a frame for a closer look.
+- The nine supplied cardboard photos are demo-only and included as original PNGs. Switch photos with the thumbnail strip and expand a frame for a closer look.
 - **Add photo** opens the photo library or the phone camera. Selected images are previewed on that device. A photo preview stays in browser memory until the page is reloaded.
 - **New observation → Analyze paired frames** accepts two PNG frames, upper/lower ROI masks, and a calibration/model JSON. Use **Configuration template** to prepare the configuration.
 - **Launch the demo** runs synthetic optical flow, creates a persisted session, and lets you record the next observation.
@@ -53,7 +53,7 @@ The phone HTTPS port is 8766; desktop loopback stays at 8765. Mobile startup req
 | --- | --- |
 | `app/console_server.py` | FastAPI console adapter and optional phone access |
 | `app/static/` | English HTML/CSS/JS, pixel guides, custom font, photo collection |
-| `app/static/photos/manifest.json` | SHA256 hashes and provenance of the five original photos |
+| `app/static/photos/manifest.json` | SHA256 hashes and provenance of the nine replacement demo photos |
 | `bind-zero-x/` | v4.9 design archive and maintained research code |
 | `runtime/` | Local sessions, PNG archive, integrity keys, execution evidence |
 | `data/physical/` | Physical data collection and independent measurements |
@@ -61,7 +61,7 @@ The phone HTTPS port is 8766; desktop loopback stays at 8765. Mobile startup req
 | `docs/security-setup.md` | MFA enrollment and private Wi-Fi HTTPS setup |
 | `docs/physical-data.md` | Physical data collection procedure |
 
-Runtime files, integrity keys, environments, and physical datasets are excluded from the source release. The source release includes the five photos supplied for this interface. The release manifest contains current source hashes; manifests in the original design archive describe historical versions.
+Runtime files, integrity keys, environments, and physical datasets are excluded from the source release. The source release includes the nine demo photos supplied for this interface. The release manifest contains current source hashes; manifests in the original design archive describe historical versions.
 
 ## Verification
 
@@ -72,3 +72,7 @@ Runtime files, integrity keys, environments, and physical datasets are excluded 
 Run the command above for the current core, console, and authentication regression results. Browser checks cover English navigation, photo switching/import, narrow layouts, observation save, history restore, and evidence inspection.
 
 The supplied still photos are demo material. Paired capture analysis still uses the original calibration, ROI, evidence, and approval contracts. Earlier AWS evidence uses synthetic inputs in Tokyo CloudShell. Account-specific AWS evidence remains local and is excluded from the public source repository.
+
+## Handover
+
+See [HANDOVER.txt](HANDOVER.txt) for the detailed Japanese operational and development handover, including data flow, MFA/TLS, demo catalog, orientation conventions, tests, publication and remaining validation.

@@ -40,6 +40,8 @@ def shape_features(image,mask):
         x1,y1,x2,y2=map(int,line); angle=abs(np.degrees(np.arctan2(y2-y1,x2-x1)))%180
         directions.add(int(angle//30));vertical+=int(65<angle<115)
     compact=min(w,h)/max(w,h)
+    (_, _),(rw,rh),angle=cv2.minAreaRect(contour)
+    long_axis=(angle+(90 if rh>rw else 0))%180
     edge_fraction=float(np.count_nonzero(edges)/max(1,np.count_nonzero(inside)))
     # Several crease directions inside a compact face suggest retained volume.
     # A single view cannot prove the object is a box, so review remains explicit.
@@ -47,7 +49,8 @@ def shape_features(image,mask):
     if edge_fraction<.015:score*=.65
     hypothesis='OPEN_BOX_CANDIDATE' if score>=.72 and compact>.45 else 'SHAPE_UNCERTAIN'
     return (x,y,w,h),dict(compactness=round(compact,3),internal_line_directions=len(directions),
-        vertical_crease_lines=vertical,edge_fraction=round(edge_fraction,4),geometry_score=round(score,3)),hypothesis
+        vertical_crease_lines=vertical,edge_fraction=round(edge_fraction,4),geometry_score=round(score,3),
+        image_long_axis_degrees=round(long_axis,1)),hypothesis
 
 
 def segment_cardboard(raw):
@@ -57,23 +60,52 @@ def segment_cardboard(raw):
     image=cv2.resize(image,None,fx=scale,fy=scale,interpolation=cv2.INTER_AREA)
     h,w=image.shape[:2]
     hsv=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
-    lab=cv2.cvtColor(image,cv2.COLOR_BGR2LAB)
-    # Brown/tan surface evidence; white/printed cardboard is reviewed via manual ROI.
-    mask=cv2.inRange(hsv,np.array([5,27,30]),np.array([38,205,250]))
-    mask=cv2.bitwise_and(mask,cv2.inRange(lab[:,:,2],136,215))
+    # Chroma evidence includes colored/pastel sheets, not just brown surfaces.
+    # This identifies visible color regions, not semantic cardboard instances.
+    mask=cv2.inRange(hsv,np.array([0,30,30]),np.array([179,255,255]))
+    lab=cv2.cvtColor(image,cv2.COLOR_BGR2LAB).astype(np.float32)
+    border=np.concatenate((lab[:8].reshape(-1,3),lab[-8:].reshape(-1,3),
+                           lab[:, :8].reshape(-1,3),lab[:, -8:].reshape(-1,3)))
+    background_chroma=np.median(border[:,1:],axis=0)
+    chroma_distance=np.linalg.norm(lab[:,:,1:]-background_chroma,axis=2)
+    mask[chroma_distance<12]=0
     mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,np.ones((5,5),np.uint8))
     mask=cv2.morphologyEx(mask,cv2.MORPH_OPEN,np.ones((3,3),np.uint8))
     smooth=cv2.bilateralFilter(image,7,45,45)
     edges=cv2.Canny(smooth,45,110)
     edges=cv2.dilate(edges,np.ones((3,3),np.uint8))
     interiors=cv2.bitwise_and(mask,cv2.bitwise_not(edges))
-    distance=cv2.distanceTransform(interiors,cv2.DIST_L2,5)
-    peaks=(distance>max(4.,float(distance.max())*.10)).astype(np.uint8)
-    count,labels,stats,_=cv2.connectedComponentsWithStats(peaks,8)
-    seeds=sorted((i for i in range(1,count) if stats[i,cv2.CC_STAT_AREA]>max(25,w*h*.0004)),
-                 key=lambda i:int(stats[i,cv2.CC_STAT_AREA]),reverse=True)[:36]
+    # Separate hue families before seeding so touching different colors survive.
+    hue=hsv[:,:,0]
+    histogram=np.bincount(hue[mask>0],minlength=180).astype(np.float32)
+    circular=np.tile(histogram,3).reshape(1,-1)
+    histogram=cv2.GaussianBlur(circular,(9,1),1.5).ravel()[180:360]
+    peaks=[]
+    for center in np.argsort(histogram)[::-1]:
+        if histogram[center]<max(20,np.count_nonzero(mask)*.004):break
+        if histogram[center]<histogram[(center-1)%180] or histogram[center]<histogram[(center+1)%180]:continue
+        if all(min(abs(int(center)-p),180-abs(int(center)-p))>=8 for p in peaks):peaks.append(int(center))
+        if len(peaks)>=8:break
+    if peaks:
+        hue_distance=np.abs(hue[:,:,None].astype(np.int16)-np.array(peaks))
+        families=np.argmin(np.minimum(hue_distance,180-hue_distance),axis=2)
+    else:families=np.zeros((h,w),np.uint8)
+    diverse=len(peaks)>=3
+    seed_masks=[]
+    for family in (range(len(peaks)) if diverse else [None]):
+        interior=((mask if diverse else interiors)>0).astype(np.uint8)
+        if diverse:
+            interior[ families!=family ]=0
+            interior=cv2.morphologyEx(interior,cv2.MORPH_CLOSE,np.ones((9,9),np.uint8))
+        distance=cv2.distanceTransform(interior,cv2.DIST_L2,5)
+        peaks=(distance>max(4.,float(distance.max())*.10)).astype(np.uint8)
+        count,labels,stats,_=cv2.connectedComponentsWithStats(peaks,8)
+        for i in range(1,count):
+            area=int(stats[i,cv2.CC_STAT_AREA])
+            if area>max(25,w*h*.0004):seed_masks.append((area,labels==i))
+    seeds=sorted(seed_masks,key=lambda item:item[0],reverse=True)[:36]
     markers=np.zeros((h,w),np.int32);markers[mask==0]=1
-    for index,label in enumerate(seeds,2):markers[labels==label]=index
+    for index,(_,seed) in enumerate(seeds,2):markers[seed]=index
     if seeds:cv2.watershed(smooth,markers)
     candidates=[]
     for index in range(2,len(seeds)+2):
@@ -106,7 +138,7 @@ def segment_cardboard(raw):
     png=cv2.imencode('.png',label_map)[1].tobytes()
     return dict(schema='BZX-PACKING-VISION-V1',opencv_version=cv2.__version__,
         source_sha256=hashlib.sha256(raw).hexdigest(),width=w,height=h,
-        algorithm='HSV_LAB_EDGE_MARKER_WATERSHED',segmentation_scope='VISIBLE_SURFACE_REGIONS_NOT_OBJECT_INSTANCES',
+        algorithm='HSV_CHROMA_HUE_EDGE_MARKER_WATERSHED',segmentation_scope='VISIBLE_SURFACE_REGIONS_NOT_OBJECT_INSTANCES',
         shape_method='UNCALIBRATED_GEOMETRIC_HEURISTIC',regions=regions,
         overlay='data:image/jpeg;base64,'+base64.b64encode(jpeg).decode(),
         labels_png='data:image/png;base64,'+base64.b64encode(png).decode(),

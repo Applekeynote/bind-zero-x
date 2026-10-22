@@ -1,0 +1,274 @@
+BIND ZERO-X v4.9 / Observation Quest 引き継ぎ文書
+更新日: 2026-10-22 / UTF-8
+公開ソース: https://github.com/Applekeynote/bind-zero-x
+
+1. 目的と現在の提供形態
+段ボールの写真をOpenCV 5で色分けし、利用者が確認したピースに対して
+折り畳み、積む順番、向き、紐の経路、本結びをアニメーションで案内する。
+別系統として、2時点の撮影画像・ROI・校正から相対的な層ずれを解析し、
+追加観察と証拠を管理する研究ワークフローを持つ。
+UIは英語。ナビゲーションには独自の5x7ピクセルフォントを使用する。
+PCのローカルサービスと、同じプライベートWi-Fiのスマートフォン向けHTTPS
+サービスとして稼働する。GitHub公開はソース公開であり、Webサービスの
+インターネット公開やAWS常時稼働を意味しない。
+
+2. 最初に確認するもの
+README.md: 起動と利用の入口。
+SECURITY.md: 認証・証拠・公開範囲の不変条件。
+docs/security-setup.md: MFAとWi-Fi HTTPS証明書の運用。
+docs/packing-verification.md: 最新ナビゲーションの実装範囲と検証。
+docs/physical-data.md: 実物データと独立GTの収集方法。
+scripts/release-files.json: 公開・配布に含めるファイルの明示的な一覧。
+bind-zero-x/ 以下: 元のv4.9設計資料と研究コア。過去の報告・ハッシュは
+当時の状態を示すため、現在の実行結果と混同しないこと。
+
+3. 構成と責務
+app/console_server.py
+  FastAPI。認証付きUI、画像解析API、研究セッション、履歴、証拠監査。
+  デスクトップは127.0.0.1:8765、Wi-Fiは指定したプライベートIPv4:8766。
+app/auth_security.py
+  パスワード、TOTP、ログインchallenge、セッション、リプレイ防止、制限。
+app/tls_local.py と scripts/setup_tls.py
+  ローカルCA・サーバー証明書の生成と検証。秘密情報はOS保護下に保存。
+app/packing_vision.py
+  本物のcv2による画像読込、色領域分割、輪郭、長軸、折り畳み候補の算出。
+app/static/app.js
+  9枚の写真カタログ、写真選択・追加、研究フロー、履歴・証拠UI。
+app/static/packing.js
+  ピースの選択と形状確認、計画編集、各段のアニメーション、紐・結び方、
+  明示的なステップ確認、JSONエクスポート。研究側の認可を書き換えない。
+app/static/index.html / style.css
+  英語のレスポンシブUI。packing-panel以下の案内はPixelフォント。
+app/static/pixel.ttf / scripts/make_pixel_font.py
+  オリジナルの5x7フォント。小文字入力もピクセル大文字の字形で表示。
+bind-zero-x/code/
+  相対運動、観測、判断、証拠、SQLite研究ストア等の既存研究実装。
+runtime/
+  実行時DB、キャプチャ、鍵、認証、TLS、ローカル実行証拠。非公開。
+data/physical/
+  実物撮影、校正、学習・ホールドアウト分離、独立測定用。非公開。
+tests/
+  UIアダプタ、MFA、画像境界、認可、物理GT、SQLite、JSフローのテスト。
+
+4. 必須ランタイムと初期構築
+Windows上でPython 3.12以上を用意し、プロジェクトルートで実行する。
+  .\Setup.ps1 -Python python
+既存環境は .venv5\Scripts\python.exe を使用する。
+requirements-opencv5.txt の固定値:
+  opencv-python-headless 5.0.0.93 / cv2.__version__ は5.0.0
+  numpy 2.3.5 / fastapi 0.133.0 / starlette 1.9.0
+  pydantic 2.13.5 / uvicorn 0.48.0 / httpx 0.28.1
+  boto3 1.43.116 / cryptography 50.0.2 / qrcode 8.2
+Setup.ps1はpip 26.2.2を指定する。
+確認:
+  .\.venv5\Scripts\python.exe -c "import cv2; print(cv2.__version__)"
+OpenCV 4をバージョン文字列の変更で5として扱うことは禁止。
+通常の起動にNode.jsやfontToolsは不要。JSテストにはNode.js、フォントの
+再生成にはrequirements-tools.txtのfonttools 4.62.1が必要。
+既存の .venv は古い検証環境であり、OpenCV 5本番には .venv5 を優先する。
+
+5. PC起動・停止・再起動
+  .\Start.ps1
+Chromeで http://127.0.0.1:8765/ を開く。
+停止はサーバー端末でCtrl+C。起動前に同じポートの既存サービスを確認する。
+サーバー再起動は全セッションとchallengeを失効させる。更新後は再ログイン。
+静的ファイルの更新だけならページ再読込で反映。Python更新は再起動が必要。
+本番認証をテストのために外したり、実DBへテスト用セッションを挿入しない。
+HTMLは認証後に提供され、初期化完了まで画像解析ボタンを無効にしている。
+
+6. MFAの運用
+初回登録はPCのloopback限定。14～128文字のパスワードを自分で入力し、
+Link authenticator → 認証アプリでQR登録 → 6桁コード → Activate MFA。
+以後はパスワードと新しいTOTPコードでサインインする。
+端末の日時は自動同期。コードは30秒単位、同じコードは成功後に再利用不可。
+登録直後に再ログインする場合も次のコードを待つ。
+ログインchallengeの期限切れはauth.jsが一度だけ更新して再試行する。
+誤ったパスワード・コードを自動的に繰り返し送信しない。
+セッションは15分アイドルまたは8時間で失効。Sign out other devicesあり。
+秘密をチャット、Git、スクリーンショット、引き継ぎ文書に記録しない。
+パスワードはscrypt、TOTP秘密と証明書パスワードはWindows DPAPIで保護。
+WindowsユーザーやPCが変わる場合、DPAPIデータの単純コピーでは復号できない。
+認証リカバリは管理者のローカル運用。外部からのパスワードリセットAPIはない。
+runtime/security/ の削除は認証を破壊するため、通常のトラブル対応に使わない。
+
+7. Wi-Fi HTTPS
+PCの現在のプライベートIPv4を確認し、次を実行する。
+  .\.venv5\Scripts\python.exe scripts\setup_tls.py --ip YOUR_PRIVATE_IPV4
+  .\Start.ps1 -Mobile -MobileIP YOUR_PRIVATE_IPV4
+PC: http://127.0.0.1:8765/
+スマートフォン: https://YOUR_PRIVATE_IPV4:8766/
+MFA登録と、有効かつIPが一致するTLS証明書がそろわなければWi-Fi起動は拒否。
+runtime/tls/ca-cert.cer は公開証明書。スマホへ直接移し、certificate-info.json
+のSHA256を照合してOSの証明書設定で信頼する。秘密鍵・DBは移さない。
+証明書警告を回避する操作で代用しない。CAは1年、サーバー証明書は90日。
+IP変更や期限切れでは停止して証明書を更新し、必要に応じて端末の信頼を更新。
+FW・端末証明書ストアはアプリから変更しない。8766の許可は対象の私設網のみ。
+端末追加の際もパスワード＋TOTPが必要。URLに認証情報を付けない。
+実スマホでのCA導入・カメラ・端末固有の操作は、現物での追加確認が必要。
+
+8. 新しいデモ画像一覧（添付順）
+全9枚、1448x1086 PNG。原本を再圧縮せずコピーしSHA256をmanifest.jsonへ記録。
+01 open-boxes-group.png   / Open boxes group / 組み立てられた箱の集合
+02 open-boxes-trio.png    / Open boxes trio / 組み立てられた箱3つ
+03 flat-jewel.png         / Jewel sheets / 深い色の展開シート5枚
+04 flat-pastel.png        / Pastel sheets / パステルの展開シート5枚
+05 flat-primary.png       / Primary sheets / 鮮やかな展開シート5枚
+06 flat-brown-spread.png  / Brown sheets spread / 茶色の展開シート
+07 flat-brown-pile.png    / Brown sheets pile / 重なった茶色のシート
+08 flat-brown-five.png    / Brown sheets five / 茶色のシート
+09 flat-brown-three.png   / Brown sheets three / 茶色のシート3枚
+初期選択は03。写真の名称は個数推定の入力には使わない。
+全てUSER_PROVIDED_DEMO_ONLY。実物撮影・独立GT・寸法校正済みとして扱わない。
+旧5枚 stacked-boxes / flattened-cartons / sorted-sheets / loose-stack /
+folded-panels は現在の写真フォルダ、カタログ、API許可リスト、配布対象から削除。
+添付元のDownloadsファイルやGitの過去コミットは削除対象ではない。
+画像追加時はmanifest、app.jsカタログ、console_server.py許可リスト、
+release-files.jsonを同時に更新し、PNG寸法・ハッシュ・表示数を確認する。
+
+9. 色分けと形状確認
+POST /api/console/segment のJSONは次のどちらか一方だけ:
+  {"demo_photo":"flat-primary"}
+  {"image_png_b64":"PNGのbase64本文（data:ヘッダーなし）"}
+認証・CSRF・Origin必須。デモ名は許可リスト照合。任意ファイルパスは不可。
+PNGは最大5,000,000 bytes、32～4096px、総画素3,000,000以下。
+ブラウザで追加した画像は長辺1280pxへ縮小してPNG化後に送信する。
+OpenCVで長辺960へ縮小し、HSV彩度と画像周辺のLab色差から領域を抽出。
+色相ヒストグラムの循環ピークで色を分け、複数色のときは色別、単色では
+エッジを用いた種からwatershedを行う。輪郭は正規化座標で返す。
+戻り値: source_sha256、opencv_version、width/height、regions、overlay、
+labels_png、input_tier、segmentation_scope等。
+regionsにはid、color、pixel_area、bbox、centroid、polygon、shape_evidence、
+shape_hypothesis、review_requiredを含む。最大12領域、手動追加を含め最大24。
+minAreaRectからimage_long_axis_degrees（画像右向き基準、画像yは下向き）を得る。
+形状は内部の直線方向、縦の折れ線、縦横比等からの未校正ヒューリスティック。
+OPEN_BOX_CANDIDATEならFold this box候補を表示するが、正解保証はない。
+FLAT / OPEN / EXCLUDEは利用者が確認し、未確認のままガイドを開始できない。
+同じ箱の別の面を別ピースとして選ばない。見逃しはDraw a missing region。
+白いシート、背景と同色、遮蔽、接触、写真の影や折り線で分割・結合が起こる。
+2D領域の長軸は隠れた箱全体の向きや折り畳み後の寸法ではない。
+解析結果はメモリ処理。ガイドは自動保存されず、利用者がJSONを書き出す。
+
+10. ナビゲーションの流れと向きの定義
+写真 → Segment & guide → 色領域選択 → 形状確認 → Animate。
+OPENと確認したピースは、上下のフラップを開き、既存の折れ線に沿って
+対角の角を寄せて平らにするFOLDステップを最初に置く。
+STACK計画画面でBASE TO TOPの順番を矢印で変更できる。
+初期順は見えている面積の降順。同じ距離での実寸比較ではないので実物で調整。
+各ピースにLong edge（Left to right / Front to back）、Bulky fold
+（away from you / toward you）を設定する。既定は長辺を左右、厚い折り目は交互。
+FRONTは作業者に一番近い辺、BACKは奥。LEFT/RIGHTは作業者から見た左右。
+設定変更すると後続の各段の案内を再生成し、それ以降の完了状態を解除する。
+各PLACEステップは番号、何段目、長辺の方向、厚い折り目の側を明示する。
+画像の長軸から目標への概算の時計回り回転角を表示し、上面図と積層図で示す。
+これは画像上の概算であり、撮影の透視変形や折り畳み後には再調整する。
+積層図は模式図で寸法通りの3D再構成ではない。
+ALIGNでは段の中心と端をそろえ、飛び出したピースを内側へ戻す。
+WRAP_LONG: 紐の中央を全段の下、手前→奥の中心線に通す。両端を前辺・
+後辺から上げ、上面中央で合わせる。下側は点線、上側は実線で示す。
+WRAP_CROSS: 上面中央で交差し90度方向を変え、一端を左辺から下へ、
+全段の下を左→右へ通し、右辺から上面中央へ戻す。他端は交点で保持。
+KNOT_FIRST: 右の端を左の端の上に置き、下へ回して輪を通し、引き寄せる。
+KNOT_SECOND: 左の端を右の端の上に置き、下へ回して輪を通す。左右均等に
+引いて本結び（square knot / reef knot）を交点上で平らに締める。
+CHECK: 二方向の輪が全段を含み、結び目が収まり、抜け落ちるピースがないか確認。
+各ステップはチェック後にNext。自動的な物理作業完了判定はしない。
+デモ画像ではチェックはシミュレーションとして記録する。
+Pause / Play / Replay / Back / Edit piecesあり。低減モーション設定にも対応。
+
+11. エクスポート
+Export packing plan JSONの形式はBZX-PACKING-GUIDE-V2。
+source_sha256、input_tier、opencv_version、orientation_reference、order_basis、
+pieces（順番、orientation、foldEdge含む）、steps（piece_id、instruction含む）。
+デモ: completed_in_demo=true/false、completed_by_user=false。
+通常画像: completed_by_userは利用者の明示チェック。実物GTの検証値ではない。
+physical_action_authorizedは常にfalse。研究側の安全ゲートを変更しない。
+
+12. 研究フローとデータ
+New observation → Launch the demo は合成の運動入力を解析して履歴に保存。
+Analyze paired framesは2枚のPNG、上下ROI、校正・モデルJSONが必要。
+追加観察を記録すると可能世界と次の観察を更新する。
+Historyで再開、Evidenceで元PNG・MAC・receiptの整合性を確認、JSONを出力。
+主なAPI: /api/console/runtime、/sessions、/sessions/{sid}、/demo、/capture、
+/reobserve-image、/sessions/{sid}/observe、/sessions/{sid}/export、/audit。
+実物の校正画像、独立測定者の実測CSV、凍結した事前登録、holdoutは未整備。
+scripts/init_physical_data.py と validate_physical_gt.py、docs/physical-data.md
+を使って収集する。デモ画像でこれを埋めたり、合成値を実測と呼ばない。
+AWSでは以前に東京リージョンで合成入力を用いたOpenCV 5実行を検証済み。
+検証用EC2と付属EBSは削除済み、証拠は私有S3とローカルに保持。
+既存予算上限は100米ドル、必要最小限。今回の画像・ガイド処理にAWSは不要。
+この文書にAWS認証・アカウント固有情報は含めない。
+
+13. セキュリティとバックアップ
+既存MFA、HTTPS、HttpOnly/SameSite Cookie、TLS時Secure Cookie、CSRF、
+Exact Origin、Host許可、試行制限、単回TOTP、入力量制限を維持する。
+高負荷APIは同時実行上限2。画像ヘッダーと総画素をdecode前に確認する。
+利用者入力はDOMへHTMLとして直接入れずescapeHTML等を通す。
+プロキシのForwardedヘッダーを信用しない。外部向け無認証バインドをしない。
+DB・キャプチャ・整合性鍵をまとめて、停止中にアクセス制限した場所へ保管。
+本番runtimeを公開ZIPやGitへ入れない。DPAPI保護の移行制約も事前に確認。
+依存パッケージは過去のpip-auditで既知の指摘を修正済みだが、継続更新が必要。
+セキュリティ対策が未知の脆弱性の不在を証明するわけではない。
+
+14. テストと再現コマンド
+プロジェクトルートで:
+  .\.venv5\Scripts\python.exe scripts\verify.py
+  node --test tests/auth_flow.test.cjs tests/packing_flow.test.cjs
+2026-10-22の本更新: 研究コア398件（397成功、1 skip）、アプリ32件成功、
+JS 14件成功。合計443成功、1 skip。以後の変更時は実際の出力で更新する。
+アプリテストは一時DBとテスト認証を使う。本番DBでテストを実行しない。
+test_packing_vision.pyは本物のOpenCV 5で9枚を解析し、認証、CSRF、
+許可リスト、PNG爆弾、上限、色領域分離、アップロード由来の契約を確認。
+新しい色画像3枚は各5領域。茶色・箱画像は4～12領域であり物体個数ではない。
+packing_flow.test.cjsは形状確認、折り畳み優先、段順・向きの更新、
+手動完了、描画座標、デモと実物完了の分離、V2出力の説明保存を確認。
+Chrome実施済み: MFA後の9枚カタログ表示、Primary sheetsの5領域解析、
+FLAT選択、領域02の最下段移動と90度方向設定、5段のPLACE、紐2方向、
+本結び、最終デモチェック、12ステップのV2 JSON出力を確認。
+Open boxes trioではOPEN選択後、FOLDが最初になることと再生・停止・再生し直しを確認。
+390pxの表示検証ではdocument client/scroll幅とも375pxで横はみ出しなし。
+Pixelフォントの読込と案内文への適用もDOMで確認。表示幅の設定は検証後解除。
+runtime/demo-results/replacement-packing-plan.json と replacement-*-guide.png
+に非公開の確認結果を保存。9枚すべての色分けはPythonで実行済み。
+実機スマホ・独立GT・現物の結束強度評価を自動テスト成功で代用しない。
+
+15. 配布とGitHubへの反映
+  .\.venv5\Scripts\python.exe scripts\package_release.py
+dist/BIND_ZERO_X_v4.9_pixel_console.zip が生成される。
+scripts/release-files.json の明示一覧だけを収録し、RELEASE_SHA256で検証する。
+鍵、認証DB、.env、実物データ、環境、runtime、.tmpは収録しない。
+元設計の既存マニフェストと、現在の配布ハッシュは役割が違う。
+公開先はApplekeynote/bind-zero-x。ブランチmainを他の変更で上書きしない。
+更新直前のHEADを取得して差分をレビューし、通常のfast-forwardまたは
+expected_shaのlease付き参照更新を使う。秘密・実測データを公開しない。
+ローカル .tmp/public-repo は過去の公開作業用コピーであり、作業ルートではない。
+この古いコピーから無条件pushしない。公開対象は現在の許可リストから組み立てる。
+
+16. 次の担当者の作業順
+1) README/SECURITY/本書を読み、.venv5でcv2 5を確認。
+2) 本番を停止せず必要な差分を整理し、一時環境で回帰確認。
+3) ナビゲーションならpacking.js、色分けならpacking_vision.pyを変更。
+4) 画像追加は4か所のカタログ・許可・配布リストを一緒に更新。
+5) Python変更後は再起動し、本人のMFAログイン後Chromeで通し確認。
+6) 実機スマホでCA・タップ・撮影・画面回転を確認。
+7) 実物撮影と独立測定、校正、holdout、結束の現物検証を収集。
+8) 型・色・背景の多様なデータで物体単位のセグメンテーションと未折畳み
+   分類の精度を評価。現状の候補スコアを確率と呼ばない。
+9) 透視補正・実寸・厚さを取得してから物理的な積層最適化へ進める。
+10)テスト・Chrome・配布ハッシュを確認し、秘密を除いて公開を更新。
+
+17. よくある問題
+ログインできない: 次の新しい30秒コード、端末の時刻、既登録アカウントを確認。
+  challenge期限切れは再読込。既存MFAを消して解決しようとしない。
+Wi-Fi起動拒否: 既存MFA、現在のIP、TLS SAN、期限、証明書ファイルを確認。
+スマホで証明書エラー: 公開CAの照合とOSの信頼設定を利用者が完了する。
+Segmentが無効: runtime初期化と認証を確認。ページ再読込後の状態を読む。
+色領域が過分割: 重複面を除外して一枚につき一ピースを選ぶか、手動矩形を使う。
+  隠れた輪郭や折り畳み後の寸法を一枚の画像から確定しない。
+順番を変えたのに前の指示: STACKで変更し、後続PLACEの番号・向きが更新される
+  テストを確認する。既存の完了チェックは解除されるのが正しい。
+フォントが通常文字: pixel.ttfの配信、CSS、再読込を確認。再生成後は小文字・
+  記号のcmapを調べ、全案内がピクセル字形を使うことを確認する。
+履歴・証拠に不整合: Evidence監査と元キャプチャを確認し、整合性鍵やDBを
+  作り直して既存の証拠を正しいことにしない。
+
+以上。実行秘密、個人パス、実測値を含まない公開可能な引き継ぎ文書。
