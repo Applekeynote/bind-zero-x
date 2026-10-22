@@ -1,0 +1,9 @@
+# Local unit-test environment verified on 2026-10-12.
+# OpenCV 4.x here is TEST ONLY and does not satisfy competition core requirement.
+numpy==2.3.5
+opencv-python-headless==4.13.0.92
+fastapi==0.133.0
+starlette==1.9.0
+pydantic==2.13.5
+uvicorn==0.48.0
+httpx==0.28.1

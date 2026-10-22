@@ -1,0 +1,134 @@
+{
+  "data_sha256": "60bc10316b1ae34f560a952f6b7e7b68a104cd19fa0ef6575e12b639db05bee3",
+  "status": "REAL_TRIAL_INPUT_UNDER_AUDIT_NOT_OFFICIAL_EFFECT_EVIDENCE",
+  "n_records": 2,
+  "group_counts": {
+    "D0": 0,
+    "D1": 1,
+    "E1": 0,
+    "E2": 1,
+    "B": 0
+  },
+  "group_summaries": {
+    "D0": {
+      "n": 0,
+      "completed_n": 0,
+      "incomplete_or_aborted_n": 0,
+      "completion_rate": null,
+      "incomplete_or_aborted_rate": null,
+      "total_original_sheets": 0,
+      "total_carried_sheets": 0,
+      "sheet_completion_fraction": null,
+      "wrong_intervention_rate": null,
+      "successful_without_wrong_intervention_rate": null,
+      "completed_only_mean_elapsed_seconds": null,
+      "all_trial_elapsed_mean_NOT_SPEED": null,
+      "abort_reasons": {}
+    },
+    "D1": {
+      "n": 1,
+      "completed_n": 1,
+      "incomplete_or_aborted_n": 0,
+      "completion_rate": 1.0,
+      "incomplete_or_aborted_rate": 0.0,
+      "total_original_sheets": 10,
+      "total_carried_sheets": 10,
+      "sheet_completion_fraction": 1.0,
+      "wrong_intervention_rate": 0,
+      "successful_without_wrong_intervention_rate": 1,
+      "completed_only_mean_elapsed_seconds": 120.0,
+      "all_trial_elapsed_mean_NOT_SPEED": 120.0,
+      "abort_reasons": {}
+    },
+    "E1": {
+      "n": 0,
+      "completed_n": 0,
+      "incomplete_or_aborted_n": 0,
+      "completion_rate": null,
+      "incomplete_or_aborted_rate": null,
+      "total_original_sheets": 0,
+      "total_carried_sheets": 0,
+      "sheet_completion_fraction": null,
+      "wrong_intervention_rate": null,
+      "successful_without_wrong_intervention_rate": null,
+      "completed_only_mean_elapsed_seconds": null,
+      "all_trial_elapsed_mean_NOT_SPEED": null,
+      "abort_reasons": {}
+    },
+    "E2": {
+      "n": 1,
+      "completed_n": 0,
+      "incomplete_or_aborted_n": 1,
+      "completion_rate": 0.0,
+      "incomplete_or_aborted_rate": 1.0,
+      "total_original_sheets": 10,
+      "total_carried_sheets": 0,
+      "sheet_completion_fraction": 0.0,
+      "wrong_intervention_rate": 0,
+      "successful_without_wrong_intervention_rate": 0,
+      "completed_only_mean_elapsed_seconds": null,
+      "all_trial_elapsed_mean_NOT_SPEED": 1.0,
+      "abort_reasons": {
+        "ABORTED_NO_COMPLETION": 1
+      }
+    },
+    "B": {
+      "n": 0,
+      "completed_n": 0,
+      "incomplete_or_aborted_n": 0,
+      "completion_rate": null,
+      "incomplete_or_aborted_rate": null,
+      "total_original_sheets": 0,
+      "total_carried_sheets": 0,
+      "sheet_completion_fraction": null,
+      "wrong_intervention_rate": null,
+      "successful_without_wrong_intervention_rate": null,
+      "completed_only_mean_elapsed_seconds": null,
+      "all_trial_elapsed_mean_NOT_SPEED": null,
+      "abort_reasons": {}
+    }
+  },
+  "comparisons": {
+    "D0": {
+      "status": "NO_MATCHED_PAIRS",
+      "n_pairs": 0
+    },
+    "D1": {
+      "status": "DESCRIPTIVE_ONLY_NOT_PREREGISTERED",
+      "n_pairs": 1,
+      "joint_completed_pairs": 0,
+      "n_excluded_from_speed_because_incomplete": 1,
+      "E2_completed_n": 0,
+      "control_completed_n": 1,
+      "E2_incomplete_n": 1,
+      "control_incomplete_n": 0,
+      "E2_minus_control_completion_rate": -1,
+      "completion_rate_difference_paired_bootstrap_95pct_CI": null,
+      "E2_minus_control_sheet_completion_fraction_mean": -1.0,
+      "E2_minus_control_success_without_wrong_intervention_rate": -1,
+      "success_without_wrong_intervention_paired_bootstrap_95pct_CI": null,
+      "error_reduction_mean": 0,
+      "error_reduction_cluster_bootstrap_95pct_CI": null,
+      "completed_pair_only_E2_minus_control_elapsed_sec": null,
+      "completed_pair_only_time_bootstrap_95pct_CI": null,
+      "unconditional_speed_claim_permitted": false,
+      "interpretation": "Speed is conditional on both arms completing; not an unconditional time-saving effect. Check completion before speed. No causal claim without verified randomization."
+    },
+    "E1": {
+      "status": "NO_MATCHED_PAIRS",
+      "n_pairs": 0
+    },
+    "B": {
+      "status": "NO_MATCHED_PAIRS",
+      "n_pairs": 0
+    }
+  },
+  "warnings": [
+    "CSV is user-provided; real-world provenance has not been verified by this script",
+    "Never use incomplete/aborted durations to claim efficiency",
+    "Conditional speed among completed cases is subject to selection bias",
+    "Paired bootstrap intervals are descriptive, not corrected for multiplicity/clustering by bundle",
+    "Primary endpoint, randomization, blinded independent GT and preregistration must be verified externally"
+  ],
+  "fixture": "SYNTHETIC_NOT_REAL_BUNDLES_DO_NOT_USE_AS_PHYSICAL_EXPERIMENT"
+}

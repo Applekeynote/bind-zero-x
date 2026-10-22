@@ -1,0 +1,114 @@
+{
+  "scope": "SYNTHETIC_OPENCV_LOCAL",
+  "opencv_version": "4.13.0",
+  "cases": [
+    {
+      "name": "COMMON_MOTION",
+      "input_ground_truth": "SYNTHETIC_PIXEL_TRANSFORMS_ONLY",
+      "gt_slip_px": [
+        0,
+        0
+      ],
+      "gt_local_rotation_deg": 0,
+      "measured": {
+        "value_mm": 0.0,
+        "sigma_mm": 0.0,
+        "calibration_id": "SYNTH_SCALE",
+        "relative_angle_deg": 0.0,
+        "max_footprint_drift_mm": 0.0,
+        "max_footprint_sigma_mm": 0.0
+      },
+      "local_rule": {
+        "action": "RECAPTURE",
+        "reason": "ROPE_PATH_NOT_OBSERVED",
+        "human_approval_required": false
+      },
+      "hypothetical_witness": {
+        "next_observation": null,
+        "disposition": "ABSTAIN",
+        "counterexample_pair": [
+          "KNOT_ONLY",
+          "NO_DETECTED_LAYER_FAULT"
+        ],
+        "certificate_hash": "01e6ff84e5d8517d0633359bb10e7be9acd5b8c147d9011bcddd878b8e69b868",
+        "initial_regret_units": 2.0,
+        "predicted_after_view_risk_units": null,
+        "status": "ILLUSTRATIVE_UNCALIBRATED_WORLD_AND_VIEW_MODEL",
+        "physical_action_authorized": false
+      },
+      "source_tier": "SYNTHETIC_DEMO_NOT_PHYSICAL_EVIDENCE"
+    },
+    {
+      "name": "RELATIVE_LAYER_SLIP",
+      "input_ground_truth": "SYNTHETIC_PIXEL_TRANSFORMS_ONLY",
+      "gt_slip_px": [
+        9,
+        0
+      ],
+      "gt_local_rotation_deg": 0,
+      "measured": {
+        "value_mm": 9.000026728372992,
+        "sigma_mm": 0.0,
+        "calibration_id": "SYNTH_SCALE",
+        "relative_angle_deg": 7.717509159268677e-05,
+        "max_footprint_drift_mm": 9.000127752716805,
+        "max_footprint_sigma_mm": 0.0
+      },
+      "local_rule": {
+        "action": "REORDER",
+        "reason": "LAYER_SLIP_MEASURED",
+        "human_approval_required": true
+      },
+      "hypothetical_witness": {
+        "next_observation": "ROPE_PATH",
+        "disposition": "REQUEST_NONCONTACT_VIEW",
+        "counterexample_pair": [
+          "LAYER_ONLY",
+          "LAYER_PLUS_ROPE"
+        ],
+        "certificate_hash": "5ed73c42113c569bde6450aa4baf3ca8cd552856777056d81e924d22b0b0b3b3",
+        "initial_regret_units": 2.0,
+        "predicted_after_view_risk_units": 0.25,
+        "status": "ILLUSTRATIVE_UNCALIBRATED_WORLD_AND_VIEW_MODEL",
+        "physical_action_authorized": false
+      },
+      "source_tier": "SYNTHETIC_DEMO_NOT_PHYSICAL_EVIDENCE"
+    },
+    {
+      "name": "RELATIVE_ROTATION",
+      "input_ground_truth": "SYNTHETIC_PIXEL_TRANSFORMS_ONLY",
+      "gt_slip_px": [
+        0,
+        0
+      ],
+      "gt_local_rotation_deg": 8,
+      "measured": {
+        "value_mm": 0.044503132560380236,
+        "sigma_mm": 0.0,
+        "calibration_id": "SYNTH_SCALE",
+        "relative_angle_deg": -7.975714926506842,
+        "max_footprint_drift_mm": 18.788449708395596,
+        "max_footprint_sigma_mm": 0.0
+      },
+      "local_rule": {
+        "action": "REORDER",
+        "reason": "LAYER_SLIP_MEASURED",
+        "human_approval_required": true
+      },
+      "hypothetical_witness": {
+        "next_observation": "ROPE_PATH",
+        "disposition": "REQUEST_NONCONTACT_VIEW",
+        "counterexample_pair": [
+          "LAYER_ONLY",
+          "LAYER_PLUS_ROPE"
+        ],
+        "certificate_hash": "5ed73c42113c569bde6450aa4baf3ca8cd552856777056d81e924d22b0b0b3b3",
+        "initial_regret_units": 2.0,
+        "predicted_after_view_risk_units": 0.25,
+        "status": "ILLUSTRATIVE_UNCALIBRATED_WORLD_AND_VIEW_MODEL",
+        "physical_action_authorized": false
+      },
+      "source_tier": "SYNTHETIC_DEMO_NOT_PHYSICAL_EVIDENCE"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# Optional: rebuild the original pixel display font (binary already included).
+fonttools==4.62.1

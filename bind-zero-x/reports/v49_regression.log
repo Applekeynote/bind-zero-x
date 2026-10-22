@@ -1,0 +1,6 @@
+{"PCIG": {"mean_hypothetical_loss": 0.65, "n_simulated_world_cases": 8}, "STATIC_TOP": {"mean_hypothetical_loss": 1.7000000000000002, "n_simulated_world_cases": 8}}
+
+----------------------------------------------------------------------
+Ran 398 tests in 3.268s
+
+OK

@@ -1,0 +1,620 @@
+test_E2E_001_common_motion_no_invasive_action (test_agentic_synthetic_e2e.AgenticSyntheticE2ETests.test_E2E_001_common_motion_no_invasive_action) ... ok
+test_E2E_002_measured_slip_drives_reorder_and_approval (test_agentic_synthetic_e2e.AgenticSyntheticE2ETests.test_E2E_002_measured_slip_drives_reorder_and_approval) ... ok
+test_E2E_003_occluded_image_cannot_authorize (test_agentic_synthetic_e2e.AgenticSyntheticE2ETests.test_E2E_003_occluded_image_cannot_authorize) ... ok
+test_E2E_004_wrong_observation_cannot_be_reused (test_agentic_synthetic_e2e.AgenticSyntheticE2ETests.test_E2E_004_wrong_observation_cannot_be_reused) ... ok
+test_E2E_005_units_4px_is_not_4mm (test_agentic_synthetic_e2e.AgenticSyntheticE2ETests.test_E2E_005_units_4px_is_not_4mm) ... ok
+test_E2E_006_missing_calibration_rejected (test_agentic_synthetic_e2e.AgenticSyntheticE2ETests.test_E2E_006_missing_calibration_rejected) ... ok
+test_BLOCKER_01B_rope_disallowed_abstains (test_cape_rule_core.RuleTests.test_BLOCKER_01B_rope_disallowed_abstains) ... ok
+test_BLOCKER_01C_multi_mode_not_blind (test_cape_rule_core.RuleTests.test_BLOCKER_01C_multi_mode_not_blind) ... ok
+test_BLOCKER_01D_partial_unknown_not_keep (test_cape_rule_core.RuleTests.test_BLOCKER_01D_partial_unknown_not_keep) ... ok
+test_BLOCKER_01_rope_only_never_keep (test_cape_rule_core.RuleTests.test_BLOCKER_01_rope_only_never_keep) ... ok
+test_BLOCKER_02B_allowed_but_not_issued (test_cape_rule_core.RuleTests.test_BLOCKER_02B_allowed_but_not_issued) ... ok
+test_BLOCKER_02C_wrong_observation (test_cape_rule_core.RuleTests.test_BLOCKER_02C_wrong_observation) ... ok
+test_BLOCKER_02D_other_owner (test_cape_rule_core.RuleTests.test_BLOCKER_02D_other_owner) ... ok
+test_BLOCKER_02E_constraints_unverified (test_cape_rule_core.RuleTests.test_BLOCKER_02E_constraints_unverified) ... ok
+test_BLOCKER_02_arbitrary_unissued_action (test_cape_rule_core.RuleTests.test_BLOCKER_02_arbitrary_unissued_action) ... ok
+test_BLOCKER_03B_reused_key_wrong_owner (test_cape_rule_core.RuleTests.test_BLOCKER_03B_reused_key_wrong_owner) ... ok
+test_BLOCKER_03C_replay_after_advance (test_cape_rule_core.RuleTests.test_BLOCKER_03C_replay_after_advance) ... ok
+test_BLOCKER_03_reused_key_other_body (test_cape_rule_core.RuleTests.test_BLOCKER_03_reused_key_other_body) ... ok
+test_RULE_001_keep_observed (test_cape_rule_core.RuleTests.test_RULE_001_keep_observed) ... ok
+test_RULE_002_knot_slip_retie (test_cape_rule_core.RuleTests.test_RULE_002_knot_slip_retie) ... ok
+test_RULE_003_layer_slip_reorder (test_cape_rule_core.RuleTests.test_RULE_003_layer_slip_reorder) ... ok
+test_RULE_004_all_unknown (test_cape_rule_core.RuleTests.test_RULE_004_all_unknown) ... ok
+test_RULE_005_recapture_limit (test_cape_rule_core.RuleTests.test_RULE_005_recapture_limit) ... ok
+test_RULE_006_rope_knot_unknown (test_cape_rule_core.RuleTests.test_RULE_006_rope_knot_unknown) ... ok
+test_RULE_007_only_keep_not_allowed (test_cape_rule_core.RuleTests.test_RULE_007_only_keep_not_allowed) ... ok
+test_RULE_008_nonfinite (test_cape_rule_core.RuleTests.test_RULE_008_nonfinite) ... ok
+test_RULE_009_approval_not_execution (test_cape_rule_core.RuleTests.test_RULE_009_approval_not_execution) ... ok
+test_RULE_010_idempotent_same_payload (test_cape_rule_core.RuleTests.test_RULE_010_idempotent_same_payload) ... ok
+test_RULE_011_stale_version (test_cape_rule_core.RuleTests.test_RULE_011_stale_version) ... ok
+test_RULE_012_probe_limit (test_cape_rule_core.RuleTests.test_RULE_012_probe_limit) ... ok
+test_RULE_024_terminal_action_denied (test_cape_rule_core.RuleTests.test_RULE_024_terminal_action_denied) ... ok
+test_RULE_025_no_forged_execution (test_cape_rule_core.RuleTests.test_RULE_025_no_forged_execution) ... ok
+test_RULE_026_no_probe_w_o_evidence (test_cape_rule_core.RuleTests.test_RULE_026_no_probe_w_o_evidence) ... ok
+test_RULE_027_completed_probe_unique (test_cape_rule_core.RuleTests.test_RULE_027_completed_probe_unique) ... ok
+test_RULE_028_retie_cannot_increment_probe (test_cape_rule_core.RuleTests.test_RULE_028_retie_cannot_increment_probe) ... ok
+test_RULE_029_probe_limit_selects_abstain (test_cape_rule_core.RuleTests.test_RULE_029_probe_limit_selects_abstain) ... ok
+test_RULE_030_unverified_probe_evidence (test_cape_rule_core.RuleTests.test_RULE_030_unverified_probe_evidence) ... ok
+test_BRIDGE_001_fault_drives_rope_path_view (test_decision_bridge.WitnessBridgeTests.test_BRIDGE_001_fault_drives_rope_path_view) ... ok
+test_BRIDGE_002_no_detected_layer_fault_changes_next_view (test_decision_bridge.WitnessBridgeTests.test_BRIDGE_002_no_detected_layer_fault_changes_next_view) ... ok
+test_BRIDGE_003_relative_rotation_changes_view (test_decision_bridge.WitnessBridgeTests.test_BRIDGE_003_relative_rotation_changes_view) ... ok
+test_BRIDGE_004_always_marks_uncalibrated (test_decision_bridge.WitnessBridgeTests.test_BRIDGE_004_always_marks_uncalibrated) ... ok
+test_BRIDGE_005_from_CV_to_witness (test_decision_bridge.WitnessBridgeTests.test_BRIDGE_005_from_CV_to_witness) ... ok
+test_BLOCKER_04B_empty_profile_rejected (test_evaluation_core.EvaluationUnitTests.test_BLOCKER_04B_empty_profile_rejected) ... ok
+test_BLOCKER_04C_comparable_wrong_duration (test_evaluation_core.EvaluationUnitTests.test_BLOCKER_04C_comparable_wrong_duration) ... ok
+test_BLOCKER_04D_missing_target_spec (test_evaluation_core.EvaluationUnitTests.test_BLOCKER_04D_missing_target_spec) ... ok
+test_BLOCKER_04_both_100N_rejected (test_evaluation_core.EvaluationUnitTests.test_BLOCKER_04_both_100N_rejected) ... ok
+test_MET_001_unknown_only_not_success (test_evaluation_core.EvaluationUnitTests.test_MET_001_unknown_only_not_success) ... ok
+test_MET_002_micro_coverage (test_evaluation_core.EvaluationUnitTests.test_MET_002_micro_coverage) ... ok
+test_MET_003_false_positive (test_evaluation_core.EvaluationUnitTests.test_MET_003_false_positive) ... ok
+test_MET_004_multilabel (test_evaluation_core.EvaluationUnitTests.test_MET_004_multilabel) ... ok
+test_MET_005_arms_mismatch (test_evaluation_core.EvaluationUnitTests.test_MET_005_arms_mismatch) ... ok
+test_MET_006_profile_match (test_evaluation_core.EvaluationUnitTests.test_MET_006_profile_match) ... ok
+test_MET_007_censored_not_silent (test_evaluation_core.EvaluationUnitTests.test_MET_007_censored_not_silent) ... ok
+test_MET_008_partial_not_complete (test_evaluation_core.EvaluationUnitTests.test_MET_008_partial_not_complete) ... ok
+test_MET_009_pair_difference (test_evaluation_core.EvaluationUnitTests.test_MET_009_pair_difference) ... ok
+test_MET_010_small_sample_inconclusive (test_evaluation_core.EvaluationUnitTests.test_MET_010_small_sample_inconclusive) ... ok
+test_MET_011_duplicate_arm (test_evaluation_core.EvaluationUnitTests.test_MET_011_duplicate_arm) ... ok
+test_MET_012_nan_outcome (test_evaluation_core.EvaluationUnitTests.test_MET_012_nan_outcome) ... ok
+test_MET_017_abort_counted (test_evaluation_core.EvaluationUnitTests.test_MET_017_abort_counted) ... ok
+test_MET_018_noncompleted_time_not_imputed (test_evaluation_core.EvaluationUnitTests.test_MET_018_noncompleted_time_not_imputed) ... ok
+test_MET_019_false_complete_rejected (test_evaluation_core.EvaluationUnitTests.test_MET_019_false_complete_rejected) ... ok
+test_PIPE_01_enforces_opencv5_runtime (test_research_pipeline.PipelineTests.test_PIPE_01_enforces_opencv5_runtime) ... ok
+test_PIPE_02_unit_correct_even_with_slip (test_research_pipeline.PipelineTests.test_PIPE_02_unit_correct_even_with_slip) ... ok
+test_PIPE_03_no_hidden_knot_assumption (test_research_pipeline.PipelineTests.test_PIPE_03_no_hidden_knot_assumption) ... ok
+test_PIPE_04_no_mask_is_failure (test_research_pipeline.PipelineTests.test_PIPE_04_no_mask_is_failure) ... ok
+test_PIPE_05_wrong_calibration_refusal (test_research_pipeline.PipelineTests.test_PIPE_05_wrong_calibration_refusal) ... ok
+test_MATH_016_common_90_degree_rotation (test_se2_math.TestSE2.test_MATH_016_common_90_degree_rotation) ... ok
+test_MATH_017_common_translation_and_rotation (test_se2_math.TestSE2.test_MATH_017_common_translation_and_rotation) ... ok
+test_MATH_018_only_top_layer_rotates (test_se2_math.TestSE2.test_MATH_018_only_top_layer_rotates) ... ok
+test_MATH_019_only_bottom_layer_rotates (test_se2_math.TestSE2.test_MATH_019_only_bottom_layer_rotates) ... ok
+test_MATH_020_common_movement_plus_five_mm_slip (test_se2_math.TestSE2.test_MATH_020_common_movement_plus_five_mm_slip) ... ok
+test_MATH_021_zero_center_translation_still_sees_angle (test_se2_math.TestSE2.test_MATH_021_zero_center_translation_still_sees_angle) ... ok
+test_common_translation (test_se2_math.TestSE2.test_common_translation) ... ok
+test_general_pose_inverse (test_se2_math.TestSE2.test_general_pose_inverse) ... ok
+test_invariant_under_common_left_multiplication_randomized (test_se2_math.TestSE2.test_invariant_under_common_left_multiplication_randomized) ... ok
+test_no_anchor_rejected (test_se2_math.TestSE2.test_no_anchor_rejected) ... ok
+test_nonfinite_rejected (test_se2_math.TestSE2.test_nonfinite_rejected) ... ok
+test_se2_group_relative_equality_under_common_motion (test_se2_math.TestSE2.test_se2_group_relative_equality_under_common_motion) ... ok
+test_single_layer_translation (test_se2_math.TestSE2.test_single_layer_translation) ... ok
+test_SCV_001_common_translation (test_synthetic_opencv.SyntheticVisionTests.test_SCV_001_common_translation) ... ok
+test_SCV_002_common_rotation (test_synthetic_opencv.SyntheticVisionTests.test_SCV_002_common_rotation) ... ok
+test_SCV_003_common_rotation_translation (test_synthetic_opencv.SyntheticVisionTests.test_SCV_003_common_rotation_translation) ... ok
+test_SCV_004_true_five_pixel_slip (test_synthetic_opencv.SyntheticVisionTests.test_SCV_004_true_five_pixel_slip) ... ok
+test_SCV_005_slip_under_camera_motion (test_synthetic_opencv.SyntheticVisionTests.test_SCV_005_slip_under_camera_motion) ... ok
+test_SCV_006_ten_pixel_slip (test_synthetic_opencv.SyntheticVisionTests.test_SCV_006_ten_pixel_slip) ... ok
+test_SCV_007_relative_rotation (test_synthetic_opencv.SyntheticVisionTests.test_SCV_007_relative_rotation) ... ok
+test_SCV_008_occlusion_abstention (test_synthetic_opencv.SyntheticVisionTests.test_SCV_008_occlusion_abstention) ... ok
+test_SCV_009_scale_is_rejected (test_synthetic_opencv.SyntheticVisionTests.test_SCV_009_scale_is_rejected) ... ok
+test_SCV_010_no_visible_features (test_synthetic_opencv.SyntheticVisionTests.test_SCV_010_no_visible_features) ... ok
+test_TVOI_01_informative_probe (test_toy_cape_voi.ToyVoITests.test_TVOI_01_informative_probe) ... ok
+test_TVOI_02_cost_exceeds_information (test_toy_cape_voi.ToyVoITests.test_TVOI_02_cost_exceeds_information) ... ok
+test_TVOI_03_physical_transition_can_reverse_benefit (test_toy_cape_voi.ToyVoITests.test_TVOI_03_physical_transition_can_reverse_benefit) ... ok
+test_TVOI_04_invalid_prior (test_toy_cape_voi.ToyVoITests.test_TVOI_04_invalid_prior) ... ok
+test_TVOI_05_invalid_transition (test_toy_cape_voi.ToyVoITests.test_TVOI_05_invalid_transition) ... ok
+test_TVOI_06_dangerous_probe_filtered (test_toy_cape_voi.ToyVoITests.test_TVOI_06_dangerous_probe_filtered) ... ok
+test_TVOI_07_negative_cost (test_toy_cape_voi.ToyVoITests.test_TVOI_07_negative_cost) ... ok
+test_TVOI_08_unknown_next_state (test_toy_cape_voi.ToyVoITests.test_TVOI_08_unknown_next_state) ... ok
+test_001_approval_denies_probe_limit (test_v42_regressions.CriticalV42Tests.test_001_approval_denies_probe_limit) ... ok
+test_002_execution_denies_probe_limit (test_v42_regressions.CriticalV42Tests.test_002_execution_denies_probe_limit) ... ok
+test_003_nonprobe_still_allowed_at_limit (test_v42_regressions.CriticalV42Tests.test_003_nonprobe_still_allowed_at_limit) ... ok
+test_004_duplicate_probe_approval_refused (test_v42_regressions.CriticalV42Tests.test_004_duplicate_probe_approval_refused) ... ok
+test_005_scale_px_to_mm (test_v42_regressions.CriticalV42Tests.test_005_scale_px_to_mm) ... ok
+test_006_unknown_scale (test_v42_regressions.CriticalV42Tests.test_006_unknown_scale) ... ok
+test_007_cross_plane (test_v42_regressions.CriticalV42Tests.test_007_cross_plane) ... ok
+test_008_wrong_unit_object (test_v42_regressions.CriticalV42Tests.test_008_wrong_unit_object) ... ok
+test_009_uncertainty_propagation (test_v42_regressions.CriticalV42Tests.test_009_uncertainty_propagation) ... ok
+test_010_profile_missing_duration (test_v42_regressions.CriticalV42Tests.test_010_profile_missing_duration) ... ok
+test_011_incomplete_target_waveform (test_v42_regressions.CriticalV42Tests.test_011_incomplete_target_waveform) ... ok
+test_012_both_100n_rejected (test_v42_regressions.CriticalV42Tests.test_012_both_100n_rejected) ... ok
+test_013_profile_hash_tampering (test_v42_regressions.CriticalV42Tests.test_013_profile_hash_tampering) ... ok
+test_014_profile_hash_mismatch_arm (test_v42_regressions.CriticalV42Tests.test_014_profile_hash_mismatch_arm) ... ok
+test_015_preflight_is_mandatory (test_v42_regressions.CriticalV42Tests.test_015_preflight_is_mandatory) ... ok
+test_016_negative_time (test_v42_regressions.CriticalV42Tests.test_016_negative_time) ... ok
+test_017_zero_sheets (test_v42_regressions.CriticalV42Tests.test_017_zero_sheets) ... ok
+test_018_more_than_original (test_v42_regressions.CriticalV42Tests.test_018_more_than_original) ... ok
+test_019_completed_missing_time (test_v42_regressions.CriticalV42Tests.test_019_completed_missing_time) ... ok
+test_020_abort_count_and_nonnegative (test_v42_regressions.CriticalV42Tests.test_020_abort_count_and_nonnegative) ... ok
+test_021_sqlite_replay_after_advance (test_v42_regressions.CriticalV42Tests.test_021_sqlite_replay_after_advance) ... ok
+test_022_sqlite_same_key_conflicting_payload (test_v42_regressions.CriticalV42Tests.test_022_sqlite_same_key_conflicting_payload) ... ok
+test_023_sqlite_no_other_owner (test_v42_regressions.CriticalV42Tests.test_023_sqlite_no_other_owner) ... ok
+test_024_sqlite_conflicting_concurrent_approvals (test_v42_regressions.CriticalV42Tests.test_024_sqlite_conflicting_concurrent_approvals) ... ok
+test_025_negative_force_limit (test_v42_regressions.CriticalV42Tests.test_025_negative_force_limit) ... ok
+test_B42_unc_01_interval_crosses_threshold (test_v42_uncertainty.UncertaintyTests.test_B42_unc_01_interval_crosses_threshold) ... ok
+test_B42_unc_02_far_above_threshold (test_v42_uncertainty.UncertaintyTests.test_B42_unc_02_far_above_threshold) ... ok
+test_B42_unc_03_bad_threshold (test_v42_uncertainty.UncertaintyTests.test_B42_unc_03_bad_threshold) ... ok
+test_D_001_rope_unknown_layer_known_never_probe_layer (test_v43_adversarial.DecisionAdversarialTests.test_D_001_rope_unknown_layer_known_never_probe_layer) ... ok
+test_D_002_no_recaptures_left_rope_unknown_abstain (test_v43_adversarial.DecisionAdversarialTests.test_D_002_no_recaptures_left_rope_unknown_abstain) ... ok
+test_D_003_only_knot_unknown_probes_knot (test_v43_adversarial.DecisionAdversarialTests.test_D_003_only_knot_unknown_probes_knot) ... ok
+test_D_004_only_layer_unknown_probes_layer (test_v43_adversarial.DecisionAdversarialTests.test_D_004_only_layer_unknown_probes_layer) ... ok
+test_D_005_probe_limit_forbids_knot (test_v43_adversarial.DecisionAdversarialTests.test_D_005_probe_limit_forbids_knot) ... ok
+test_D_006_footprint_trigger_even_center_zero (test_v43_adversarial.DecisionAdversarialTests.test_D_006_footprint_trigger_even_center_zero) ... ok
+test_D_007_rotation_trigger_even_center_zero (test_v43_adversarial.DecisionAdversarialTests.test_D_007_rotation_trigger_even_center_zero) ... ok
+test_D_008_rotation_below_threshold_not_triggered (test_v43_adversarial.DecisionAdversarialTests.test_D_008_rotation_below_threshold_not_triggered) ... ok
+test_D_009_nonfinite_angle_rejected (test_v43_adversarial.DecisionAdversarialTests.test_D_009_nonfinite_angle_rejected) ... ok
+test_D_010_invalid_angle_threshold_rejected (test_v43_adversarial.DecisionAdversarialTests.test_D_010_invalid_angle_threshold_rejected) ... ok
+test_D_011_rope_fault_not_keep (test_v43_adversarial.DecisionAdversarialTests.test_D_011_rope_fault_not_keep) ... ok
+test_D_012_layer_plus_rope_abstention (test_v43_adversarial.DecisionAdversarialTests.test_D_012_layer_plus_rope_abstention) ... ok
+test_ROI_001_duplicate_roi_false_zero_denied (test_v43_adversarial.GeometryAdversarialTests.test_ROI_001_duplicate_roi_false_zero_denied) ... ok
+test_ROI_002_overlap_denied (test_v43_adversarial.GeometryAdversarialTests.test_ROI_002_overlap_denied) ... ok
+test_ROI_003_empty_mask_still_denied (test_v43_adversarial.GeometryAdversarialTests.test_ROI_003_empty_mask_still_denied) ... ok
+test_ROI_004_bad_dtype (test_v43_adversarial.GeometryAdversarialTests.test_ROI_004_bad_dtype) ... ok
+test_ROI_005_bad_shape (test_v43_adversarial.GeometryAdversarialTests.test_ROI_005_bad_shape) ... ok
+test_ROI_006_known_slip_still_measured (test_v43_adversarial.GeometryAdversarialTests.test_ROI_006_known_slip_still_measured) ... ok
+test_ROI_007_one_layer_rotation_has_large_footprint_motion (test_v43_adversarial.GeometryAdversarialTests.test_ROI_007_one_layer_rotation_has_large_footprint_motion) ... ok
+test_ROI_008_common_rotation_zero_relative (test_v43_adversarial.GeometryAdversarialTests.test_ROI_008_common_rotation_zero_relative) ... ok
+test_ROI_009_rotation_changes_pipeline_decision (test_v43_adversarial.GeometryAdversarialTests.test_ROI_009_rotation_changes_pipeline_decision) ... ok
+test_ROI_010_px_to_mm_preserved_on_rotated_footprint (test_v43_adversarial.GeometryAdversarialTests.test_ROI_010_px_to_mm_preserved_on_rotated_footprint) ... ok
+test_ROI_011_duplicate_roi_pipeline_rejects_not_measured (test_v43_adversarial.GeometryAdversarialTests.test_ROI_011_duplicate_roi_pipeline_rejects_not_measured) ... ok
+test_ROI_012_provenance_required_when_strict (test_v43_adversarial.GeometryAdversarialTests.test_ROI_012_provenance_required_when_strict) ... ok
+test_ROI_013_frame_bound_manifest_passes (test_v43_adversarial.GeometryAdversarialTests.test_ROI_013_frame_bound_manifest_passes) ... ok
+test_ROI_014_roi_swapped_invalidates_hash (test_v43_adversarial.GeometryAdversarialTests.test_ROI_014_roi_swapped_invalidates_hash) ... ok
+test_ROI_015_manifest_reuse_source_id_denied (test_v43_adversarial.GeometryAdversarialTests.test_ROI_015_manifest_reuse_source_id_denied) ... ok
+test_ROI_016_manifest_other_frame_denied (test_v43_adversarial.GeometryAdversarialTests.test_ROI_016_manifest_other_frame_denied) ... ok
+test_M_001_nan_sigma_rejected_at_creation (test_v43_adversarial.MetricAdversarialTests.test_M_001_nan_sigma_rejected_at_creation) ... ok
+test_M_002_inf_sigma_rejected (test_v43_adversarial.MetricAdversarialTests.test_M_002_inf_sigma_rejected) ... ok
+test_M_003_negative_sigma_rejected (test_v43_adversarial.MetricAdversarialTests.test_M_003_negative_sigma_rejected) ... ok
+test_M_004_nan_pixel_rejected (test_v43_adversarial.MetricAdversarialTests.test_M_004_nan_pixel_rejected) ... ok
+test_M_005_inf_scale_rejected (test_v43_adversarial.MetricAdversarialTests.test_M_005_inf_scale_rejected) ... ok
+test_M_006_wrong_max_calibration_rejected (test_v43_adversarial.MetricAdversarialTests.test_M_006_wrong_max_calibration_rejected) ... ok
+test_M_007_max_metric_boundary_uncertain (test_v43_adversarial.MetricAdversarialTests.test_M_007_max_metric_boundary_uncertain) ... ok
+test_M_008_nonfinite_angle_rejected (test_v43_adversarial.MetricAdversarialTests.test_M_008_nonfinite_angle_rejected) ... ok
+test_M_009_valid_mm_max_and_angle_transferred (test_v43_adversarial.MetricAdversarialTests.test_M_009_valid_mm_max_and_angle_transferred) ... ok
+test_M_010_pixel_negative_sigma_rejected (test_v43_adversarial.MetricAdversarialTests.test_M_010_pixel_negative_sigma_rejected) ... ok
+test_P_001_valid_profile (test_v43_adversarial.ProtocolAdversarialTests.test_P_001_valid_profile) ... ok
+test_P_002_overwide_tolerance_rejected (test_v43_adversarial.ProtocolAdversarialTests.test_P_002_overwide_tolerance_rejected) ... ok
+test_P_003_zero_rate_quasistatic_rejected (test_v43_adversarial.ProtocolAdversarialTests.test_P_003_zero_rate_quasistatic_rejected) ... ok
+test_P_004_naive_freeze_timestamp_rejected (test_v43_adversarial.ProtocolAdversarialTests.test_P_004_naive_freeze_timestamp_rejected) ... ok
+test_P_005_non_utc_freeze_timestamp_rejected (test_v43_adversarial.ProtocolAdversarialTests.test_P_005_non_utc_freeze_timestamp_rejected) ... ok
+test_P_006_profile_tampering_detected_before_range_check (test_v43_adversarial.ProtocolAdversarialTests.test_P_006_profile_tampering_detected_before_range_check) ... ok
+test_P_007_zero_amplitude_low_energy_rejected (test_v43_adversarial.ProtocolAdversarialTests.test_P_007_zero_amplitude_low_energy_rejected) ... ok
+test_SAFE_001_correct_motion_but_no_ROI_identity_means_no_action (test_v43_fail_closed.PipelineFailClosedTests.test_SAFE_001_correct_motion_but_no_ROI_identity_means_no_action) ... ok
+test_SAFE_002_operator_attested_roi_can_offer_human_approval (test_v43_fail_closed.PipelineFailClosedTests.test_SAFE_002_operator_attested_roi_can_offer_human_approval) ... ok
+test_SAFE_003_false_identity_no_unreviewed_physical_action (test_v43_fail_closed.PipelineFailClosedTests.test_SAFE_003_false_identity_no_unreviewed_physical_action) ... ok
+test_API44_001_health_does_not_claim_opencv5 (test_v44_research_api.ApiV44.test_API44_001_health_does_not_claim_opencv5) ... <frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bde40>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bda80>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bd7b0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bd5d0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bd6c0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bd3f0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bd210>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bce50>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bd4e0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e020>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e110>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e200>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e2f0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e3e0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e4d0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e5c0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e890>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:107: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e980>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_API44_002_ready_denied_without_token (test_v44_research_api.ApiV44.test_API44_002_ready_denied_without_token) ... ok
+test_API44_003_missing_token_denied (test_v44_research_api.ApiV44.test_API44_003_missing_token_denied) ... ok
+test_API44_004_invalid_token_denied (test_v44_research_api.ApiV44.test_API44_004_invalid_token_denied) ... ok
+test_API44_005_extra_fields_disallowed (test_v44_research_api.ApiV44.test_API44_005_extra_fields_disallowed) ... ok
+test_API44_006_bad_image_decode_rejected (test_v44_research_api.ApiV44.test_API44_006_bad_image_decode_rejected) ... ok
+test_API44_007_non_png_rejected (test_v44_research_api.ApiV44.test_API44_007_non_png_rejected) ... ok
+test_API44_008_no_opencv4_bypass_in_api (test_v44_research_api.ApiV44.test_API44_008_no_opencv4_bypass_in_api) ... ok
+test_API44_009_large_png_data_rejected (test_v44_research_api.ApiV44.test_API44_009_large_png_data_rejected) ... ok
+test_FIG44_001_layer_observed_rope_unknown_knot_unknown (test_v44_witness_security.FIGV44.test_FIG44_001_layer_observed_rope_unknown_knot_unknown) ... ok
+test_FIG44_002_unknown_never_zero (test_v44_witness_security.FIGV44.test_FIG44_002_unknown_never_zero) ... ok
+test_FIG44_003_hash_changes_on_evidence_update (test_v44_witness_security.FIGV44.test_FIG44_003_hash_changes_on_evidence_update) ... ok
+test_FIG44_004_rejects_other_obs (test_v44_witness_security.FIGV44.test_FIG44_004_rejects_other_obs) ... ok
+test_FIG44_005_uncertain_requires_reason (test_v44_witness_security.FIGV44.test_FIG44_005_uncertain_requires_reason) ... ok
+test_FIG44_006_reject_dangling_edge (test_v44_witness_security.FIGV44.test_FIG44_006_reject_dangling_edge) ... ok
+test_FIG44_007_reject_duplicate_node (test_v44_witness_security.FIGV44.test_FIG44_007_reject_duplicate_node) ... ok
+test_GATE44_001_witness_request_blocks_rule_reorder (test_v44_witness_security.UnifiedGateV44.test_GATE44_001_witness_request_blocks_rule_reorder) ... ok
+test_GATE44_002_unverified_roi_abstains (test_v44_witness_security.UnifiedGateV44.test_GATE44_002_unverified_roi_abstains) ... ok
+test_GATE44_003_toy_model_always_blocks_physical (test_v44_witness_security.UnifiedGateV44.test_GATE44_003_toy_model_always_blocks_physical) ... ok
+test_GATE44_004_even_calibrated_agreement_not_physical_exec (test_v44_witness_security.UnifiedGateV44.test_GATE44_004_even_calibrated_agreement_not_physical_exec) ... ok
+test_GATE44_005_disagreement_abstains (test_v44_witness_security.UnifiedGateV44.test_GATE44_005_disagreement_abstains) ... ok
+test_GATE44_006_tampered_certificate_abstains (test_v44_witness_security.UnifiedGateV44.test_GATE44_006_tampered_certificate_abstains) ... ok
+test_GATE44_007_main_pipeline_respects_witness (test_v44_witness_security.UnifiedGateV44.test_GATE44_007_main_pipeline_respects_witness) ... ok
+test_GATE44_008_tracking_sigma_not_falsely_calibrated (test_v44_witness_security.UnifiedGateV44.test_GATE44_008_tracking_sigma_not_falsely_calibrated) ... ok
+test_GATE44_009_stale_witness_different_observation_abstains (test_v44_witness_security.UnifiedGateV44.test_GATE44_009_stale_witness_different_observation_abstains) ... ok
+test_GATE44_010_unbound_evidence_cannot_authorize (test_v44_witness_security.UnifiedGateV44.test_GATE44_010_unbound_evidence_cannot_authorize) ... ok
+test_GATE44_011_image_content_binds_certificate (test_v44_witness_security.UnifiedGateV44.test_GATE44_011_image_content_binds_certificate) ... ok
+test_W44_001_ambiguous_optimum_does_not_fabricate_pair (test_v44_witness_security.WitnessSecurityV44.test_W44_001_ambiguous_optimum_does_not_fabricate_pair) ... ok
+test_W44_002_tiebreak_has_shared_optimum (test_v44_witness_security.WitnessSecurityV44.test_W44_002_tiebreak_has_shared_optimum) ... ok
+test_W44_003_three_way_without_pairwise_disjointness (test_v44_witness_security.WitnessSecurityV44.test_W44_003_three_way_without_pairwise_disjointness) ... ok
+test_W44_004_pairwise_disjoint_witness (test_v44_witness_security.WitnessSecurityV44.test_W44_004_pairwise_disjoint_witness) ... ok
+test_W44_005_unknown_wildcard_cannot_fake_information (test_v44_witness_security.WitnessSecurityV44.test_W44_005_unknown_wildcard_cannot_fake_information) ... ok
+test_W44_006_unknown_observation_never_shrinks (test_v44_witness_security.WitnessSecurityV44.test_W44_006_unknown_observation_never_shrinks) ... ok
+test_W44_007_explicit_occlusion_is_not_mislabeled_unknown (test_v44_witness_security.WitnessSecurityV44.test_W44_007_explicit_occlusion_is_not_mislabeled_unknown) ... ok
+test_W44_008_possible_outcome_set_overlaps_conservatively (test_v44_witness_security.WitnessSecurityV44.test_W44_008_possible_outcome_set_overlaps_conservatively) ... ok
+test_W44_009_model_falsification_is_explicit (test_v44_witness_security.WitnessSecurityV44.test_W44_009_model_falsification_is_explicit) ... ok
+test_W44_010_full_hash_includes_unselected_view_cost (test_v44_witness_security.WitnessSecurityV44.test_W44_010_full_hash_includes_unselected_view_cost) ... ok
+test_W44_011_hash_changes_with_observation_id (test_v44_witness_security.WitnessSecurityV44.test_W44_011_hash_changes_with_observation_id) ... ok
+test_W44_012_hash_changes_with_model_version (test_v44_witness_security.WitnessSecurityV44.test_W44_012_hash_changes_with_model_version) ... ok
+test_W44_013_hash_changes_with_video_sha (test_v44_witness_security.WitnessSecurityV44.test_W44_013_hash_changes_with_video_sha) ... ok
+test_W44_014_hash_changes_with_loss_nonopt (test_v44_witness_security.WitnessSecurityV44.test_W44_014_hash_changes_with_loss_nonopt) ... ok
+test_W44_015_hash_can_be_verified (test_v44_witness_security.WitnessSecurityV44.test_W44_015_hash_can_be_verified) ... ok
+test_W44_016_view_without_real_improvement_not_selected (test_v44_witness_security.WitnessSecurityV44.test_W44_016_view_without_real_improvement_not_selected) ... ok
+test_W44_017_physical_auth_not_granted_by_witness (test_v44_witness_security.WitnessSecurityV44.test_W44_017_physical_auth_not_granted_by_witness) ... ok
+test_W44_018_unbounded_loss_rejected (test_v44_witness_security.WitnessSecurityV44.test_W44_018_unbounded_loss_rejected) ... ok
+test_W44_019_result_cost_nonnegative_and_finite (test_v44_witness_security.WitnessSecurityV44.test_W44_019_result_cost_nonnegative_and_finite) ... ok
+test_W44_020_forged_field_with_original_hash_rejected (test_v44_witness_security.WitnessSecurityV44.test_W44_020_forged_field_with_original_hash_rejected) ... ok
+test_V45_024_opencv_exception_becomes_quality_error (test_v45_critical.ExtraFlowRobustnessV45.test_V45_024_opencv_exception_becomes_quality_error) ... ok
+test_V45_025_malformed_forward_flow_rejected (test_v45_critical.ExtraFlowRobustnessV45.test_V45_025_malformed_forward_flow_rejected) ... ok
+test_V45_023_untrusted_cv_evidence_never_updates (test_v45_critical.ExtraTrustBoundaryV45.test_V45_023_untrusted_cv_evidence_never_updates) ... ok
+test_V45_010_none_backward (test_v45_critical.FlowFailureV45.test_V45_010_none_backward) ... ok
+test_V45_011_none_status (test_v45_critical.FlowFailureV45.test_V45_011_none_status) ... ok
+test_V45_012_wrong_backward_shape (test_v45_critical.FlowFailureV45.test_V45_012_wrong_backward_shape) ... ok
+test_V45_013_nan_tracks (test_v45_critical.FlowFailureV45.test_V45_013_nan_tracks) ... ok
+test_V45_026_independent_checker_valid (test_v45_critical.IndependentSemanticCheckerV45.test_V45_026_independent_checker_valid) ... ok
+test_V45_027_independent_checker_catches_forged_optimal_actions (test_v45_critical.IndependentSemanticCheckerV45.test_V45_027_independent_checker_catches_forged_optimal_actions) ... ok
+test_V45_014_start_requests_view (test_v45_critical.MultiTurnV45.test_V45_014_start_requests_view) ... ok
+test_V45_015_new_observation_restricts_hypotheses (test_v45_critical.MultiTurnV45.test_V45_015_new_observation_restricts_hypotheses) ... ok
+test_V45_016_unknown_result_does_not_reduce_worlds (test_v45_critical.MultiTurnV45.test_V45_016_unknown_result_does_not_reduce_worlds) ... ok
+test_V45_017_wrong_view_rejected (test_v45_critical.MultiTurnV45.test_V45_017_wrong_view_rejected) ... ok
+test_V45_018_same_image_rejected (test_v45_critical.MultiTurnV45.test_V45_018_same_image_rejected) ... ok
+test_V45_019_cv_claim_without_calibration_rejected (test_v45_critical.MultiTurnV45.test_V45_019_cv_claim_without_calibration_rejected) ... ok
+test_V45_020_cv_path_with_model_consistent_signature (test_v45_critical.MultiTurnV45.test_V45_020_cv_path_with_model_consistent_signature) ... ok
+test_V45_021_wrong_cv_signature_rejected (test_v45_critical.MultiTurnV45.test_V45_021_wrong_cv_signature_rejected) ... ok
+test_V45_022_toy_model_provenance_remains_visible (test_v45_critical.MultiTurnV45.test_V45_022_toy_model_provenance_remains_visible) ... ok
+test_V45_001_semantic_proof_accept (test_v45_critical.SemanticProofV45.test_V45_001_semantic_proof_accept) ... ok
+test_V45_002_forged_direct_action_rejected_even_after_rehash (test_v45_critical.SemanticProofV45.test_V45_002_forged_direct_action_rejected_even_after_rehash) ... ok
+test_V45_003_forged_minimax_regret_rejected (test_v45_critical.SemanticProofV45.test_V45_003_forged_minimax_regret_rejected) ... ok
+test_V45_004_toy_100_loss_direct_rejected (test_v45_critical.SemanticProofV45.test_V45_004_toy_100_loss_direct_rejected) ... ok
+test_V45_005_small_single_world_still_direct_but_not_authorized (test_v45_critical.SemanticProofV45.test_V45_005_small_single_world_still_direct_but_not_authorized) ... ok
+test_V45_006_trusted_model_and_cv_can_propose_but_cannot_authorize (test_v45_critical.SemanticProofV45.test_V45_006_trusted_model_and_cv_can_propose_but_cannot_authorize) ... ok
+test_V45_007_untrusted_model_pin_mismatch_denied (test_v45_critical.SemanticProofV45.test_V45_007_untrusted_model_pin_mismatch_denied) ... ok
+test_V45_008_abs_ceiling_invalid_rejected (test_v45_critical.SemanticProofV45.test_V45_008_abs_ceiling_invalid_rejected) ... ok
+test_V45_009_inconsistent_model_hash_differs (test_v45_critical.SemanticProofV45.test_V45_009_inconsistent_model_hash_differs) ... ok
+test_V45_API_001_auth_required_for_start (test_v45_loop_api.ResearchLoopApiV45.test_V45_API_001_auth_required_for_start) ... ok
+test_V45_API_002_multi_turn_persists_and_filters (test_v45_loop_api.ResearchLoopApiV45.test_V45_API_002_multi_turn_persists_and_filters) ... ok
+test_V45_API_003_stale_version_conflict (test_v45_loop_api.ResearchLoopApiV45.test_V45_API_003_stale_version_conflict) ... /mnt/data/bzx_v46_work/code/witness_planner.py:81: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61673010>
+  if not set.intersection(*(optimal[w] for w in subset)):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:81: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61673790>
+  if not set.intersection(*(optimal[w] for w in subset)):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:81: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616726b0>
+  if not set.intersection(*(optimal[w] for w in subset)):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:81: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61671c60>
+  if not set.intersection(*(optimal[w] for w in subset)):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:81: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e6b0>
+  if not set.intersection(*(optimal[w] for w in subset)):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:81: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e5c0>
+  if not set.intersection(*(optimal[w] for w in subset)):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_V45_API_004_untrusted_cv_source_rejected (test_v45_loop_api.ResearchLoopApiV45.test_V45_API_004_untrusted_cv_source_rejected) ... ok
+test_V45_API_005_duplicate_session_refused (test_v45_loop_api.ResearchLoopApiV45.test_V45_API_005_duplicate_session_refused) ... /mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b619dd5d0>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e5c0>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61671c60>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616726b0>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8130>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8220>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a93f0>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a94e0>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa3e0>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616abb50>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616abc40>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:35: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b5fd0c4f0>
+  def minimax(subset):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_V45_API_006_rogue_extra_action_rejected (test_v45_loop_api.ResearchLoopApiV45.test_V45_API_006_rogue_extra_action_rejected) ... ok
+test_V45_API_007_auth_required_for_followup (test_v45_loop_api.ResearchLoopApiV45.test_V45_API_007_auth_required_for_followup) ... ok
+test_V46_037_static_top_negative_control_equal (test_v46_ablation.FiniteModelAblationV46.test_V46_037_static_top_negative_control_equal) ... ok
+test_V46_038_information_only_if_view_has_registered_signal (test_v46_ablation.FiniteModelAblationV46.test_V46_038_information_only_if_view_has_registered_signal) ... ok
+test_V46_039_model_internal_aggregate_is_explicit (test_v46_ablation.FiniteModelAblationV46.test_V46_039_model_internal_aggregate_is_explicit) ... ok
+test_V46_040_png_preflight_rejects_huge_dimensions (test_v46_ablation.FiniteModelAblationV46.test_V46_040_png_preflight_rejects_huge_dimensions) ... ok
+test_V46_041_png_preflight_rejects_short_header (test_v46_ablation.FiniteModelAblationV46.test_V46_041_png_preflight_rejects_short_header) ... ok
+test_V46_API_001_real_opencv4_runtime_rejected (test_v46_image_api.ResearchImageApiV46.test_V46_API_001_real_opencv4_runtime_rejected) ... ok
+test_V46_API_002_unauthenticated_image_rejected (test_v46_image_api.ResearchImageApiV46.test_V46_API_002_unauthenticated_image_rejected) ... ok
+test_V46_API_003_extra_client_cv_attestation_rejected (test_v46_image_api.ResearchImageApiV46.test_V46_API_003_extra_client_cv_attestation_rejected) ... ok
+test_V46_API_004_synthetic_cv4_with_mocked_version_consumes_view_but_no_world_reduction (test_v46_image_api.ResearchImageApiV46.test_V46_API_004_synthetic_cv4_with_mocked_version_consumes_view_but_no_world_reduction) ... /usr/lib/python3.13/asyncio/base_events.py:430: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8130>
+  self._clock_resolution = time.get_clock_info('monotonic').resolution
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/asyncio/base_events.py:430: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8040>
+  self._clock_resolution = time.get_clock_info('monotonic').resolution
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/asyncio/base_events.py:430: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61671a80>
+  self._clock_resolution = time.get_clock_info('monotonic').resolution
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/asyncio/base_events.py:430: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61673880>
+  self._clock_resolution = time.get_clock_info('monotonic').resolution
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/asyncio/base_events.py:430: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e110>
+  self._clock_resolution = time.get_clock_info('monotonic').resolution
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/asyncio/base_events.py:430: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e4d0>
+  self._clock_resolution = time.get_clock_info('monotonic').resolution
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_V46_API_005_replay_image_wrong_version_rejected (test_v46_image_api.ResearchImageApiV46.test_V46_API_005_replay_image_wrong_version_rejected) ... ok
+test_V46_API_006_new_frame_roi_provenance_failure (test_v46_image_api.ResearchImageApiV46.test_V46_API_006_new_frame_roi_provenance_failure) ... /mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616726b0>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61673c40>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61672020>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616731f0>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b619dd5d0>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e2f0>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616733d0>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8400>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61673880>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa200>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8130>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616abb50>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/independent_witness_checker.py:36: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa980>
+  scores={a:max(float(losses[a][w])-mins[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_V46_API_007_duplicate_layer_mask_error (test_v46_image_api.ResearchImageApiV46.test_V46_API_007_duplicate_layer_mask_error) ... ok
+test_V46_API_008_legacy_endpoint_rejects_client_cv_source (test_v46_image_api.ResearchImageApiV46.test_V46_API_008_legacy_endpoint_rejects_client_cv_source) ... ok
+test_V46_035_feature_detector_cv2_error_yields_quality_error (test_v46_integrity.CvFailClosedV46.test_V46_035_feature_detector_cv2_error_yields_quality_error) ... ok
+test_V46_036_no_feature_yields_unknown_not_zero (test_v46_integrity.CvFailClosedV46.test_V46_036_no_feature_yields_unknown_not_zero) ... ok
+test_V46_001_client_loss_dict_mutation_does_not_change_loop (test_v46_integrity.ModelBindingV46.test_V46_001_client_loss_dict_mutation_does_not_change_loop) ... ok
+test_V46_002_client_view_prediction_mutation_detached (test_v46_integrity.ModelBindingV46.test_V46_002_client_view_prediction_mutation_detached) ... ok
+test_V46_003_inplace_loss_tamper_refused (test_v46_integrity.ModelBindingV46.test_V46_003_inplace_loss_tamper_refused) ... ok
+test_V46_004_inplace_view_signature_tamper_refused (test_v46_integrity.ModelBindingV46.test_V46_004_inplace_view_signature_tamper_refused) ... ok
+test_V46_005_forged_model_fingerprint_cannot_keep_old_proof (test_v46_integrity.ModelBindingV46.test_V46_005_forged_model_fingerprint_cannot_keep_old_proof) ... ok
+test_V46_006_mismatched_worlds_rejected (test_v46_integrity.ModelBindingV46.test_V46_006_mismatched_worlds_rejected) ... ok
+test_V46_007_mismatched_witness_rejected (test_v46_integrity.ModelBindingV46.test_V46_007_mismatched_witness_rejected) ... ok
+test_V46_008_valid_advanced_history_reconstructed (test_v46_integrity.ModelBindingV46.test_V46_008_valid_advanced_history_reconstructed) ... ok
+test_V46_009_forged_step_worlds_rejected (test_v46_integrity.ModelBindingV46.test_V46_009_forged_step_worlds_rejected) ... ok
+test_V46_010_forged_step_signature_rejected (test_v46_integrity.ModelBindingV46.test_V46_010_forged_step_signature_rejected) ... /mnt/data/bzx_v46_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa980>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616ab5b0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a95d0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61673b50>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616733d0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61672e30>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b5fd0c8b0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b61673a60>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_V46_011_hash_only_wrong_step_rejected (test_v46_integrity.ModelBindingV46.test_V46_011_hash_only_wrong_step_rejected) ... ok
+test_V46_012_zero_view_budget_no_false_request (test_v46_integrity.ModelBindingV46.test_V46_012_zero_view_budget_no_false_request) ... ok
+test_V46_013_zero_budget_followup_rejected (test_v46_integrity.ModelBindingV46.test_V46_013_zero_budget_followup_rejected) ... ok
+test_V46_014_direct_abstain_is_terminal (test_v46_integrity.ModelBindingV46.test_V46_014_direct_abstain_is_terminal) ... ok
+test_V46_015_trace_never_authorizes (test_v46_integrity.ModelBindingV46.test_V46_015_trace_never_authorizes) ... ok
+test_V46_016_cv_unverified_rejected (test_v46_integrity.ModelBindingV46.test_V46_016_cv_unverified_rejected) ... ok
+test_V46_017_uncalibrated_cv_does_not_shrink_worlds (test_v46_integrity.ModelBindingV46.test_V46_017_uncalibrated_cv_does_not_shrink_worlds) ... ok
+test_V46_018_uncalibrated_cv_diagnostic_assertion_rejected (test_v46_integrity.ModelBindingV46.test_V46_018_uncalibrated_cv_diagnostic_assertion_rejected) ... ok
+test_V46_019_encode_decode_roundtrip (test_v46_integrity.ModelBindingV46.test_V46_019_encode_decode_roundtrip) ... ok
+test_V46_020_decoded_bad_model_rejected (test_v46_integrity.ModelBindingV46.test_V46_020_decoded_bad_model_rejected) ... ok
+test_V46_021_history_replay_roundtrip (test_v46_integrity.ModelBindingV46.test_V46_021_history_replay_roundtrip) ... ok
+test_V46_022_valid_read (test_v46_integrity.PersistentIntegrityV46.test_V46_022_valid_read) ... ok
+test_V46_023_sql_loss_tamper_refused (test_v46_integrity.PersistentIntegrityV46.test_V46_023_sql_loss_tamper_refused) ... ok
+test_V46_024_sql_version_tamper_refused (test_v46_integrity.PersistentIntegrityV46.test_V46_024_sql_version_tamper_refused) ... ok
+test_V46_025_sql_mac_tamper_refused (test_v46_integrity.PersistentIntegrityV46.test_V46_025_sql_mac_tamper_refused) ... ok
+test_V46_026_same_path_uses_persistent_mac_key (test_v46_integrity.PersistentIntegrityV46.test_V46_026_same_path_uses_persistent_mac_key) ... ok
+test_V46_027_store_advances_atomically (test_v46_integrity.PersistentIntegrityV46.test_V46_027_store_advances_atomically) ... ok
+test_V46_028_stale_version_conflict (test_v46_integrity.PersistentIntegrityV46.test_V46_028_stale_version_conflict) ... ok
+test_V46_029_malformed_blob_rejected_even_if_mac_recomputed (test_v46_integrity.PersistentIntegrityV46.test_V46_029_malformed_blob_rejected_even_if_mac_recomputed) ... ok
+test_V46_030_model_changed_with_mac_recomputed_still_rejected (test_v46_integrity.PersistentIntegrityV46.test_V46_030_model_changed_with_mac_recomputed_still_rejected) ... ok
+test_V46_031_untrusted_cv_source_refused_by_public_store_method (test_v46_integrity.PersistentIntegrityV46.test_V46_031_untrusted_cv_source_refused_by_public_store_method) ... ok
+test_V46_032_server_cv_nondiagnostic_updates (test_v46_integrity.PersistentIntegrityV46.test_V46_032_server_cv_nondiagnostic_updates) ... ok
+test_V46_033_server_cv_fake_calibrated_rejected (test_v46_integrity.PersistentIntegrityV46.test_V46_033_server_cv_fake_calibrated_rejected) ... /mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928be020>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bd3f0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bdf30>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b928bd7b0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b619dd5d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177d8a0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177db70>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e200>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e980>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e110>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e020>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177e2f0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8220>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aaa70>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a9c60>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8400>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa4d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a96c0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aab60>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8f40>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616ab010>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a9a80>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a95d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616ab5b0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a86d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a9210>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8040>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8310>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa110>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a97b0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa3e0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa2f0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a9d50>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a93f0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a9990>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8130>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aae30>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a8c70>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616aa890>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616a84f0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b616abb50>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/bzx_v46_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f8b6177dc60>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_V46_034_wrong_external_integrity_key_cannot_read (test_v46_integrity.PersistentIntegrityV46.test_V46_034_wrong_external_integrity_key_cannot_read) ... ok
+test_WIT_001_conflicting_decisions_produce_witness (test_witness_planner.BINDWitnessTests.test_WIT_001_conflicting_decisions_produce_witness) ... ok
+test_WIT_002_uninformative_view_not_requested (test_witness_planner.BINDWitnessTests.test_WIT_002_uninformative_view_not_requested) ... ok
+test_WIT_003_costlier_than_regret_abstains (test_witness_planner.BINDWitnessTests.test_WIT_003_costlier_than_regret_abstains) ... ok
+test_WIT_004_one_world_direct_action (test_witness_planner.BINDWitnessTests.test_WIT_004_one_world_direct_action) ... ok
+test_WIT_005_same_good_action_no_view (test_witness_planner.BINDWitnessTests.test_WIT_005_same_good_action_no_view) ... ok
+test_WIT_006_invalid_missing_loss_rejected (test_witness_planner.BINDWitnessTests.test_WIT_006_invalid_missing_loss_rejected) ... ok
+test_WIT_007_nan_cost_rejected (test_witness_planner.BINDWitnessTests.test_WIT_007_nan_cost_rejected) ... ok
+test_WIT_008_evidence_update (test_witness_planner.BINDWitnessTests.test_WIT_008_evidence_update) ... ok
+test_WIT_009_model_falsified_not_forced (test_witness_planner.BINDWitnessTests.test_WIT_009_model_falsified_not_forced) ... ok
+test_WIT_010_unknown_view_not_admitted (test_witness_planner.BINDWitnessTests.test_WIT_010_unknown_view_not_admitted) ... ok
+test_WIT_011_view_cost_reduces_advantage (test_witness_planner.BINDWitnessTests.test_WIT_011_view_cost_reduces_advantage) ... ok
+test_WIT_012_repeatable_certificate (test_witness_planner.BINDWitnessTests.test_WIT_012_repeatable_certificate) ... ok
+test_WIT_013_bad_signatures_rejected (test_witness_planner.BINDWitnessTests.test_WIT_013_bad_signatures_rejected) ... ok
+test_WIT_014_zero_information_stop (test_witness_planner.BINDWitnessTests.test_WIT_014_zero_information_stop) ... ok
+
+----------------------------------------------------------------------
+Ran 317 tests in 1.875s
+
+OK
+{"PCIG": {"mean_hypothetical_loss": 0.65, "n_simulated_world_cases": 8}, "STATIC_TOP": {"mean_hypothetical_loss": 1.7000000000000002, "n_simulated_world_cases": 8}}

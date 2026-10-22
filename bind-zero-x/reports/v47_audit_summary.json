@@ -1,0 +1,17 @@
+{
+  "package_version": "v4.7",
+  "test_cases": 591,
+  "local_pass": 350,
+  "not_run": 241,
+  "requirements": 131,
+  "traces": 766,
+  "cv_in_container": "4.13.0_or_runtime_value_not_a_V5_claim",
+  "physical_ground_truth_trials": 0,
+  "aws_running_tests": 0,
+  "opencv5_executed": false,
+  "simulation_or_mock_included": true,
+  "code_test_log_sha256": "396f4462bd3a75bd5ea942dee6dbbdab1d77929eaa2f8b7386cfef42e08ab6a4",
+  "evidence_scope": "LOCAL_PURE_CODE_AND_MOCKED_CV5_ONLY",
+  "official_score_claim": null,
+  "target_score": 96
+}

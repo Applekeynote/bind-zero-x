@@ -1,0 +1,32 @@
+[
+  {
+    "file": "stacked-boxes.png",
+    "label": "Stacked boxes",
+    "sha256": "c1c94ab2535a5e728152660ce6fd23eda982ec418151eab72c9b0cf910379d05",
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  },
+  {
+    "file": "flattened-cartons.png",
+    "label": "Flattened cartons",
+    "sha256": "f7653f513c2394b1b93fa33c292e14011cde90971eb73b9f9e574b2c754a717a",
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  },
+  {
+    "file": "sorted-sheets.png",
+    "label": "Sorted sheets",
+    "sha256": "706d1edb6b82ee26431d138018c4faccf5864b5b35565f9ee2408b180c77c16d",
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  },
+  {
+    "file": "loose-stack.png",
+    "label": "Loose stack",
+    "sha256": "bd1ec51d03d7a75dd66d6fcdbf1d6add9ef863df7cf7b50090b4d7cc658f8b79",
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  },
+  {
+    "file": "folded-panels.png",
+    "label": "Folded panels",
+    "sha256": "8f53f4908246ee3260950dbcf8e4db04d7121d95eac1849aa43be0d09d27f71e",
+    "provenance": "USER_PROVIDED_DEMO_ONLY"
+  }
+]

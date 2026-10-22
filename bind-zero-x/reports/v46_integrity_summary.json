@@ -1,0 +1,11 @@
+{
+  "test_count": 550,
+  "executed_local_pass": 317,
+  "planned_not_run": 233,
+  "requirements": 121,
+  "relationships": 717,
+  "new_local_tests": 49,
+  "new_future_gates": 10,
+  "test_method_count": 317,
+  "warning": "PASS is local only; no actual AWS/OpenCV5/physical trials"
+}

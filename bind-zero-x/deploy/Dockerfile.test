@@ -1,0 +1,4 @@
+FROM bind-zero-x-v44:runtime
+WORKDIR /app
+COPY code/ /app/code/
+CMD ["python","-m","unittest","discover","-s","code","-p","test_*.py","-v"]

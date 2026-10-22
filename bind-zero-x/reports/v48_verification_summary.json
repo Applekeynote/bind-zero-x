@@ -1,0 +1,18 @@
+{
+  "version": "v4.8",
+  "local_test_methods_pass": 386,
+  "planned_test_cases": 637,
+  "not_run": 251,
+  "requirements": 141,
+  "requirement_test_relations": 822,
+  "local_opencv_version": "4.13.0",
+  "actual_opencv5_executed": false,
+  "actual_aws_workload_verified": false,
+  "independent_physical_gt_verified": false,
+  "real_efficacy_experiment_completed": false,
+  "real_worker_ui_tested": false,
+  "official_score_claim": null,
+  "score_goal": 96,
+  "only_logged_evidence": "LOCAL_UNIT_TESTS_WITH_SYNTHETIC_OR_MOCK_INPUTS",
+  "unittest_log_sha256": "431c3f29a41449b78bd715304fb39a51311499cd953d6daec741753debfb3317"
+}

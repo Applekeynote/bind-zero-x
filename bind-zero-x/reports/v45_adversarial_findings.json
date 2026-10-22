@@ -1,0 +1,21 @@
+{
+  "audit": "v4.4 adversarial checks",
+  "pass_means": "reported defect was reproducible",
+  "findings": [
+    {
+      "id": "ADV-01",
+      "reproduced": false,
+      "detail": "valid_original=REQUEST_NONCONTACT_VIEW, forged_verify=False, gated=ABSTAIN, human_approval_required=False, physical_action_authorized=False"
+    },
+    {
+      "id": "ADV-02",
+      "reproduced": false,
+      "detail": "Handled gracefully: (None, 'BACKWARD_FLOW_FAILED')"
+    },
+    {
+      "id": "ADV-03",
+      "reproduced": false,
+      "detail": "disposition=ABSTAIN, recommended=None, max_absolute_loss=100, regret=0.0"
+    }
+  ]
+}

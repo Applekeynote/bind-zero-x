@@ -2,5 +2,55 @@
 
 A retro pixel-style field workspace for cardboard photos and observations. The interface is in English and adapts to phone, tablet, and desktop screens.
 
+## Start
 
-Source upload in progress.
+```powershell
+.\Start.ps1
+```
+
+Open <http://127.0.0.1:8765/> and complete **Set up MFA**: choose a 14–128 character password, select **Link authenticator**, scan the QR, enter its six-digit code, then select **Activate MFA**. On another PC, install Python 3.12+ and run `.\Setup.ps1 -Python python` once first. The launcher prefers `.venv5`, with genuine OpenCV 5.0.0.
+
+## Use on a phone
+
+```powershell
+.\Start.ps1 -Mobile
+```
+
+Complete desktop MFA first. Create a local HTTPS certificate with `.\.venv5\Scripts\python.exe scripts\setup_tls.py --ip YOUR_PRIVATE_IPV4`, then start mobile mode. Install the public `runtime/tls/ca-cert.cer` on your phone and trust that local CA. Open the HTTPS link shown by **Connect phone** on the same private Wi-Fi, then sign in with your password and a fresh authenticator code. See [the setup guide](docs/security-setup.md) for trust, expiry, and network setup.
+
+The phone HTTPS port is 8766; desktop loopback stays at 8765. Mobile startup requires MFA and valid TLS. Sessions expire after 15 minutes idle or eight hours total, and a restart revokes them. Each authenticator code can succeed once; wait for the next code before another sign-in. No credential is included in a join URL.
+
+## Explore the collection
+
+- The five supplied cardboard photos are demo-only and included as original PNGs. Switch photos with the thumbnail strip and expand a frame for a closer look.
+- **Add photo** opens the photo library or the phone camera. Selected images are previewed on that device. A photo preview stays in browser memory until the page is reloaded.
+- **New observation → Analyze paired frames** accepts two PNG frames, upper/lower ROI masks, and a calibration/model JSON. Use **Configuration template** to prepare the configuration.
+- **Launch the demo** runs synthetic optical flow, creates a persisted session, and lets you record the next observation.
+- **History** reopens saved sessions. **Evidence** checks original PNGs, session MACs, and receipt integrity. The decision witness and trace can be exported as JSON.
+- Photo details and observation measurements have separate views. Selecting a demo photo does not create motion measurements or ground-truth results.
+
+## Files
+
+| Path | Content |
+| --- | --- |
+| `app/console_server.py` | FastAPI console adapter and optional phone access |
+| `app/static/` | English HTML/CSS/JS, pixel guides, custom font, photo collection |
+| `app/static/photos/manifest.json` | SHA256 hashes and provenance of the five original photos |
+| `bind-zero-x/` | v4.9 design archive and maintained research code |
+| `runtime/` | Local sessions, PNG archive, integrity keys, execution evidence |
+| `data/physical/` | Physical data collection and independent measurements |
+| `SECURITY.md` | Security boundaries and publication policy |
+| `docs/security-setup.md` | MFA enrollment and private Wi-Fi HTTPS setup |
+| `docs/physical-data.md` | Physical data collection procedure |
+
+Runtime files, integrity keys, environments, and physical datasets are excluded from the source release. The source release includes the five photos supplied for this interface. The release manifest contains current source hashes; manifests in the original design archive describe historical versions.
+
+## Verification
+
+```powershell
+.\.venv5\Scripts\python.exe scripts\verify.py
+```
+
+Run the command above for the current core, console, and authentication regression results. Browser checks cover English navigation, photo switching/import, narrow layouts, observation save, history restore, and evidence inspection.
+
+The supplied still photos are demo material. Paired capture analysis still uses the original calibration, ROI, evidence, and approval contracts. Earlier AWS evidence uses synthetic inputs in Tokyo CloudShell. Account-specific AWS evidence remains local and is excluded from the public source repository.

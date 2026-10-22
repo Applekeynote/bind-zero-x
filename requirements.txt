@@ -1,0 +1,6 @@
+# Research/development runtime. OpenCV 4 is ONLY for synthetic demo/tests.
+# Genuine OpenCV 5 must be supplied separately for captured-image endpoints.
+-r bind-zero-x/requirements-dev-v45.txt
+
+cryptography==50.0.2
+qrcode==8.2

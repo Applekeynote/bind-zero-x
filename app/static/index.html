@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1b2330">
+  <meta name="description" content="BIND ZERO-X — A field workspace for cardboard observations, photos, and evidence.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>BIND ZERO-X · Observation Quest</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar">
+  <a class="brand" href="/" aria-label="BIND ZERO-X home"><svg class="brand-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M4 8h8V4h8v4h8v16h-8v4h-8v-4H4z" fill="currentColor"/><path d="M8 12h16v8H8zM12 8h8v16h-8z" fill="#181f2b"/><path d="M14 10h4v12h-4z" fill="currentColor"/></svg><span>BIND<span class="brand-sub">ZERO-X<span class="brand-dot">■</span></span></span></a>
+  <div class="sidebar-caption">OBSERVATION QUEST</div>
+  <div class="workspace"><span class="pixel-mini">▦</span><span>Field lab<small>YOUR WORKSPACE</small></span><span class="tiny">⌄</span></div>
+  <div class="nav-label">WORKSPACE</div>
+  <nav aria-label="Main navigation">
+    <button class="nav-item active" data-page="overview" title="Observation console" aria-current="page"><span class="nav-symbol">▣</span><span class="nav-text">Console</span><span class="nav-key">01</span></button>
+    <button class="nav-item" data-page="history" title="Session history"><span class="nav-symbol">▤</span><span class="nav-text">History</span><span class="nav-key" id="history-count">00</span></button>
+    <button class="nav-item" data-page="evidence" title="Evidence archive"><span class="nav-symbol">◇</span><span class="nav-text">Evidence</span></button>
+    <button class="nav-item" data-page="guide" title="Field guide"><span class="nav-symbol">▧</span><span class="nav-text">Guide</span></button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="pixel-buddy" aria-hidden="true"><svg viewBox="0 0 56 48"><path d="M12 8h32v4h4v28H8V12h4z" fill="#e3b87d"/><path d="M8 16h40v4H8zM24 8h8v32h-8z" fill="#846c54"/><path d="M16 24h4v4h-4zM36 24h4v4h-4zM20 32h16v4H20z" fill="#1e2931"/><path d="M4 20h4v12H4zM48 20h4v12h-4zM12 40h8v4h-8zM36 40h8v4h-8z" fill="#e3b87d"/></svg></div>
+    <div class="buddy-text">Small observations.<br>Better next moves.</div>
+    <div class="system-state"><span class="status-dot"></span> SYSTEM ONLINE <span>v4.9</span></div>
+    <button class="settings-link" id="revoke-button">Sign out other devices ↗</button><button class="settings-link" id="settings-button"><span>⚙</span> Runtime <span>↗</span></button>
+  </div>
+</aside>
+<div class="shell">
+  <header class="topbar"><div class="breadcrumb">WORKSPACE <span>/</span> <strong id="breadcrumb">Console</strong></div><div class="topbar-right"><button class="text-button" id="phone-button">Connect phone ↗</button><span class="topbar-divider"></span><button class="text-button" id="logout-button">Sign out</button><button class="avatar" id="help-button" aria-label="Open field guide">?</button></div></header>
+  <main id="main" tabindex="-1">
+    <div class="page-heading"><div><div class="eyebrow"><span class="small-star">✦</span> OBSERVE. UNDERSTAND. REPLAN.</div><h1 id="page-title">Observation console<span class="heading-cursor">_</span></h1><p id="page-description">A closer look. A clearer next move.</p></div><button class="button primary" id="new-session"><span>＋</span> New observation <span class="button-key">N</span></button></div>
+    <section id="overview-page" class="page">
+      <div class="mission-bar"><div class="mission-label"><span class="pixel-flag">⚑</span><span>YOUR MISSION</span></div><p>Explore the cardboard demo collection</p><span class="mission-mode" id="mode-tag">DEMO LIBRARY</span><button id="mode-info" aria-label="Open runtime">ⓘ</button></div>
+      <div class="quest-progress" aria-label="Observation progress"><div class="quest-step done"><span>01</span><div>Capture<small>ADD A FRAME</small></div></div><div class="progress-line"></div><div class="quest-step current" id="observe-step"><span>02</span><div>Observe<small>FIND THE CLUES</small></div></div><div class="progress-line"></div><div class="quest-step" id="plan-step"><span>03</span><div>Replan<small>THE NEXT MOVE</small></div></div></div>
+      <div class="console-grid">
+        <section class="panel observation-panel">
+          <div class="panel-header"><h2><span class="title-square"></span>Observation <small>PHOTO BOARD</small></h2><span class="live-tag" id="view-status">● PHOTO 02 / 05</span></div>
+          <div class="view-toolbar"><div class="segmented" aria-label="View mode"><button class="selected" data-view="PHOTOS">Photos</button><button data-view="SIDE">Side guide</button><button data-view="TOP">Top guide</button></div><button class="icon-button" id="expand-view" aria-label="Expand photo" aria-expanded="false">⛶</button></div>
+          <div class="observation-scene photo-scene" id="scene"><div class="scene-coordinate">CAM 01 <span id="scene-view-label">PHOTO VIEW</span></div><div class="scene-demo">DEMO PHOTO</div><div class="scene-art" id="scene-art"></div><div class="scene-label upper-label"><span></span>UPPER LAYER</div><div class="scene-label lower-label"><span></span>LOWER LAYER</div><div class="scene-ruler"><span>0</span><i></i><span>50</span><i></i><span>100 px</span></div><div class="scene-bottom"><span><i class="mini-cross"></i> <span id="scene-caption">Flattened cartons</span></span><span id="scene-session">PHOTO 02</span></div><button class="icon-button scene-close" id="collapse-view" aria-label="Close expanded photo">✕</button></div>
+          <div class="photo-strip" id="photo-strip" aria-label="Cardboard photos"></div>
+          <div class="observation-footer"><span><i class="status-dot"></i> <span id="observation-state">5 photos in your collection</span></span><button class="text-button" id="capture-button">Add photo ↗</button></div>
+        </section>
+        <section class="panel next-panel"><div class="panel-header"><h2><span class="title-square amber"></span>Next quest</h2><span class="level-badge">LV. 02</span></div><div class="next-content"><span class="label-tag" id="disposition-tag">READY TO EXPLORE</span><h3 id="next-title">Every stack has<br>a story.</h3><p id="next-description">Pick a photo, inspect the layers, and start your next observation.</p><div class="quest-details"><span id="method-label">Current collection</span><strong id="next-method">Cardboard / 5 photos</strong><span id="budget-label">Next step</span><strong id="remaining-views">Add a paired capture</strong></div><button class="button primary quest-action" id="quest-action">Start an observation <span>→</span></button></div></section>
+      </div>
+      <div class="section-heading"><h2 id="snapshot-title">Frame details <span>AT A GLANCE</span></h2><span class="tiny muted" id="evidence-source">DEMO PHOTO COLLECTION</span></div>
+      <div class="metric-grid"><article class="metric-card"><div class="metric-label" id="metric-label-0">Image size <span class="metric-icon">↔</span></div><div class="metric-value" id="layer-value">1448<span>× 1086 px</span></div><div class="metric-bottom"><span class="metric-tag blue" id="layer-tag">PNG</span><span id="layer-note">Original resolution</span></div><div class="metric-spark" aria-hidden="true">▁▁▂▂▃▂▄▃▅▄▆</div></article><article class="metric-card"><div class="metric-label" id="metric-label-1">Collection <span class="metric-icon">▤</span></div><div class="metric-value">05<span>photos</span></div><div class="metric-bottom"><span class="metric-tag">LIBRARY</span><span>Ready to explore</span></div></article><article class="metric-card"><div class="metric-label" id="metric-label-2">Selected frame <span class="metric-icon">⌖</span></div><div class="metric-value">02<span>/ 05</span></div><div class="metric-bottom"><span class="metric-tag">REFERENCE</span><span>Flattened cartons</span></div></article></div>
+      <div class="lower-grid"><section class="panel hypothesis-panel"><div class="panel-header"><h2><span class="title-square"></span>Possible worlds</h2><span class="count-badge" id="world-count">00</span></div><div id="world-list" class="world-list"></div></section><section class="panel trace-panel"><div class="panel-header"><h2><span class="title-square"></span>Session trace</h2><button class="text-button" id="export-button">JSON ↓</button></div><div class="trace-list" id="trace-list"><div class="trace-entry"><span class="trace-time">READY</span><i></i><div>Your collection is ready.<small>Select a frame to begin.</small></div></div></div><div class="trace-footer"><span id="trace-proof">CERTIFICATE —</span><button class="text-button" id="proof-button">View reasoning ↗</button></div></section></div>
+    </section>
+    <section id="history-page" class="page" hidden><div class="panel"><div class="panel-header"><h2>Saved sessions</h2><button class="text-button" id="refresh-history">Refresh ↻</button></div><div class="history-list" id="history-list"></div></div></section>
+    <section id="evidence-page" class="page" hidden><div class="audit-summary" id="audit-summary"></div><div class="panel"><div class="panel-header"><h2>Archive integrity</h2><button class="text-button" id="refresh-audit">Run audit ↻</button></div><div class="audit-content" id="audit-content"></div></div></section>
+    <section id="guide-page" class="page" hidden><div class="guide-grid"><article class="panel guide-card"><div class="guide-number">01</div><h2>Find your frame.</h2><p>Explore the five demo cardboard photos, add a picture from your library, or take one with your phone.</p><button class="button primary" id="guide-photo">Open photos →</button></article><article class="panel guide-card"><div class="guide-number">02</div><h2>Follow the motion.</h2><p>Add two PNG frames, upper and lower ROI masks, and a calibration configuration to measure relative motion.</p><button class="button secondary" id="download-config">Configuration template ↓</button></article><article class="panel guide-card"><div class="guide-number">03</div><h2>Try an observation.</h2><p>Run the demo, record a rope-path observation, and watch the possible worlds update.</p><button class="button secondary" id="guide-demo">Launch demo →</button></article><article class="panel guide-card"><div class="guide-number">04</div><h2>Keep the evidence.</h2><p>Reopen a saved session, inspect the decision witness, and export the trace as JSON.</p><button class="button secondary" id="guide-history">Session history →</button></article></div></section>
+    <footer class="page-footer"><span><span class="footer-cross">✚</span> BIND ZERO-X <span class="muted">/</span> A LITTLE MORE EVIDENCE.</span><span>BUILT FOR THE NEXT OBSERVATION <span class="footer-pixels">▪ ▪ ▪</span></span></footer>
+  </main>
+</div>
+<dialog id="modal"><div class="modal-header"><span id="modal-eyebrow">NEW OBSERVATION</span><button class="icon-button" id="close-modal" aria-label="Close dialog">✕</button></div><div id="modal-content"></div></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

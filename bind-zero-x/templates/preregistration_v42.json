@@ -1,0 +1,27 @@
+{
+ "version": "4.2", "status": "DRAFT_NOT_PREREGISTERED", "date": "2026-10-12",
+ "study_id": null, "experiment_approval_id": null, "prereg_freeze_utc": null,
+ "pilot_data_sha256": null, "holdout_manifest_sha256": null, "analysis_git_commit": null,
+ "research_mtrack": {
+  "primary_contrast": "adaptive_rule_E_vs_fixed_probe_D",
+  "primary_outcome": "wrong_repair_rate_or_final_Q_loss (CHOOSE ONE AND FREEZE BEFORE MAIN)",
+  "interpretation": "exploratory_until_sample_design_complete",
+  "effect_direction": "lower_is_better", "min_meaningful_difference": null,
+  "probe_dose_matching": "predefined input force/time and cumulative dose or explicit limitations"
+ },
+ "utility_utrack": {
+  "primary_contrast": "adaptive_E_vs_skilled_human_B",
+  "primary_outcome": "all_sheet_job_completion (confirm priority vs time before main)",
+  "secondary_outcomes": ["T_job_s", "D_res_mm", "K_res_mm", "rope_consumption_cm"],
+  "min_meaningful_difference": null
+ },
+ "data_unit": "independent configuration_id + material_set_id",
+ "study_power_or_sensitivity": null,
+ "randomization_seed": null,
+ "stop_rules": [], "exclusion_rules": [], "aborted_handling": "intention-to-evaluate completion proportion",
+ "time_handling": "times_only_completers + failures separately + sensitivity analyses",
+ "thresholds_frozen": false,
+ "challenge_profile": null,
+ "pilot_n": 0, "holdout_n": 0,
+ "evidence_status": {"physics": "NOT_RUN", "opencv5_aws": "NOT_RUN", "skilled_human": "NOT_RUN"}
+}

@@ -1,0 +1,48 @@
+{
+  "before": {
+    "session_id": "SYNTH-0001",
+    "observation_id": "OBS-SYNTH",
+    "possible_worlds": [
+      "LAYER_AND_ROPE",
+      "LAYER_ONLY"
+    ],
+    "disposition": "REQUEST_NONCONTACT_VIEW",
+    "next_view": "ROPE_PATH",
+    "modeled_recommendation": null,
+    "physical_action_authorized": false,
+    "steps": [],
+    "scientific_status": "HYPOTHETICAL_MODEL_NOT_EMPIRICALLY_VALIDATED"
+  },
+  "after": {
+    "session_id": "SYNTH-0001",
+    "observation_id": "OBS-SYNTH",
+    "possible_worlds": [
+      "LAYER_AND_ROPE"
+    ],
+    "disposition": "DIRECT_ACTION",
+    "next_view": null,
+    "modeled_recommendation": "ABSTAIN",
+    "physical_action_authorized": false,
+    "steps": [
+      {
+        "seq": 1,
+        "view": "ROPE_PATH",
+        "source": "HUMAN_REPORTED",
+        "signature": "rope_moved",
+        "capture_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "worlds_before": [
+          "LAYER_AND_ROPE",
+          "LAYER_ONLY"
+        ],
+        "worlds_after": [
+          "LAYER_AND_ROPE"
+        ],
+        "before_certificate_hash": "97fb975abe7f517e6e323b8ee30659f9967054a2120b07ed03a807de5a99c651",
+        "after_certificate_hash": "f2720bdf827861c5a7ef23fd8d73b828e6aa8e65a823ef9302ef9d147a534f86",
+        "note": "RESEARCH_MODEL_ONLY_NO_PHYSICAL_AUTHORIZATION"
+      }
+    ],
+    "scientific_status": "HYPOTHETICAL_MODEL_NOT_EMPIRICALLY_VALIDATED"
+  },
+  "warning": "HYPOTHETICAL MANUAL REPORT; NO REAL OPENCV5/AWS/PHYSICAL-GT"
+}

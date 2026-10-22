@@ -1,0 +1,13 @@
+BIND ZERO-X v4.3 ACTUAL LOCAL VALIDATION REPORT
+UTC: 2026-10-12T04:34:49.101631+00:00
+Python: 3.13.5
+Tests: 187 discovered / 187 PASS
+Source v4.2 ledger: 327 (120 old local PASS, 207 NOT_RUN)
+v4.3 regression tests: 67 added and PASS (local only)
+Current ledger: 394 cases (187 local PASS, 207 NOT_RUN)
+Requirements: 88; requirement-test links: 543
+OpenCV local version: 4.13.0 (NOT OpenCV5)
+AWS: NOT_RUN; Physical independent GT: NOT_RUN; Human comparison: NOT_RUN.
+Novelty: finite deterministic illustrative witness planner; no real-world improvement proven.
+Run log SHA256: 570d0470a1ac5b45f37d828486a9385109d92e8314325c5378e01ae203712ec3
+WARNING: PASS test category PHYS can refer to software profile checks; never label as physical evidence.

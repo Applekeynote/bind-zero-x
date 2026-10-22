@@ -1,0 +1,371 @@
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfe890>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfe2f0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfe020>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfdc60>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfdf30>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfdb70>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfd6c0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfd5d0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bc7c0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bd5d0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bd6c0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bd7b0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bd8a0>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bd990>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bda80>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bdb70>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bde40>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+<frozen abc>:123: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bdf30>
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfd6c0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029f30>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d028b80>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d028310>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bef20>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d028f40>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0285e0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02ac50>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d068310>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d068400>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02bc40>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:106: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029030>
+  request = _CachedRequest(scope, receive)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:106: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02a3e0>
+  request = _CachedRequest(scope, receive)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:106: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02a020>
+  request = _CachedRequest(scope, receive)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:106: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029d50>
+  request = _CachedRequest(scope, receive)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:106: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d069990>
+  request = _CachedRequest(scope, receive)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:106: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a200>
+  request = _CachedRequest(scope, receive)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/starlette/middleware/base.py:106: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a2f0>
+  request = _CachedRequest(scope, receive)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0293f0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02a4d0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b1f0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a980>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a890>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d069c60>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0a89a0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0a8a90>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0a96c0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0a97b0>
+  for vals in sets.values():universe.update(v for v in vals if v not in UNKNOWN_TOKENS)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfdc60>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfd5d0>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029e40>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02a890>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0285e0>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029a80>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02b970>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06ba60>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d068400>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b4c0>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d069e40>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a110>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0a9120>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0686d0>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0a84f0>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0a9030>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bf880>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/opt/pyvenv/lib/python3.13/site-packages/fastapi/routing.py:91: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b790>
+  async def app(scope: Scope, receive: Receive, send: Send) -> None:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0686d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d069c60>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d069b70>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06ba60>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a110>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0294e0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029a80>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/experiments/analyze_physical_comparison.py:13: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpe5p0alai/t.csv' mode='r' encoding='utf-8-sig'>
+  rows=list(csv.DictReader(Path(csv_path).open(encoding='utf-8-sig',newline='')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/experiments/analyze_physical_comparison.py:13: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpt_z9n7vs/t.csv' mode='r' encoding='utf-8-sig'>
+  rows=list(csv.DictReader(Path(csv_path).open(encoding='utf-8-sig',newline='')))
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6fa8f5b0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfdc60>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9fa0bfd5d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6f9bd5d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d069e40>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a200>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a980>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06be20>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a890>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06ab60>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b880>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b4c0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b5b0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b3d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b6a0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d069f30>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b010>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a3e0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06a7a0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0697b0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06bf10>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06bb50>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b970>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06ac50>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b790>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06b1f0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0689a0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02b880>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029d50>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029e40>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02a890>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02b4c0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6fa8f6a0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d028c70>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6fa8f790>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02a4d0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02a7a0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02b790>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02b2e0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0a84f0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/mnt/data/BIND_ZERO_X_v48_work/code/witness_planner.py:165: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0aa6b0>
+  vals={a:max(float(losses[a][w])-best_in_world[w] for w in subset) for a in actions}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02b3d0>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02b970>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d029b70>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06bf10>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02a890>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d06ab60>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d02b790>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d069c60>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0697b0>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0aa6b0>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0ab2e0>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0ab3d0>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6d0aac50>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.13/threading.py:281: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7f9f6c7486d0>
+  def __init__(self, lock=None):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+----------------------------------------------------------------------
+Ran 350 tests in 10.926s
+
+OK
+{"PCIG": {"mean_hypothetical_loss": 0.65, "n_simulated_world_cases": 8}, "STATIC_TOP": {"mean_hypothetical_loss": 1.7000000000000002, "n_simulated_world_cases": 8}}

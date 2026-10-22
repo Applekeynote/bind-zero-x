@@ -1,0 +1,14 @@
+{
+  "version": "4.5",
+  "local_tests_pass": 268,
+  "test_ledger_total": 491,
+  "real_tests_pending": 223,
+  "requirements": 109,
+  "requirement_test_links": 650,
+  "opencv_local": "4.13.x development; 5.x NOT_VERIFIED",
+  "aws_runtime": "NOT_VERIFIED",
+  "physical_comparison": "NOT_RUN",
+  "local_unittest_log_sha256": "136913c0c61c7e174f98e4c51b2dd61a1f529e16d7dd3a6ef2bfaaccaaebd451",
+  "adversarial_regressions_fixed": 3,
+  "official_95_plus_score": "NOT_PROVEN"
+}

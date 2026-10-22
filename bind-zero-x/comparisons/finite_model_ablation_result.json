@@ -1,0 +1,242 @@
+{
+  "evidence_scope": "HYPOTHETICAL_FINITE_MODEL_ONLY_NOT_REAL_GT",
+  "purpose": "Falsifiable demonstration of a model-internal view selection comparison",
+  "scenario_count": 4,
+  "summary": {
+    "PCIG": {
+      "mean_hypothetical_loss": 0.65,
+      "n_simulated_world_cases": 8
+    },
+    "STATIC_TOP": {
+      "mean_hypothetical_loss": 1.7000000000000002,
+      "n_simulated_world_cases": 8
+    }
+  },
+  "cases": [
+    {
+      "scenario": "top_already_diagnostic",
+      "true_world": "A",
+      "method": "PCIG",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "A"
+      ],
+      "final_action": "REORDER",
+      "hypothetical_loss": 0.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "top_already_diagnostic",
+      "true_world": "A",
+      "method": "STATIC_TOP",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "A"
+      ],
+      "final_action": "REORDER",
+      "hypothetical_loss": 0.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "top_already_diagnostic",
+      "true_world": "B",
+      "method": "PCIG",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "B"
+      ],
+      "final_action": "RE_TIE",
+      "hypothetical_loss": 0.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "top_already_diagnostic",
+      "true_world": "B",
+      "method": "STATIC_TOP",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "B"
+      ],
+      "final_action": "RE_TIE",
+      "hypothetical_loss": 0.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "rope_path_only_diagnostic",
+      "true_world": "A",
+      "method": "PCIG",
+      "chosen_view": "ROPE_PATH",
+      "worlds_after": [
+        "A"
+      ],
+      "final_action": "REORDER",
+      "hypothetical_loss": 0.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "rope_path_only_diagnostic",
+      "true_world": "A",
+      "method": "STATIC_TOP",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "A",
+        "B"
+      ],
+      "final_action": "ABSTAIN",
+      "hypothetical_loss": 2.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "rope_path_only_diagnostic",
+      "true_world": "B",
+      "method": "PCIG",
+      "chosen_view": "ROPE_PATH",
+      "worlds_after": [
+        "B"
+      ],
+      "final_action": "RE_TIE",
+      "hypothetical_loss": 0.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "rope_path_only_diagnostic",
+      "true_world": "B",
+      "method": "STATIC_TOP",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "A",
+        "B"
+      ],
+      "final_action": "ABSTAIN",
+      "hypothetical_loss": 2.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "side_only_diagnostic",
+      "true_world": "A",
+      "method": "PCIG",
+      "chosen_view": "SIDE",
+      "worlds_after": [
+        "A"
+      ],
+      "final_action": "REORDER",
+      "hypothetical_loss": 0.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "side_only_diagnostic",
+      "true_world": "A",
+      "method": "STATIC_TOP",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "A",
+        "B"
+      ],
+      "final_action": "ABSTAIN",
+      "hypothetical_loss": 2.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "side_only_diagnostic",
+      "true_world": "B",
+      "method": "PCIG",
+      "chosen_view": "SIDE",
+      "worlds_after": [
+        "B"
+      ],
+      "final_action": "RE_TIE",
+      "hypothetical_loss": 0.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "side_only_diagnostic",
+      "true_world": "B",
+      "method": "STATIC_TOP",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "A",
+        "B"
+      ],
+      "final_action": "ABSTAIN",
+      "hypothetical_loss": 2.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "no_informative_view",
+      "true_world": "A",
+      "method": "PCIG",
+      "chosen_view": null,
+      "worlds_after": [
+        "A",
+        "B"
+      ],
+      "final_action": "ABSTAIN",
+      "hypothetical_loss": 2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "no_informative_view",
+      "true_world": "A",
+      "method": "STATIC_TOP",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "A",
+        "B"
+      ],
+      "final_action": "ABSTAIN",
+      "hypothetical_loss": 2.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "no_informative_view",
+      "true_world": "B",
+      "method": "PCIG",
+      "chosen_view": null,
+      "worlds_after": [
+        "A",
+        "B"
+      ],
+      "final_action": "ABSTAIN",
+      "hypothetical_loss": 2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    },
+    {
+      "scenario": "no_informative_view",
+      "true_world": "B",
+      "method": "STATIC_TOP",
+      "chosen_view": "TOP",
+      "worlds_after": [
+        "A",
+        "B"
+      ],
+      "final_action": "ABSTAIN",
+      "hypothetical_loss": 2.2,
+      "physical_trial": false,
+      "agentic_opencv5_evidence": false
+    }
+  ],
+  "limitations": [
+    "Contrived loss function",
+    "Synthetic view signatures",
+    "No camera",
+    "No AWS",
+    "No OpenCV5 runtime",
+    "No human comparison",
+    "No independence/realism claim"
+  ]
+}

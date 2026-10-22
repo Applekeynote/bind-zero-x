@@ -1,0 +1,21 @@
+{
+  "test_count": 550,
+  "executed_local_pass": 317,
+  "planned_not_run": 233,
+  "requirements": 121,
+  "relationships": 717,
+  "new_local_tests": 49,
+  "new_future_gates": 10,
+  "test_method_count": 317,
+  "warning": "PASS is local only; no actual AWS/OpenCV5/physical trials",
+  "checked_at_utc": "2026-10-12T07:04:51.660622+00:00",
+  "python": "3.13.5 (main, Jul 15 2026, 20:25:40) [GCC 14.2.0]",
+  "cv2_runtime_version": "4.13.0",
+  "machine": "x86_64",
+  "agentic_image_endpoint": "server processing implemented but empirically uncalibrated; mocked version tests only",
+  "actual_opencv5_executed": false,
+  "actual_aws_deployed": false,
+  "physical_trials": 0,
+  "finite_model_ablation": "synthetic only 8 cases per method",
+  "caveat": "NOT a competition score or real-world safety proof"
+}
