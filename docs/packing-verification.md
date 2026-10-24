@@ -51,3 +51,7 @@ Chrome signed into the isolated public `/judge` endpoint using its password-only
 
 The downloaded `BZX-PACKING-GUIDE-V4` export records two bundles, inferred geometry separately from observed surfaces, continuous binding paths and all 14 first-bundle steps as `completed_in_demo=true`, `completed_by_user=false`. `physical_action_authorized` and `lifting_verified` remain false. Local screenshots and export are in `runtime/demo-results/aws-*`; deployment security evidence is in `runtime/evidence/aws-public-deployment.json`. These operational artifacts are excluded from the public source release.
 
+## Completion and size regression — 24 October 2026
+
+The new tests exercise a partially hidden cross-shaped net, preservation of a hidden background corner, own-piece texture rather than occluder color, the blue/green size inversion in the supplied demo, common scaling across different bundles, close-up image scale isolation, and rejection of partially measured plans. Research: 397 pass / 1 skip; application: 47 pass; JavaScript: 26 pass. Total: 470 pass / 1 skip.
+

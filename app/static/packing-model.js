@@ -3,14 +3,22 @@
 globalThis.BZXModel=(()=>{
   const finite=(value,min,max)=>Number.isFinite(Number(value))&&Number(value)>=min&&Number(value)<=max;
   function dimensions(piece){
-    if(finite(piece.longMm,20,3000)&&finite(piece.shortMm,20,3000)&&finite(piece.thicknessMm,.5,50)&&Number(piece.longMm)>=Number(piece.shortMm))return {long:Number(piece.longMm),short:Number(piece.shortMm),thickness:Number(piece.thicknessMm),units:'mm'};
+    if(finite(piece.longMm,20,3000)&&finite(piece.shortMm,20,3000)&&Number(piece.longMm)>=Number(piece.shortMm))return {long:Number(piece.longMm),short:Number(piece.shortMm),thickness:finite(piece.thicknessMm,.5,50)?Number(piece.thicknessMm):4,units:'mm',thicknessEstimated:!finite(piece.thicknessMm,.5,50)};
     const box=piece.bbox||[0,0,1,.7],axis=piece.shape_evidence?.image_long_axis_degrees||0;
     const width=box[2]*(piece.sourceWidth||960),height=box[3]*(piece.sourceHeight||720);
-    const completed=piece.flatCapture?.region?.completion||piece.completion;
+    // A close-up can supply texture, but its independent pixel scale must not
+    // replace the dimensions measured in the common overview photograph.
+    const completed=piece.completion;
     const panel=piece.geometryMode!=='FULL_OUTLINE'&&completed;
-    const long=Math.max((panel?completed.body_long_px:piece.shape_evidence?.image_long_edge_px)||Math.max(width,height),10),short=Math.max(10,(panel?completed.body_short_px:piece.shape_evidence?.image_short_edge_px)||Math.min(width,height));
-    return {long,short,thickness:Math.max(2,long*.008),units:'relative',imageAxis:axis};
+    const long=Math.max((panel?completed.body_long_px:completed?.full_long_px||piece.shape_evidence?.image_long_edge_px)||Math.max(width,height),10),short=Math.max(10,(panel?completed.body_short_px:completed?.full_short_px||piece.shape_evidence?.image_short_edge_px)||Math.min(width,height));
+    return {long,short,thickness:Math.max(2,long*.008),units:'relative',imageAxis:panel?completed.image_long_axis_degrees:completed?.outline_axis_degrees??axis,thicknessEstimated:true};
   }
+  function sizePolicy(pieces){
+    const entered=pieces.some(p=>[p.longMm,p.shortMm,p.thicknessMm].some(v=>v!=null));
+    const missing=pieces.filter(p=>dimensions(p).units!=='mm').map(p=>p.id);
+    return {ready:!entered||!missing.length,units:entered?'mm':'relative',missing};
+  }
+  function sizeLabel(piece){const d=dimensions(piece);return `${Math.round(d.long)} × ${Math.round(d.short)} ${d.units==='mm'?'mm':'px'}`;}
   function knotPolicy(condition={}){
     const material=condition.material||'PAPER',springback=condition.springback||'LOW';
     if(!['PAPER','COTTON','SLICK'].includes(material)||!['LOW','HIGH'].includes(springback))throw Error('INVALID_BINDING_CONDITION');
@@ -31,7 +39,7 @@ globalThis.BZXModel=(()=>{
     const measured=pieces.length>0&&pieces.every(p=>dimensions(p).units==='mm');
     // Mixed physical and image units never enter a common layout.
     const footprints=pieces.map(p=>measured?footprint(p):footprint({...p,longMm:null,shortMm:null,thicknessMm:null}));
-    const normalizer=Math.max(1,...footprints.flatMap(p=>[p.width,p.depth]));
+    const normalizer=Math.max(1,...footprints.flatMap(p=>[p.width,p.depth]),...pieces.map(p=>p.sizeReferenceUnits===(measured?'mm':'relative')?p.sizeReference||0:0));
     let height=0;
     const layers=pieces.map((piece,i)=>{const d=footprints[i],layer={id:piece.id,width:d.width/normalizer*3.2,depth:d.depth/normalizer*3.2,thickness:d.thickness/normalizer*3.2,y:height,orientation:piece.orientation||0};height+=layer.thickness;return layer;});
     const result={layers,width:Math.max(.1,...layers.map(l=>l.width)),depth:Math.max(.1,...layers.map(l=>l.depth)),height,units:measured?'mm':'relative',normalizer};
@@ -50,8 +58,11 @@ globalThis.BZXModel=(()=>{
       lifting_verified:false,physical_friction_verified:false};
   }
   function plan(pieces){
+    if(!sizePolicy(pieces).ready)throw Error('COMPLETE_ALL_PANEL_DIMENSIONS');
     const measured=pieces.length>0&&pieces.every(p=>dimensions(p).units==='mm');
     const dim=p=>dimensions(measured?p:{...p,longMm:null,shortMm:null,thicknessMm:null});
+    const reference=Math.max(1,...pieces.map(p=>dim(p).long));
+    pieces.forEach(p=>{p.sizeReference=reference;p.sizeReferenceUnits=measured?'mm':'relative';});
     let pending=[...pieces].sort((a,b)=>dim(b).long*dim(b).short-dim(a).long*dim(a).short||(b.pixel_area||0)-(a.pixel_area||0)||a.id-b.id);const bundles=[];
     while(pending.length){
       const base=pending.shift(),d=dim(base),fit=p=>dim(p).long<=d.long*1.005&&dim(p).short<=d.short*1.005;
@@ -95,5 +106,5 @@ globalThis.BZXModel=(()=>{
     }
     return {a,b:bpath,knotStartA,knotStartB,midpoint:mid,continuous:[...a].reverse().concat(bpath.slice(1)),kind};
   }
-  return {dimensions,knotPolicy,footprint,optimize,plan,assess,layout,route,halfKnot,bindingPaths};
+  return {dimensions,sizePolicy,sizeLabel,knotPolicy,footprint,optimize,plan,assess,layout,route,halfKnot,bindingPaths};
 })();

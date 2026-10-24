@@ -17,6 +17,10 @@ test('an unreviewed surface cannot silently become a packing piece',()=>{
  const h=harness();h.run(`packing.pieces=[{id:1,pixel_area:100,selected:true,review:'REVIEW'}]`);
  h.element('packing-build').onclick();assert.equal(h.run('packing.steps.length'),0);
 });
+test('one measured panel and one image-only panel cannot create a misleading plan',()=>{
+ const h=harness();h.run(`packing.pieces=[{id:1,selected:true,review:'FLAT',longMm:600,shortMm:400},{id:2,selected:true,review:'FLAT'}]`);
+ h.element('packing-build').onclick();assert.equal(h.run('packing.steps.length'),0);
+});
 test('the largest apparent piece begins at the base and real sizes can override order',()=>{
  const h=harness();h.run(`packing.pieces=[{id:1,pixel_area:100,color:'#61dcb1',selected:true,review:'FLAT'},{id:2,pixel_area:200,color:'#79b7ff',selected:true,review:'FLAT'}]`);
  h.element('packing-build').onclick();assert.equal(h.run('packing.ordered.map(p=>p.id).join()'),'2,1');

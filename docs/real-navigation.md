@@ -47,3 +47,11 @@ Completion masks are separate unverified hypotheses: rotated envelopes fill only
 The planner groups panels by containment, uses broad base/cap panels around smaller centered panels, alternates bulky fold edges, and splits incompatible footprints. Support below 98% or height/short-edge above 0.25 blocks the planning confirmation. These are geometric heuristics, not measured friction or load ratings. Final checks press/release the stack, test accessible sheets for motion, then lift 2 cm with both hands supporting the underside and set down. Twine is never presented as a carrying handle.
 
 The renderer consumes one bindingPaths model for both wraps and the knot. Amber A and blue B meet at the twine midpoint under the stack and extend continuously into opposite knot crossings. Independent white loops/floating knot strands are removed. V4 exports bundle membership, support evidence and exact paths, with lifting_verified=false.
+## Shared-photo size and crease-aligned completion (24 October 2026)
+
+The default needs no manual measurements. Each piece displays its estimated folded-panel long/short edges in pixels from the same overview image. The planner compares these dimensions, and every bundle uses one shared display normalizer. Close-up photos replace textures without changing overview size ratios. Optional measured dimensions must cover every selected piece; partially entered measurements no longer disappear into a relative layout. Thickness defaults to an explicitly estimated value when omitted.
+
+Cross-shaped nets no longer use a minimum-area bounding box to determine their fold direction. OpenCV straight-edge/crease votes determine an axis modulo 90 degrees. Visible silhouette reflections propose hidden edges only behind other regions, preserving background cutouts. Reflected texture comes from the same piece, while observed labels remain unchanged. Outline shoulders and nearby creases locate the folded panel. The per-piece **Inspect completed outline** view exposes the result before stacking.
+
+These are image dimension ratios, not absolute millimetres or a calibrated perspective reconstruction. On the supplied Primary sheets, blue is about 233×205 px and green 126×124 px; the previous diagonal panel estimate incorrectly made them similar in size.
+

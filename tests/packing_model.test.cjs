@@ -6,6 +6,20 @@ test('binding follows material and operator-reported springback',()=>{
  assert.equal(model.knotPolicy({material:'SLICK',springback:'HIGH'}).ready,false);
  assert.throws(()=>model.knotPolicy({material:'unknown'}));
 });
+test('overview completion sizes remain comparable across bundles and close-up photos',()=>{
+ const p=(id,long,short)=>({id,sourceWidth:960,sourceHeight:720,completion:{body_long_px:long,body_short_px:short},flatCapture:{region:{completion:{body_long_px:900,body_short_px:800}}}});
+ const big=p(1,300,180),small=p(2,130,120),narrow=p(3,320,90);
+ assert.equal(model.dimensions(small).long,130,'a close-up cannot enlarge a small piece');
+ const plan=model.plan([big,small,narrow]);assert.equal(plan.bundles.length,2);
+ assert.equal(plan.bundles[0].layout.normalizer,plan.bundles[1].layout.normalizer);
+ const layers=plan.bundles.flatMap(b=>b.layout.layers);
+ assert.ok(Math.abs(layers.find(p=>p.id===2).width/layers.find(p=>p.id===1).width-130/300)<1e-10);
+});
+test('partial measured input cannot be silently ignored and thickness is optional',()=>{
+ const a={id:1,longMm:600,shortMm:400},b={id:2,completion:{body_long_px:300,body_short_px:200}};
+ assert.equal(model.dimensions(a).units,'mm');assert.equal(model.dimensions(a).thicknessEstimated,true);
+ assert.equal(model.sizePolicy([a,b]).ready,false);assert.throws(()=>model.plan([a,b]),/COMPLETE_ALL_PANEL_DIMENSIONS/);
+});
 test('measured footprints set real thickness and never mix mm with image units',()=>{
  const a={id:1,longMm:600,shortMm:400,thicknessMm:8,orientation:0,bbox:[0,0,.6,.5]},b={id:2,longMm:400,shortMm:300,thicknessMm:4,orientation:90,bbox:[0,0,.3,.2]};
  const result=model.layout([a,b]);assert.equal(result.units,'mm');assert.equal(result.normalizer,600);assert.ok(Math.abs(result.height-12/600*3.2)<1e-10);

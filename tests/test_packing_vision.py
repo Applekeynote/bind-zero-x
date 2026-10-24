@@ -30,6 +30,27 @@ class PackingVision(unittest.TestCase):
         visible=np.zeros((180,220),np.uint8);visible[20:160,20:200]=255;visible[100:160,20:70]=0
         result=complete_surface(np.full((180,220,3),120,np.uint8),visible,np.zeros_like(visible))
         self.assertEqual(result['inferred_pixels'],0)
+    def test_cross_net_uses_crease_axes_and_preserves_background_corners(self):
+        image=np.full((300,300,3),180,np.uint8);visible=np.zeros((300,300),np.uint8)
+        visible[50:250,100:200]=255;visible[100:200,50:250]=255
+        image[visible>0]=(210,80,20)
+        for a,b in [((100,60),(100,240)),((200,60),(200,240)),((60,100),(240,100)),((60,200),(240,200))]:cv2.line(image,a,b,(130,45,15),2)
+        other=np.zeros_like(visible);other[150:250,50:145]=255
+        visible[other>0]=0;image[other>0]=(20,160,60)
+        result=complete_surface(image,visible,other)
+        mask=cv2.imdecode(np.frombuffer(base64.b64decode(result['mask_png'].split(',')[1]),np.uint8),0)
+        texture=cv2.imdecode(np.frombuffer(base64.b64decode(result['texture_png'].split(',')[1]),np.uint8),-1)
+        self.assertEqual(result['axis_method'],'CREASE_EDGE_VOTE')
+        self.assertLess(min(result['image_long_axis_degrees']%90,90-result['image_long_axis_degrees']%90),5)
+        self.assertEqual(mask[175,80],255)
+        self.assertEqual(mask[220,65],0,'a hidden background corner is not a rectangular sheet')
+        self.assertGreater(int(texture[175,80,0]),int(texture[175,80,1]),'inferred blue texture must not borrow the green occluder')
+    def test_demo_small_green_panel_cannot_become_larger_than_blue(self):
+        root=Path(__file__).resolve().parents[1]
+        result=segment_cardboard((root/'app/static/photos/flat-primary.png').read_bytes())
+        blue=next(p for p in result['regions'] if p['completion']['fill_rgb'][2]>p['completion']['fill_rgb'][0]*2)
+        green=next(p for p in result['regions'] if p['completion']['fill_rgb'][1]>max(p['completion']['fill_rgb'][0],p['completion']['fill_rgb'][2]))
+        self.assertGreater(blue['completion']['body_long_px'],green['completion']['body_long_px']*1.5)
     def test_non_cardboard_background_has_no_invented_regions(self):
         image=np.full((200,300,3),170,np.uint8)
         result=segment_cardboard(self.png(image))

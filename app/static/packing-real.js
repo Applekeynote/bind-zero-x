@@ -76,9 +76,11 @@ async function cutout(piece,input){
     const mask=await image(completion.mask_png),mc=document.createElement('canvas');mc.width=width;mc.height=height;
     const mm=mc.getContext('2d',{willReadFrequently:true});mm.drawImage(mask,0,0,width,height);
     const md=mm.getImageData(0,0,width,height).data,data=ctx.getImageData(0,0,width,height);
+    let restored=null;
+    if(completion.texture_png){mm.clearRect(0,0,width,height);mm.drawImage(await image(completion.texture_png),0,0,width,height);restored=mm.getImageData(0,0,width,height).data;}
     for(let i=0;i<data.data.length;i+=4)if(md[i]>0&&data.data[i+3]===0){
       const x=(i/4)%width,y=Math.floor(i/4/width),stripe=(x+y)%20<3?22:0;
-      for(let c=0;c<3;c++)data.data[i+c]=Math.min(255,completion.fill_rgb[c]+stripe);data.data[i+3]=255;
+      for(let c=0;c<3;c++)data.data[i+c]=Math.min(255,(restored?restored[i+c]:completion.fill_rgb[c])+stripe);data.data[i+3]=255;
     }
     ctx.putImageData(data,0,0);
   }
@@ -87,7 +89,7 @@ async function cutout(piece,input){
 function surface(piece,asset,layer,prepared=true){
   const {region,width,height,canvas}=asset;
   const completion=region.completion,panel=piece.geometryMode!=='FULL_OUTLINE'&&completion;
-  const angle=(completion?.image_long_axis_degrees||region.shape_evidence?.image_long_axis_degrees||0)*Math.PI/180;
+  const angle=((panel?completion?.image_long_axis_degrees:completion?.outline_axis_degrees)??region.shape_evidence?.image_long_axis_degrees??0)*Math.PI/180;
   const c=Math.cos(angle),s=Math.sin(angle),polygon=panel&&prepared?completion.body_polygon:region.polygon;
   let points=polygon.map(([x,y])=>{const px=x*width,py=y*height;return {x:px*c+py*s,y:-px*s+py*c};});
   const bounds=(panel?completion.body_polygon:polygon).map(([x,y])=>({x:x*width*c+y*height*s,y:-x*width*s+y*height*c}));
