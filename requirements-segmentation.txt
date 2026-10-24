@@ -1,0 +1,4 @@
+# Model conversion during installation only. Inference uses OpenCV 5 DNN.
+onnx==1.19.0
+protobuf==7.36.2
+ml_dtypes==0.6.0

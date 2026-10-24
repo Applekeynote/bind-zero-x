@@ -17,6 +17,14 @@ test('an unreviewed surface cannot silently become a packing piece',()=>{
  const h=harness();h.run(`packing.pieces=[{id:1,pixel_area:100,selected:true,review:'REVIEW'}]`);
  h.element('packing-build').onclick();assert.equal(h.run('packing.steps.length'),0);
 });
+test('all selected pieces stay in inventory and finishing a bundle advances to the blue piece',()=>{
+ const h=harness();h.run(`packing.result={input_tier:'USER_PROVIDED_DEMO_ONLY'};packing.pieces=[{id:1,selected:true,review:'FLAT',longMm:600,shortMm:400},{id:2,selected:true,review:'FLAT',longMm:500,shortMm:300},{id:3,selected:true,review:'FLAT',longMm:900,shortMm:100}];`);
+ h.element('packing-build').onclick();assert.match(h.element('packing-inventory').innerHTML,/ALL 3 PIECES INCLUDED/);
+ h.run(`packing.step=packing.steps.length-1;packing.steps[packing.step].done=true;`);h.element('packing-next').onclick();
+ assert.equal(h.run('packing.bundleIndex'),1);assert.equal(h.run('packing.bundles[0].completed'),true);
+ h.element('packing-export').onclick();assert.equal(h.exports[0].pieces.length,3);
+ assert.equal(h.exports[0].bundles.flatMap(b=>b.piece_ids).length,3);
+});
 test('one measured panel and one image-only panel cannot create a misleading plan',()=>{
  const h=harness();h.run(`packing.pieces=[{id:1,selected:true,review:'FLAT',longMm:600,shortMm:400},{id:2,selected:true,review:'FLAT'}]`);
  h.element('packing-build').onclick();assert.equal(h.run('packing.steps.length'),0);

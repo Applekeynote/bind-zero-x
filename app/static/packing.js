@@ -20,27 +20,43 @@ async function packInput() {
   if(png.length>6666668)throw new Error('Choose a smaller image.');
   return {source,body:{image_png_b64:png}};
 }
+async function packingSegment(body,generation,button){
+  let result=await api('segment',{...body,async_job:true});
+    if(result.job_id){
+      const job=result.job_id;let finished=false;
+      for(let attempt=0;attempt<120;attempt++){
+        if(generation!==packing.generation)return;
+        await new Promise(resolve=>setTimeout(resolve,1500));
+        const status=await api('segment/jobs/'+encodeURIComponent(job));
+        if(status.status==='FAILED')throw Error(status.error);
+        if(status.status==='DONE'){result=status.result;finished=true;break;}
+        if(button)button.textContent='Separating complete sheets…';
+      }
+      if(!finished)throw Error('Segmentation is still running. Try again shortly.');
+    }
+  return result;
+}
 packEl('segment-photo').onclick=async event=>{
-  const button=event.currentTarget;button.disabled=true;button.textContent='Coloring surfaces…';packMessage('');
+  const button=event.currentTarget;button.disabled=true;button.textContent='Separating complete sheets…';packMessage('');
   clearPacking();const generation=packing.generation;
   try {
     const input=await packInput();packing.source=input.source;
-    const result=await api('segment',input.body);
+    const result=await packingSegment(input.body,generation,button);if(!result)return;
     if(generation!==packing.generation || packingSource()!==input.source)return;
     packing.result=result;
-    packing.pieces=result.regions.map(region=>({...region,selected:false,review:'REVIEW',folded:false,geometryMode:"FOLD_PANEL",completionMode:"INFERRED",sourceWidth:result.width,sourceHeight:result.height}));
+    packing.pieces=result.regions.map(region=>({...region,selected:false,review:'REVIEW',folded:false,geometryMode:"FULL_OUTLINE",completionMode:"INFERRED",sourceWidth:result.width,sourceHeight:result.height}));
     packEl('packing-overlay').src=result.overlay;packEl('packing-outline-status').textContent='IMAGE DIMENSION RATIOS · NO MEASURING NEEDED';packEl('packing-show-regions').hidden=true;
     packEl('packing-analysis').hidden=false;packEl('packing-player').hidden=true;
     renderPackingRegions();
-    if(!result.regions.length)packMessage('No clear colored surfaces found. Draw a region around a piece to add it.');
+    if(!result.regions.length)packMessage('No clear sheet outlines found. Draw a region around a piece to add it.');
   } catch(error) {packMessage(friendlyError(error));}
   finally {button.disabled=false;button.textContent='Segment & guide →';}
 };
 function renderPackingRegions() {
   if(packing.result){packEl('packing-overlay').src=packing.result.overlay;packEl('packing-overlay').alt='Color segmentation of cardboard surfaces';packEl('packing-outline-status').textContent='IMAGE DIMENSION RATIOS · NO MEASURING NEEDED';packEl('packing-show-regions').hidden=true;}
   const previousScroll=packEl('packing-regions').scrollTop;
-  packEl('packing-count').textContent=`${packing.pieces.length} color regions`;
-  packEl('packing-regions').innerHTML=packing.pieces.map(piece=>`<div class="packing-region ${piece.selected?'picked':''}" style="--piece:${piece.color}"><label class="packing-pick"><input type="checkbox" data-pack-select="${piece.id}" ${piece.selected?'checked':''}><span class="packing-swatch">${String(piece.id).padStart(2,'0')}</span><strong>Region ${String(piece.id).padStart(2,'0')}</strong></label><span class="packing-piece-size">${globalThis.BZXModel.sizeLabel(piece)} · ${Math.round(globalThis.BZXModel.dimensions(piece).long/Math.max(...packing.pieces.map(p=>globalThis.BZXModel.dimensions(p).long))*100)}% longest edge</span><button type="button" data-pack-inspect="${piece.id}">Inspect completed outline</button><span class="packing-shape ${piece.shape_hypothesis==='OPEN_BOX_CANDIDATE'?'fold-candidate':''}">${piece.shape_hypothesis==='OPEN_BOX_CANDIDATE'?'Fold this box · candidate':'Check flat / open'}</span><label class="packing-review">Shape<select data-pack-review="${piece.id}" aria-label="Shape for region ${piece.id}"><option value="REVIEW" ${piece.review==='REVIEW'?'selected':''}>Choose shape…</option><option value="FLAT" ${piece.review==='FLAT'?'selected':''}>Flat sheet</option><option value="OPEN" ${piece.review==='OPEN'?'selected':''}>Open / assembled box — fold first</option><option value="EXCLUDE" ${piece.review==='EXCLUDE'?'selected':''}>Not cardboard / duplicate face</option></select></label><label class="packing-review">Panel<select data-pack-geometry="${piece.id}" aria-label="Panel shape for region ${piece.id}"><option value="FOLD_PANEL" ${piece.geometryMode!=='FULL_OUTLINE'?'selected':''}>Fold flaps inward to panel</option><option value="FULL_OUTLINE" ${piece.geometryMode==='FULL_OUTLINE'?'selected':''}>Keep whole sheet outline</option></select></label>${piece.completion?.inferred_pixels?`<label class="packing-review">Hidden part<select data-pack-completion="${piece.id}" aria-label="Hidden part for region ${piece.id}"><option value="INFERRED" ${piece.completionMode!=='OBSERVED'?'selected':''}>Complete outline · striped estimate</option><option value="OBSERVED" ${piece.completionMode==='OBSERVED'?'selected':''}>Observed pixels only</option></select></label>`:''}<details class="packing-manual-size"><summary>Optional measured size</summary><div class="packing-measurements"><span>Finished folded panel / mm</span>${[['longMm','Long edge',20,3000],['shortMm','Short edge',20,3000],['thicknessMm','Thickness',.5,50]].map(([key,label,min,max])=>`<label>${label}<input type="number" inputmode="decimal" step="0.5" min="${min}" max="${max}" value="${piece[key]??''}" data-pack-measure="${piece.id}" data-measure-key="${key}" aria-label="${label} mm for region ${piece.id}"></label>`).join('')}</div></details></div>`).join('');
+  packEl('packing-count').textContent=`${packing.pieces.length} piece outlines`;
+  packEl('packing-regions').innerHTML=packing.pieces.map(piece=>`<div class="packing-region ${piece.selected?'picked':''}" style="--piece:${piece.color}"><label class="packing-pick"><input type="checkbox" data-pack-select="${piece.id}" ${piece.selected?'checked':''}><span class="packing-swatch">${String(piece.id).padStart(2,'0')}</span><strong>Region ${String(piece.id).padStart(2,'0')}</strong></label><span class="packing-piece-size">${globalThis.BZXModel.sizeLabel(piece)} · ${Math.round(globalThis.BZXModel.dimensions(piece).long/Math.max(...packing.pieces.map(p=>globalThis.BZXModel.dimensions(p).long))*100)}% longest edge</span><button type="button" data-pack-inspect="${piece.id}">Inspect completed outline</button><span class="packing-shape ${piece.shape_hypothesis==='OPEN_BOX_CANDIDATE'?'fold-candidate':''}">${piece.shape_hypothesis==='OPEN_BOX_CANDIDATE'?'Fold this box · candidate':'Check flat / open'}</span><label class="packing-review">Shape<select data-pack-review="${piece.id}" aria-label="Shape for region ${piece.id}"><option value="REVIEW" ${piece.review==='REVIEW'?'selected':''}>Choose shape…</option><option value="FLAT" ${piece.review==='FLAT'?'selected':''}>Flat sheet</option><option value="OPEN" ${piece.review==='OPEN'?'selected':''}>Open / assembled box — fold first</option><option value="EXCLUDE" ${piece.review==='EXCLUDE'?'selected':''}>Not cardboard / duplicate face</option></select></label><label class="packing-review">Panel<select data-pack-geometry="${piece.id}" aria-label="Panel shape for region ${piece.id}"><option value="FULL_OUTLINE" ${piece.geometryMode==='FULL_OUTLINE'?'selected':''}>Keep whole sheet outline</option></select></label>${piece.completion?.inferred_pixels?`<label class="packing-review">Hidden part<select data-pack-completion="${piece.id}" aria-label="Hidden part for region ${piece.id}"><option value="INFERRED" ${piece.completionMode!=='OBSERVED'?'selected':''}>Complete outline · striped estimate</option><option value="OBSERVED" ${piece.completionMode==='OBSERVED'?'selected':''}>Observed pixels only</option></select></label>`:''}<details class="packing-manual-size"><summary>Optional measured size</summary><div class="packing-measurements"><span>Whole flattened sheet / mm</span>${[['longMm','Long edge',20,3000],['shortMm','Short edge',20,3000],['thicknessMm','Thickness',.5,50]].map(([key,label,min,max])=>`<label>${label}<input type="number" inputmode="decimal" step="0.5" min="${min}" max="${max}" value="${piece[key]??''}" data-pack-measure="${piece.id}" data-measure-key="${key}" aria-label="${label} mm for region ${piece.id}"></label>`).join('')}</div></details></div>`).join('');
   packEl('packing-regions').scrollTop=previousScroll;
   packEl('packing-hit-map').innerHTML=packing.pieces.map(piece=>`<polygon points="${piece.polygon.map(p=>p.join(',')).join(' ')}" fill="${piece.color}" fill-opacity="${piece.selected?'.35':'.02'}" stroke="${piece.color}" stroke-width="${piece.selected?'.004':'.001'}" data-pack-hit="${piece.id}" tabindex="0" role="button" aria-label="Select region ${piece.id}" aria-pressed="${piece.selected}"/>`).join('');
   const selected=packing.pieces.filter(p=>p.selected && p.review!=='EXCLUDE');
@@ -88,9 +104,9 @@ function makePackingSteps(pieces,preserveOrder=false) {
   const ordered=preserveOrder?[...pieces]:[...pieces].sort((a,b)=>b.pixel_area-a.pixel_area||a.id-b.id);
   const fold=ordered.filter(p=>p.review==='OPEN').map(p=>({kind:'FOLD',piece:p,title:`Fold region ${String(p.id).padStart(2,'0')} flat`,copy:'Open the top and bottom flaps. Push the opposite corners together along the existing creases, then lay the box flat.',confirm:`I have flattened region ${String(p.id).padStart(2,'0')}.`}));
   const policy=globalThis.BZXModel?.knotPolicy(packing.condition)||{id:'REEF',firstTurns:1,name:'Square binding knot'};
-  const prepare=ordered.filter(p=>(p.flatCapture?.region?.completion||p.completion)&&p.geometryMode!=='FULL_OUTLINE').map(p=>({kind:'PREPARE',piece:p,title:`Prepare panel ${String(p.id).padStart(2,'0')}`,copy:'Check the striped inferred edges against the real sheet. Fold every projecting flap inward along its existing crease to make one compact rectangular panel. Keep holes and bulky folds away from the future twine crossing. Correct the finished panel dimensions or add an individual photo if the outline is wrong.',confirm:'I checked the inferred outline and folded all flaps inside the finished panel.'}));
+  const prepare=ordered.filter(p=>p.geometryMode==='FOLD_PANEL'&&(p.flatCapture?.region?.completion||p.completion)).map(p=>({kind:'PREPARE',piece:p,title:`Prepare panel ${String(p.id).padStart(2,'0')}`,copy:'Check the striped inferred edges against the real sheet. Fold every projecting flap inward along its existing crease to make one compact rectangular panel. Keep holes and bulky folds away from the future twine crossing. Correct the finished panel dimensions or add an individual photo if the outline is wrong.',confirm:'I checked the inferred outline and folded all flaps inside the finished panel.'}));
   const steps=[...fold,...prepare,
-    {kind:'STACK',title:'Build a centered stack',copy:'Place a broad panel at the base and reserve the second broad panel as the top cap. Center the smaller panels between them with no projecting corners. Alternate bulky folded edges. Use the finished folded dimensions to verify this suggested order.',confirm:'The largest real sheet is underneath and the layers are centered.'},
+    {kind:'STACK',title:'Arrange the complete sheets',copy:'Keep each sheet, flap and slot in its original shape. Place the broad sheet at the base and center the smaller sheets over it. Compare projecting flaps in the Top view. Every selected sheet remains in the inventory; incompatible outlines are prepared as separate bundles.',confirm:'The complete outlines are centered and the projecting edges have been checked.'},
     ...ordered.map((p,i)=>placementStep(p,i,ordered)),
     {kind:'ALIGN',title:'Align and flatten the layers',copy:'Bring the stack edges together. Press the folds flat and move overhanging pieces back toward the center.',confirm:'The layers lie flat without loose overhanging pieces.'},
     {kind:'WRAP_LONG',title:'Route 1: under, up, over',copy:'Slide the middle of the twine under ALL layers along the front-to-back centerline. Bring the near end up the FRONT edge and the far end up the BACK edge. Bring both ends over the top to meet at its center. Use the Underneath camera to inspect the continuous route below every layer.',confirm:'The first loop passes under every sheet and rises at the front and back edges.'},
@@ -128,7 +144,7 @@ function renderPackingStep() {
   packEl('packing-step-label').textContent=`${demo?'DEMO · ':''}STEP ${String(packing.step+1).padStart(2,'0')} / ${String(packing.steps.length).padStart(2,'0')}`;
   packEl('packing-step-title').textContent=step.title;packEl('packing-step-copy').textContent=step.copy;
   const support=globalThis.BZXModel.layout(packing.ordered).support;
-  packEl('packing-plan-health').textContent=`${globalThis.BZXModel.layout(packing.ordered).units==='mm'?'MEASURED SIZES':'SHARED PHOTO SCALE'} · BUNDLE ${(packing.bundleIndex||0)+1} / ${packing.bundles?.length||1} · COVER ${Math.round(support.minimum_cover*100)}% · ${support.reason} · HOLD / LIFT CHECK PENDING`;
+  renderPackingInventory();packEl('packing-plan-health').textContent=`${globalThis.BZXModel.layout(packing.ordered).units==='mm'?'MEASURED SIZES':'SHARED PHOTO SCALE'} · BUNDLE ${(packing.bundleIndex||0)+1} / ${packing.bundles?.length||1} · COVER ${Math.round(support.minimum_cover*100)}% · ${support.reason} · HOLD / LIFT CHECK PENDING`;
   drawRealPackingStep(step);packEl('packing-stage').dataset.kind=step.kind;
   packEl('packing-stage').classList.toggle('is-paused',packing.paused);
   packEl('packing-order').innerHTML='<span class="packing-order-intro">BASE TO TOP<br>Set order, long-edge direction and bulky fold in this planning step. FRONT means the edge nearest you.</span>'+packing.ordered.map((p,i)=>`<span class="packing-order-chip"><span>Layer ${i+1} · ${globalThis.BZXModel.sizeLabel(p)}</span><button data-pack-move="${i}" data-direction="-1" aria-label="Move region ${p.id} toward base" ${step.kind!=='STACK'||i===0?'disabled':''}>‹</button><b style="--piece:${p.color}">${String(p.id).padStart(2,'0')}</b><button data-pack-move="${i}" data-direction="1" aria-label="Move region ${p.id} toward top" ${step.kind!=='STACK'||i===packing.ordered.length-1?'disabled':''}>›</button><label>Long edge<select data-pack-orient="${p.id}" aria-label="Direction for region ${p.id}" ${step.kind!=='STACK'?'disabled':''}>${[0,90].map(a=>`<option value="${a}" ${p.orientation===a?'selected':''}>${a===0?'Left to right':'Front to back'}</option>`).join('')}</select></label><label>Bulky fold<select data-pack-fold="${p.id}" aria-label="Fold edge for region ${p.id}" ${step.kind!=='STACK'?'disabled':''}>${['away from you','toward you'].map(v=>`<option value="${v}" ${p.foldEdge===v?'selected':''}>${v}</option>`).join('')}</select></label><button type="button" data-pack-capture="${p.id}" ${step.kind!=='STACK'?'disabled':''}>${p.flatCapture?'Replace individual photo':'Add individual flat photo'}</button></span>`).join('');
@@ -137,12 +153,12 @@ function renderPackingStep() {
   packEl('packing-done-label').textContent=demo?'Demo: simulate completion of this step.':step.confirm;packEl('packing-done').checked=!!step.done;
   packEl('packing-flat-capture').hidden=step.kind!=='FOLD';
   packEl('packing-flat-status').textContent=step.piece?.flatCapture?'Flat capture added. Review the photo before continuing.':'';
-  refreshStepDone();packEl('packing-next').textContent=packing.step===packing.steps.length-1?'Finish guide ✓':'Next step →';
+  refreshStepDone();packEl('packing-next').textContent=packing.step===packing.steps.length-1?(packing.bundles?.some((b,i)=>i!==packing.bundleIndex&&!b.completed)?'Finish bundle & continue →':'Finish guide ✓'):'Next step →';
   packEl('packing-prev').disabled=packing.step===0;packEl('packing-pause').textContent=packing.paused?'Play':'Pause';
   packEl('packing-progress').innerHTML=packing.steps.map((s,i)=>`<span class="${i===packing.step?'current':s.done?'done':''}"></span>`).join('');
 }
 packEl('packing-done').onchange=event=>{const step=packing.steps[packing.step];if(step.kind==='FOLD'&&!step.piece.flatCapture)return;step.done=event.target.checked;refreshStepDone();};
-packEl('packing-next').onclick=()=>{if(packing.capturing||(packing.steps[packing.step].kind==='STACK'&&!globalThis.BZXModel.layout(packing.ordered).support.ready)||!packing.steps[packing.step].done||(packing.steps[packing.step].kind==='FOLD'&&!packing.steps[packing.step].piece.flatCapture))return;if(packing.step<packing.steps.length-1){packing.step++;renderPackingStep();}else{packMessage('Packing guide complete. Your checked steps are ready to export.');packEl('packing-next').disabled=true;}};
+packEl('packing-next').onclick=()=>{if(packing.capturing||(packing.steps[packing.step].kind==='STACK'&&!globalThis.BZXModel.layout(packing.ordered).support.ready)||!packing.steps[packing.step].done||(packing.steps[packing.step].kind==='FOLD'&&!packing.steps[packing.step].piece.flatCapture))return;if(packing.step<packing.steps.length-1){packing.step++;renderPackingStep();}else{if(packing.bundles?.length){const bundle=packing.bundles[packing.bundleIndex];bundle.completed=true;bundle.steps=packing.steps;const next=packing.bundles.findIndex(b=>!b.completed);if(next>=0){activatePackingBundle(next);return;}}packMessage('All selected pieces are included. Every bundle guide is complete.');packEl('packing-next').disabled=true;}};
 packEl('packing-prev').onclick=()=>{if(packing.step>0){packing.step--;renderPackingStep();}};
 function rebuildPackingPlan() {
   const folds=packing.steps.filter(s=>s.kind==='FOLD');
@@ -153,7 +169,7 @@ function rebuildPackingPlan() {
 packEl('packing-order').onclick=event=>{if(event.target.closest('[data-pack-replan]')){packing.ordered=globalThis.BZXModel.optimize(packing.ordered);rebuildPackingPlan();return;}const capture=event.target.closest('[data-pack-capture]');if(capture?.dataset.packCapture&&!capture.disabled&&packing.steps[packing.step].kind==='STACK'){packing.capturePiece=packing.ordered.find(p=>p.id===Number(capture.dataset.packCapture));packEl('packing-flat-photo').click();return;}const button=event.target.closest('[data-pack-move]');if(!button||button.disabled||packing.steps[packing.step].kind!=='STACK')return;const from=Number(button.dataset.packMove),to=from+Number(button.dataset.direction);if(to<0||to>=packing.ordered.length)return;[packing.ordered[from],packing.ordered[to]]=[packing.ordered[to],packing.ordered[from]];rebuildPackingPlan();};
 packEl('packing-order').onchange=event=>{
   if(packing.steps[packing.step].kind!=='STACK')return;
-  if(event.target.dataset.packBundle){packing.bundleIndex=Number(event.target.value);packing.ordered=packing.bundles[packing.bundleIndex].pieces;packing.steps=makePackingSteps(packing.ordered,true);packing.step=0;renderPackingStep();return;}
+  if(event.target.dataset.packBundle){activatePackingBundle(Number(event.target.value));return;}
   const p=packing.ordered.find(p=>p.id===Number(event.target.dataset.packOrient||event.target.dataset.packFold));if(!p)return;
   if(event.target.dataset.packOrient){const angle=Number(event.target.value);if(![0,90].includes(angle))return;p.orientation=angle;}
   else if(['away from you','toward you'].includes(event.target.value))p.foldEdge=event.target.value;
@@ -162,7 +178,7 @@ packEl('packing-order').onchange=event=>{
 packEl('packing-pause').onclick=()=>{packing.paused=!packing.paused;globalThis.bzxRealGuide?.pause(packing.paused);packEl('packing-stage').classList.toggle('is-paused',packing.paused);packEl('packing-pause').textContent=packing.paused?'Play':'Pause';};
 packEl('packing-replay').onclick=()=>{globalThis.bzxRealGuide?.replay();};
 packEl('packing-edit').onclick=()=>{globalThis.bzxRealGuide?.hide();packEl('packing-player').hidden=true;packEl('packing-analysis').hidden=false;packing.steps=[];};
-packEl('packing-export').onclick=()=>downloadJSON({schema:'BZX-PACKING-GUIDE-V4',bundles:packing.bundles?.map(b=>({piece_ids:b.pieces.map(p=>p.id),layout:globalThis.BZXModel.layout(b.pieces)})),binding_paths:globalThis.BZXModel?.bindingPaths(globalThis.BZXModel.layout(packing.ordered),'CHECK',globalThis.BZXModel.knotPolicy(packing.condition).firstTurns),lifting_verified:false,binding_condition:packing.condition,knot:globalThis.BZXModel?.knotPolicy(packing.condition),layout:globalThis.BZXModel?.layout(packing.ordered),source_sha256:packing.result.source_sha256,input_tier:packing.result.input_tier,opencv_version:packing.result.opencv_version,segmentation_scope:packing.result.segmentation_scope,orientation_reference:'TOP_VIEW_FRONT_EDGE_NEAREST_OPERATOR',order_basis:globalThis.BZXModel?.layout(packing.ordered).units==='mm'?'MEASURED_FOOTPRINT_OPERATOR_EDITABLE':'CREASE_ALIGNED_SHARED_PHOTO_DIMENSION_RATIOS',pieces:packing.ordered.map(({flatCapture,...p})=>({...p,flat_capture:flatCapture?{source_sha256:flatCapture.source_sha256,width:flatCapture.width,height:flatCapture.height}:null})),steps:packing.steps.map(({kind,title,copy,piece,done})=>({kind,title,instruction:copy,piece_id:piece?.id,completed_by_user:packing.result.input_tier!=='USER_PROVIDED_DEMO_ONLY'&&!!done,completed_in_demo:packing.result.input_tier==='USER_PROVIDED_DEMO_ONLY'&&!!done})),physical_action_authorized:false},'bind-zero-packing-guide.json');
+packEl('packing-export').onclick=()=>downloadJSON({schema:'BZX-PACKING-GUIDE-V4',bundles:packing.bundles?.map(b=>({piece_ids:b.pieces.map(p=>p.id),completed_in_demo:packing.result.input_tier==='USER_PROVIDED_DEMO_ONLY'&&!!b.completed,layout:globalThis.BZXModel.layout(b.pieces)})),binding_paths:globalThis.BZXModel?.bindingPaths(globalThis.BZXModel.layout(packing.ordered),'CHECK',globalThis.BZXModel.knotPolicy(packing.condition).firstTurns),lifting_verified:false,binding_condition:packing.condition,knot:globalThis.BZXModel?.knotPolicy(packing.condition),layout:globalThis.BZXModel?.layout(packing.ordered),source_sha256:packing.result.source_sha256,input_tier:packing.result.input_tier,opencv_version:packing.result.opencv_version,segmentation_scope:packing.result.segmentation_scope,orientation_reference:'TOP_VIEW_FRONT_EDGE_NEAREST_OPERATOR',order_basis:globalThis.BZXModel?.layout(packing.ordered).units==='mm'?'MEASURED_FOOTPRINT_OPERATOR_EDITABLE':'CREASE_ALIGNED_SHARED_PHOTO_DIMENSION_RATIOS',pieces:(packing.pieces.length?packing.pieces.filter(p=>p.selected&&p.review!=='EXCLUDE'):packing.ordered).map(({flatCapture,...p})=>({...p,flat_capture:flatCapture?{source_sha256:flatCapture.source_sha256,width:flatCapture.width,height:flatCapture.height}:null})),steps:packing.steps.map(({kind,title,copy,piece,done})=>({kind,title,instruction:copy,piece_id:piece?.id,completed_by_user:packing.result.input_tier!=='USER_PROVIDED_DEMO_ONLY'&&!!done,completed_in_demo:packing.result.input_tier==='USER_PROVIDED_DEMO_ONLY'&&!!done})),physical_action_authorized:false},'bind-zero-packing-guide.json');
 
 function enablePackingAnalysis() { if(ui.csrf && ui.runtime) packEl('segment-photo').disabled=false; }
 document.addEventListener('console-ready',enablePackingAnalysis);
@@ -180,7 +196,7 @@ packEl('packing-flat-photo').onchange=async e=>{
     try{await image.decode();const scale=Math.min(1,1280/Math.max(image.naturalWidth,image.naturalHeight));
       const canvas=document.createElement('canvas');canvas.width=Math.round(image.naturalWidth*scale);canvas.height=Math.round(image.naturalHeight*scale);canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
       const png=canvas.toDataURL('image/png'),b64=png.split(',')[1];if(b64.length>6666668)throw Error('Choose a smaller photo.');
-      const result=await api('segment',{image_png_b64:b64});
+      const result=await packingSegment({image_png_b64:b64},generation);if(!result)return;
       if(generation!==packing.generation||packing.steps[packing.step]!==step)return;
       if(!result.regions.length)throw Error('No clear flat surface found. Take a closer photo on a contrasting background.');
       piece.flatCapture={url:png,width:result.width,height:result.height,labels_png:result.labels_png,source_sha256:result.source_sha256,region:result.regions[0]};
@@ -206,3 +222,20 @@ packEl('packing-show-regions').onclick=()=>{
   packEl('packing-outline-status').textContent='IMAGE DIMENSION RATIOS · NO MEASURING NEEDED';
   packEl('packing-show-regions').hidden=true;renderPackingRegions();
 };
+
+function activatePackingBundle(index){
+  if(!Number.isInteger(index)||!packing.bundles?.[index])return;
+  const previous=packing.bundles[packing.bundleIndex];
+  if(previous){previous.steps=packing.steps;previous.stepIndex=packing.step;previous.pieces=packing.ordered;}
+  packing.bundleIndex=index;const next=packing.bundles[index];packing.ordered=next.pieces;
+  packing.steps=next.steps||makePackingSteps(packing.ordered,true);packing.step=next.stepIndex||0;packMessage('');renderPackingStep();
+}
+function renderPackingInventory(){
+  const bundles=packing.bundles||[{pieces:packing.ordered}],all=bundles.flatMap(b=>b.pieces);
+  packEl('packing-inventory').innerHTML='<p>ALL '+all.length+' PIECES INCLUDED · '+bundles.length+' BUNDLES</p><div>'+bundles.map((b,index)=>b.pieces.map(p=>{
+    const photo=p.completion?.preview_png||p.completion?.texture_png;
+    const thumbnail=photo?.startsWith('data:image/png;base64,')?'<img src="'+photo+'" alt="Complete outline of region '+p.id+'">':'';
+    return '<button type="button" data-inventory-bundle="'+index+'" aria-label="Show region '+String(p.id).padStart(2,'0')+' in bundle '+(index+1)+'" aria-pressed="'+(index===packing.bundleIndex)+'">'+thumbnail+'<span>REGION '+String(p.id).padStart(2,'0')+'</span><small>'+globalThis.BZXModel.sizeLabel(p)+' · BUNDLE '+(index+1)+(b.completed?' · DONE':'')+'</small></button>';
+  }).join('')).join('')+'</div>';
+}
+packEl('packing-inventory').onclick=event=>{const button=event.target.closest('[data-inventory-bundle]');if(button)activatePackingBundle(Number(button.dataset.inventoryBundle));};

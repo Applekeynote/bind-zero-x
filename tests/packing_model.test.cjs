@@ -6,6 +6,14 @@ test('binding follows material and operator-reported springback',()=>{
  assert.equal(model.knotPolicy({material:'SLICK',springback:'HIGH'}).ready,false);
  assert.throws(()=>model.knotPolicy({material:'unknown'}));
 });
+test('full net keeps every flap and concave corner instead of its central rectangle',()=>{
+ const polygon=[[.3,0],[.7,0],[.7,.3],[1,.3],[1,.7],[.7,.7],[.7,1],[.3,1],[.3,.7],[0,.7],[0,.3],[.3,.3]];
+ const region={polygon,completion:{body_polygon:[[.3,.3],[.7,.3],[.7,.7],[.3,.7]],outline_axis_degrees:17,full_long_px:100,full_short_px:100,body_long_px:40,body_short_px:40}};
+ const outline=model.sheetOutline(region,100,100);assert.equal(outline.points.length,12);
+ const area=Math.abs(outline.points.reduce((sum,p,i)=>{const q=outline.points[(i+1)%12];return sum+p.x*q.y-q.x*p.y;},0))/2;
+ assert.ok(Math.abs(area-6400)<1e-8,'rotation preserves the cross-shaped net area');
+ assert.equal(model.dimensions(region).long,100,'default sizing uses the full outline');
+});
 test('overview completion sizes remain comparable across bundles and close-up photos',()=>{
  const p=(id,long,short)=>({id,sourceWidth:960,sourceHeight:720,completion:{body_long_px:long,body_short_px:short},flatCapture:{region:{completion:{body_long_px:900,body_short_px:800}}}});
  const big=p(1,300,180),small=p(2,130,120),narrow=p(3,320,90);

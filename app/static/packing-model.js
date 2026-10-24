@@ -9,8 +9,8 @@ globalThis.BZXModel=(()=>{
     // A close-up can supply texture, but its independent pixel scale must not
     // replace the dimensions measured in the common overview photograph.
     const completed=piece.completion;
-    const panel=piece.geometryMode!=='FULL_OUTLINE'&&completed;
-    const long=Math.max((panel?completed.body_long_px:completed?.full_long_px||piece.shape_evidence?.image_long_edge_px)||Math.max(width,height),10),short=Math.max(10,(panel?completed.body_short_px:completed?.full_short_px||piece.shape_evidence?.image_short_edge_px)||Math.min(width,height));
+    const panel=piece.geometryMode==='FOLD_PANEL'&&completed;
+    const long=Math.max((panel?completed.body_long_px:completed?.full_long_px||completed?.body_long_px||piece.shape_evidence?.image_long_edge_px)||Math.max(width,height),10),short=Math.max(10,(panel?completed.body_short_px:completed?.full_short_px||completed?.body_short_px||piece.shape_evidence?.image_short_edge_px)||Math.min(width,height));
     return {long,short,thickness:Math.max(2,long*.008),units:'relative',imageAxis:panel?completed.image_long_axis_degrees:completed?.outline_axis_degrees??axis,thicknessEstimated:true};
   }
   function sizePolicy(pieces){
@@ -19,6 +19,11 @@ globalThis.BZXModel=(()=>{
     return {ready:!entered||!missing.length,units:entered?'mm':'relative',missing};
   }
   function sizeLabel(piece){const d=dimensions(piece);return `${Math.round(d.long)} × ${Math.round(d.short)} ${d.units==='mm'?'mm':'px'}`;}
+  function sheetOutline(region,width,height){
+    const angle=(region.completion?.outline_axis_degrees??region.shape_evidence?.image_long_axis_degrees??0)*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
+    const points=region.polygon.map(([x,y])=>({x:x*width*c+y*height*s,y:-x*width*s+y*height*c}));
+    return {points,c,s,minX:Math.min(...points.map(p=>p.x)),maxX:Math.max(...points.map(p=>p.x)),minY:Math.min(...points.map(p=>p.y)),maxY:Math.max(...points.map(p=>p.y))};
+  }
   function knotPolicy(condition={}){
     const material=condition.material||'PAPER',springback=condition.springback||'LOW';
     if(!['PAPER','COTTON','SLICK'].includes(material)||!['LOW','HIGH'].includes(springback))throw Error('INVALID_BINDING_CONDITION');
@@ -54,7 +59,7 @@ globalThis.BZXModel=(()=>{
     const coverage=Math.min(1,...ratios),slenderness=l.height/Math.max(.001,Math.min(base.width,base.depth));
     const ready=coverage>=.98&&slenderness<=.25;
     return {ready,minimum_cover:coverage,height_to_short_edge:slenderness,centered:true,twine_crosses_every_panel:true,
-      reason:coverage<.98?'Split this bundle or fold the projecting edges inside both cover sheets.':slenderness>.25?'Split this tall bundle into smaller bundles.':'Base and cap cover the centered inner panels.',
+      assessment:'BOUNDING_ENVELOPES_ONLY',reason:coverage<.98?'Split this bundle or adjust its projecting outlines.':slenderness>.25?'Split this tall bundle into smaller bundles.':'Bounding outlines align; inspect the projecting flaps.',
       lifting_verified:false,physical_friction_verified:false};
   }
   function plan(pieces){
@@ -106,5 +111,5 @@ globalThis.BZXModel=(()=>{
     }
     return {a,b:bpath,knotStartA,knotStartB,midpoint:mid,continuous:[...a].reverse().concat(bpath.slice(1)),kind};
   }
-  return {dimensions,sizePolicy,sizeLabel,knotPolicy,footprint,optimize,plan,assess,layout,route,halfKnot,bindingPaths};
+  return {dimensions,sizePolicy,sizeLabel,sheetOutline,knotPolicy,footprint,optimize,plan,assess,layout,route,halfKnot,bindingPaths};
 })();

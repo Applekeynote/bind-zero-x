@@ -108,9 +108,15 @@ def segment_cardboard(raw):
     markers=np.zeros((h,w),np.int32);markers[mask==0]=1
     for index,(_,seed) in enumerate(seeds,2):markers[seed]=index
     if seeds:cv2.watershed(smooth,markers)
+    regions_to_review=[((markers==index)&(mask>0)).astype(np.uint8)*255 for index in range(2,len(seeds)+2)]
+    algorithm='HSV_CHROMA_HUE_EDGE_MARKER_WATERSHED'
+    inner_edges=cv2.bitwise_and(edges,cv2.erode(mask,np.ones((9,9),np.uint8)))
+    if not diverse and np.count_nonzero(inner_edges)>max(60,w*h*.001):
+        from packing_instances import instance_masks
+        regions_to_review=instance_masks(image,mask)
+        algorithm='OPENCV5_DNN_EFFICIENTSAM_INSTANCE_HIERARCHY_WATERSHED'
     candidates=[]
-    for index in range(2,len(seeds)+2):
-        region=((markers==index)&(mask>0)).astype(np.uint8)*255
+    for region in regions_to_review:
         area=int(np.count_nonzero(region))
         if area<w*h*.004:continue
         box,features,kind=shape_features(image,region)
@@ -126,7 +132,8 @@ def segment_cardboard(raw):
         label_map[selected]=number
         contours,_=cv2.findContours(region,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
         contour=max(contours,key=cv2.contourArea)
-        polygon=np.asarray(cv2.approxPolyDP(contour,max(1.5,cv2.arcLength(contour,True)*.007),True)).reshape(-1,2)[:80]
+        polygon=np.asarray(cv2.approxPolyDP(contour,max(.65,cv2.arcLength(contour,True)*.0012),True)).reshape(-1,2)
+        if len(polygon)>256:polygon=polygon[np.linspace(0,len(polygon)-1,256,dtype=int)]
         all_contours,hierarchy=cv2.findContours(region,cv2.RETR_CCOMP,cv2.CHAIN_APPROX_SIMPLE)
         holes=[]
         if hierarchy is not None:
@@ -151,7 +158,7 @@ def segment_cardboard(raw):
     png=cv2.imencode('.png',label_map)[1].tobytes()
     return dict(schema='BZX-PACKING-VISION-V1',opencv_version=cv2.__version__,
         source_sha256=hashlib.sha256(raw).hexdigest(),width=w,height=h,
-        algorithm='HSV_CHROMA_HUE_EDGE_MARKER_WATERSHED',segmentation_scope='VISIBLE_SURFACE_REGIONS_NOT_OBJECT_INSTANCES',
+        algorithm=algorithm,segmentation_scope='REVIEWABLE_VISIBLE_INSTANCE_PROPOSALS' if 'EFFICIENTSAM' in algorithm else 'VISIBLE_SURFACE_REGIONS_NOT_OBJECT_INSTANCES',
         shape_method='UNCALIBRATED_GEOMETRIC_HEURISTIC',regions=regions,
         overlay='data:image/jpeg;base64,'+base64.b64encode(jpeg).decode(),
         labels_png='data:image/png;base64,'+base64.b64encode(png).decode(),

@@ -2,7 +2,7 @@
 
 The public judge app is a separate AWS deployment in Tokyo. It contains public source/demo assets and a new judge account. Laptop operator credentials, captures, private history and GT data never enter this release.
 
-`deploy/aws_public_demo.py prepare --commit SHA` only reads AWS metadata and saves a CloudFormation template. `deploy --commit SHA --account 510266171733` is a separate, explicitly authorized action. The stack creates an HTTP API, VPC Link, internal ALB, EC2 t3.small, encrypted 12 GiB gp3 root volume, WAF, security groups and a scoped instance role/profile. A private encrypted source bucket and SecureString origin token are prepared by the deployment command. No domain purchase, NAT gateway, SSH key or public inbound instance port is required. EC2's public IPv4 supports outbound package installation and SSM; inbound connections are restricted to the ALB group. The internal ALB accepts only the VPC Link group.
+The executable AWS controller stays in the operator's private runtime/security directory, with its original fixed-account validation unchanged. The public deploy/aws_public_demo.py is a fail-closed notice and performs no AWS operation. Use the private deployment handover for approved prepare/deploy actions. The stack creates an HTTP API, VPC Link, internal ALB, EC2 t3.small, encrypted 12 GiB gp3 root volume, WAF, security groups and a scoped instance role/profile. A private encrypted source bucket and SecureString origin token are prepared by the deployment command. No domain purchase, NAT gateway, SSH key or public inbound instance port is required. EC2's public IPv4 supports outbound package installation and SSM; inbound connections are restricted to the ALB group. The internal ALB accepts only the VPC Link group.
 
 The AWS-managed `execute-api.ap-northeast-1.amazonaws.com` URL supports TLS 1.2/1.3. API Gateway overwrites the origin token, HTTPS context and viewer IP headers. `PublicOrigin` verifies the secret before trusting those headers, fixes the public authority and discards untrusted forwarding headers. Exact-Origin/CSRF checks, Secure/HttpOnly/SameSite cookies, password failure limits and principal isolation remain active. Public mode disables operator login, operator session creation and MFA enrollment entirely. The local operator MFA is unchanged. The health probe returns only fixed readiness metadata.
 
@@ -20,7 +20,7 @@ Before declaring the URL operational, verify Chrome login, secure cookies, forei
 
 - URL: https://8cojy59x54.execute-api.ap-northeast-1.amazonaws.com/judge
 - Expiry timer verified active: 23 November 2026, 09:31:56 UTC / 18:31:56 JST.
-- CloudFormation stack: `bzx-public-7ffd2117`, status `UPDATE_COMPLETE`.
+- CloudFormation stack: [PRIVATE_DEPLOYMENT_RESOURCE], status `UPDATE_COMPLETE`.
 - Bootstrap source: `f93937b04cbdcce3abe61f31a2706e6c63d66aee`. Runtime source revision after SHA-256-verified static patches: `b303e8a1e31e8f46e77ed3735fe21b2cb7dc4fa6`.
 - HTTP API header literals were corrected through CloudFormation. HTTP API mappings use raw literal values; extra single quotes would reach the origin as part of the header.
 - The live host reports OpenCV 5.0.0, zero operator credential rows, only the active judge account, zero private capture PNGs, a non-root service and a 0600 origin-token file.

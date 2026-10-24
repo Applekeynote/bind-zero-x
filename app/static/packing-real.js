@@ -88,14 +88,11 @@ async function cutout(piece,input){
 }
 function surface(piece,asset,layer,prepared=true){
   const {region,width,height,canvas}=asset;
-  const completion=region.completion,panel=piece.geometryMode!=='FULL_OUTLINE'&&completion;
-  const angle=((panel?completion?.image_long_axis_degrees:completion?.outline_axis_degrees)??region.shape_evidence?.image_long_axis_degrees??0)*Math.PI/180;
-  const c=Math.cos(angle),s=Math.sin(angle),polygon=panel&&prepared?completion.body_polygon:region.polygon;
-  let points=polygon.map(([x,y])=>{const px=x*width,py=y*height;return {x:px*c+py*s,y:-px*s+py*c};});
-  const bounds=(panel?completion.body_polygon:polygon).map(([x,y])=>({x:x*width*c+y*height*s,y:-x*width*s+y*height*c}));
-  const minX=Math.min(...bounds.map(p=>p.x)),maxX=Math.max(...bounds.map(p=>p.x)),minY=Math.min(...bounds.map(p=>p.y)),maxY=Math.max(...bounds.map(p=>p.y));
+  const polygon=region.polygon;
+  const {points,c,s,minX,maxX,minY,maxY}=model.sheetOutline(region,width,height);
   const long=piece.orientation===90?layer.depth:layer.width,short=piece.orientation===90?layer.width:layer.depth;
-  const sx=long/Math.max(1,maxX-minX),sy=short/Math.max(1,maxY-minY),cx=(minX+maxX)/2,cy=(minY+maxY)/2;
+  const uniform=currentLayout.units==='relative'&&!piece.flatCapture?3.2/currentLayout.normalizer:Math.min(long/Math.max(1,maxX-minX),short/Math.max(1,maxY-minY));
+  const sx=uniform,sy=uniform,cx=(minX+maxX)/2,cy=(minY+maxY)/2;
   const shape=new THREE.Shape();points.forEach((p,i)=>{const x=(p.x-cx)*sx,y=-(p.y-cy)*sy;i?shape.lineTo(x,y):shape.moveTo(x,y);});shape.closePath();
   for(const hole of region.holes||[]){
     const hx=hole.reduce((n,p)=>n+p[0],0)/hole.length,hy=hole.reduce((n,p)=>n+p[1],0)/hole.length;
@@ -161,7 +158,7 @@ async function show(input){
   if(input.step.kind==='FOLD'){renderPhotoFold(input);return;}
   try{
     initialize();host.classList.remove('photo-fold-stage');
-    host.replaceChildren(renderer.domElement);host.dataset.renderer='PHOTO_TEXTURED_WEBGL';
+    host.replaceChildren(renderer.domElement);host.dataset.renderer='PHOTO_TEXTURED_WEBGL';host.dataset.outlineMode='FULL_ORIGINAL_POLYGON';
     resetGroup();currentLayout=model.layout(input.pieces);const layout=currentLayout;
     const visible=input.step.kind==='PREPARE'?[input.step.piece]:input.step.kind==='PLACE'?input.pieces.slice(0,input.pieces.findIndex(p=>p.id===input.step.piece.id)+1):input.pieces;
     assets=await Promise.all(visible.map(p=>cutout(p,input)));if(ticket!==generation)return;
@@ -183,7 +180,7 @@ async function show(input){
     const policy=model.knotPolicy(input.condition);
     if(['WRAP_LONG','WRAP_CROSS','KNOT_FIRST','KNOT_SECOND','CHECK','LIFT_CHECK'].includes(input.step.kind))drawBinding(layout,input.step.kind==='LIFT_CHECK'?'CHECK':input.step.kind,policy);
     const front=label('FRONT / YOU');front.position.set(0,-.015,layout.depth/2+.4);group.add(front);
-    host.dataset.units=layout.units;host.dataset.visiblePieces=String(visible.length);
+    host.dataset.units=layout.units;host.dataset.visiblePieces=String(visible.length);host.dataset.visiblePieceIds=visible.map(p=>p.id).join(',');
     host.dataset.knot=policy.id;
     document.getElementById('packing-scale-label').textContent=layout.units==='mm'?'MEASURED / mm':'PHOTO PROPORTIONS';
     resize();updateCamera();cancelAnimationFrame(frame);frame=requestAnimationFrame(tick);

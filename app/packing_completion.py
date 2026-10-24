@@ -58,8 +58,11 @@ def complete_surface(image, observed, occluders):
     completed[observed>0]=255;inferred=(completed>0)&(observed==0)
     texture=cv2.warpAffine(texture,inverse_matrix,(w,h));texture[observed>0]=image[observed>0]
     rgba=cv2.cvtColor(texture,cv2.COLOR_BGR2BGRA);rgba[:,:,3]=completed
+    ys,xs=np.nonzero(completed)
+    preview=rgba[ys.min():ys.max()+1,xs.min():xs.max()+1]
     exterior=max(cv2.findContours(completed,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0],key=cv2.contourArea)
-    polygon=cv2.approxPolyDP(exterior,max(.8,cv2.arcLength(exterior,True)*.0015),True).reshape(-1,2)[:160]
+    polygon=cv2.approxPolyDP(exterior,max(.65,cv2.arcLength(exterior,True)*.0012),True).reshape(-1,2)
+    if len(polygon)>256:polygon=polygon[np.linspace(0,len(polygon)-1,256,dtype=int)]
     # Outline shoulders identify the central panel; nearby creases refine it.
     widths=np.count_nonzero(complete,axis=1);heights=np.count_nonzero(complete,axis=0)
     rows=np.flatnonzero(widths>=widths.max()*.78);cols=np.flatnonzero(heights>=heights.max()*.78)
@@ -79,7 +82,7 @@ def complete_surface(image, observed, occluders):
     body=[inverse(x0,y0),inverse(x1,y0),inverse(x1,y1),inverse(x0,y1)]
     return dict(method='CREASE_ALIGNED_OCCLUDER_SYMMETRY',axis_method=axis_method,
         inferred_pixels=int(inferred.sum()),inferred_fraction=round(float(inferred.sum()/max(1,np.count_nonzero(completed))),4),
-        polygon=[[round(float(x)/w,5),round(float(y)/h,5)] for x,y in polygon],mask_png=png(completed),texture_png=png(rgba),
+        polygon=[[round(float(x)/w,5),round(float(y)/h,5)] for x,y in polygon],mask_png=png(completed),texture_png=png(rgba),preview_png=png(preview),
         fill_rgb=np.median(image[observed>0],axis=0)[::-1].astype(int).tolist(),review_required=True,verified=False,
         body_polygon=body,body_long_px=round(float(max(x1-x0,y1-y0)),2),body_short_px=round(float(min(x1-x0,y1-y0)),2),
         full_long_px=round(float(max(xx.max()-xx.min(),yy.max()-yy.min())),2),full_short_px=round(float(min(xx.max()-xx.min(),yy.max()-yy.min())),2),

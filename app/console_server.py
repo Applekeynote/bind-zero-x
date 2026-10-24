@@ -35,6 +35,7 @@ from sqlite_scope import connect
 from capture_archive import verify_capture
 from auth_security import AuthStore, AuthError, SESSION_SECONDS
 from packing_vision import segment_cardboard
+from packing_jobs import PackingJobs
 import io
 import threading
 import qrcode
@@ -55,6 +56,7 @@ if PUBLIC_MODE:
     from urllib.parse import urlsplit
     ALLOWED_HOSTS.append(urlsplit(os.environ['BZX_PUBLIC_URL']).hostname)
 EXPENSIVE_GATE = threading.BoundedSemaphore(2)
+PACKING_JOBS=PackingJobs()
 
 app = FastAPI(title='BIND ZERO-X Local Research Console', docs_url=None, redoc_url=None, openapi_url=None)
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=ALLOWED_HOSTS)
@@ -358,10 +360,11 @@ class SegmentationRequest(BaseModel):
     model_config = ConfigDict(extra='forbid')
     demo_photo: str | None = Field(default=None,max_length=40)
     image_png_b64: str | None = Field(default=None,max_length=6_666_668)
+    async_job: bool = False
 
 
 @app.post('/api/console/segment')
-def segment_photo(data: SegmentationRequest):
+def segment_photo(data: SegmentationRequest,request:Request):
     if bool(data.demo_photo)==bool(data.image_png_b64):
         raise HTTPException(422,'CHOOSE_ONE_IMAGE_SOURCE')
     if not EXPENSIVE_GATE.acquire(blocking=False):raise HTTPException(429,'ANALYSIS_BUSY')
@@ -372,15 +375,28 @@ def segment_photo(data: SegmentationRequest):
             raw=(ROOT/'app/static/photos'/(data.demo_photo+'.png')).read_bytes()
         else:
             raw=base64.b64decode(data.image_png_b64,validate=True)
-        result=segment_cardboard(raw)
-        result['input_tier']='USER_PROVIDED_DEMO_ONLY' if data.demo_photo else 'USER_IMAGE_UNVERIFIED'
-        return result
+        def analyze():
+            result=segment_cardboard(raw)
+            result['input_tier']='USER_PROVIDED_DEMO_ONLY' if data.demo_photo else 'USER_IMAGE_UNVERIFIED'
+            return result
+        if data.async_job:
+            response=PACKING_JOBS.submit(request.state.session['username'],analyze,EXPENSIVE_GATE.release)
+            handed_off=True
+            return JSONResponse(response,status_code=202)
+        return analyze()
     except (ValueError,binascii.Error) as exc:
         raise HTTPException(422,str(exc)[:100])
     except RuntimeError as exc:
         raise HTTPException(503,str(exc)[:100])
     finally:
-        EXPENSIVE_GATE.release()
+        if not locals().get('handed_off'):EXPENSIVE_GATE.release()
+
+
+@app.get('/api/console/segment/jobs/{job_id}')
+def segmentation_job(job_id:str,request:Request):
+    result=PACKING_JOBS.read(job_id,request.state.session['username'])
+    if result is None:raise HTTPException(404,'SEGMENTATION_JOB_NOT_FOUND')
+    return result
 
 
 def bounded_metadata(value):
