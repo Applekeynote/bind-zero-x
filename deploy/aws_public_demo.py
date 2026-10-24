@@ -5,7 +5,7 @@ WAF, encrypted EBS, and a 30-day expiry. Source comes from a pinned PUBLIC commi
 Run `prepare --commit SHA`, review template, then explicitly `deploy --commit SHA
 --account 510266171733`. Metadata and login handout stay in ~/.bzx-public/.
 """
-import argparse,base64,datetime,hashlib,json,os,re,secrets,time,urllib.request,zipfile,io
+import argparse,base64,datetime,hashlib,json,os,re,secrets,time,urllib.request,zipfile,io,subprocess
 from pathlib import Path
 import boto3
 
@@ -213,7 +213,15 @@ def deploy(account,commit):
         except Exception:pass
         time.sleep(10)
     else:raise TimeoutError('APPLICATION_BOOT_TIMEOUT')
-    cmd=ssm.send_command(InstanceIds=[state['instance']],DocumentName='AWS-RunShellScript',Parameters={'commands':['base64 -w0 /var/lib/bzx/judge-login.txt']},TimeoutSeconds=60)['Command']['CommandId']
+    # SSM command history must contain ciphertext, never a password (including
+    # base64 passwords). Only this CloudShell session retains the transfer key.
+    key=HOME/('transfer-'+secrets.token_hex(8)+'.pem')
+    private_file(key,'')
+    subprocess.run(['openssl','genpkey','-algorithm','RSA','-pkeyopt','rsa_keygen_bits:4096','-out',str(key)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+    public_key=subprocess.check_output(['openssl','pkey','-in',str(key),'-pubout'])
+    remote="import base64,pathlib;from cryptography.hazmat.primitives import serialization,hashes;from cryptography.hazmat.primitives.asymmetric import padding;k=serialization.load_pem_public_key(base64.b64decode('"+base64.b64encode(public_key).decode()+"'));raw=pathlib.Path('/var/lib/bzx/judge-login.txt').read_bytes();print(base64.b64encode(k.encrypt(raw,padding.OAEP(mgf=padding.MGF1(hashes.SHA256()),algorithm=hashes.SHA256(),label=None))).decode())"
+    command='/opt/bzx/venv/bin/python -c "import base64;exec(base64.b64decode(\''+base64.b64encode(remote.encode()).decode()+'\'))"'
+    cmd=ssm.send_command(InstanceIds=[state['instance']],DocumentName='AWS-RunShellScript',Parameters={'commands':[command]},TimeoutSeconds=60)['Command']['CommandId']
     for _ in range(30):
         time.sleep(2)
         try:result=ssm.get_command_invocation(CommandId=cmd,InstanceId=state['instance'])
@@ -221,7 +229,10 @@ def deploy(account,commit):
         if result['Status']=='Success':break
         if result['Status'] in ['Failed','TimedOut','Cancelled']:raise RuntimeError('HANDOUT_RETRIEVAL_FAILED')
     else:raise TimeoutError('HANDOUT_RETRIEVAL_TIMEOUT')
-    handout=base64.b64decode(result['StandardOutputContent']).decode('utf-8');private_file(HOME/'judge-login.txt',handout)
+    cipher=HOME/'handover-transfer.bin';cipher.write_bytes(base64.b64decode(result['StandardOutputContent']))
+    pending=HOME/'judge-login.pending';private_file(pending,'')
+    subprocess.run(['openssl','pkeyutl','-decrypt','-inkey',str(key),'-pkeyopt','rsa_padding_mode:oaep','-pkeyopt','rsa_oaep_md:sha256','-in',str(cipher),'-out',str(pending)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+    pending.replace(HOME/'judge-login.txt');key.unlink();cipher.unlink()
     save('READY');print(json.dumps({'url':state['url']+'/judge','handout':str(HOME/'judge-login.txt'),'expires':state['expires']}))
 
 def main():

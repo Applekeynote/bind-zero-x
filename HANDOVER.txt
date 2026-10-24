@@ -356,12 +356,36 @@ V4 JSONは束分割、支持条件、連続経路、補完仮説を記録する�
 摩擦係数・実重量・保持力の実測検証ではない。紐を持ち手にする案内はしない。
 自動検証: 研究397成功+1skip、アプリ45成功、JS23成功、合計465成功+1skip。
 
-22. AWS公開版の準備（稼働URLはデプロイ成功後に記録）
-現在のlocalhost URLは外部審査員には使えない。公開版を独立したAWS環境へ配備する。
+22. AWS公開版の稼働（2026-10-24）
+審査員URL: https://8cojy59x54.execute-api.ap-northeast-1.amazonaws.com/judge
+Chromeでjudgeのパスワード単独ログインと実際のOpenCV 5.0.0解析を確認済み。
+配布用の文字情報はruntime/security/aws-judge-login.txt。ローカル用judge-login.txtとは別。
+パスワードはこの引き継ぎ文書、公開GitHub、公開ZIPへ転記しない。
 構成・見積・権限・30日期限はdocs/aws-public-demo.md、実装はdeploy/aws_public_demo.py。
 東京HTTP APIのAWS管理HTTPS URLを入口にし、VPC Link→内部ALB→EC2の順に接続する。
 公開環境は新規judge専用。ローカルoperatorのDB/パスワード/TOTP/履歴は転送しない。
 通信上限とWAF、認証試行制限、Secure Cookie、Origin/CSRF、所有者確認を保持する。
 prepareはAWSメタデータの読み取りとテンプレート保存だけ。deployは個別の実行操作。
-30日後は今回のAPI/ALB/WAF/EC2/EBSと審査員側の一時履歴を終了する構成。
-公開URLがChromeで実際にログイン・解析できるまで、公開稼働完了と記載しない。
+終了時刻は2026-11-23 18:31:56 JST（09:31:56 UTC）。永続systemd timerがactiveと確認。
+今回のAPI/ALB/WAF/EC2/EBSと審査員側の一時履歴を終了する。元PCの履歴は残る。
+30日基本費用は約45〜60米ドル、税・通信・リクエスト等は別。予算100米ドル。
+通信上限は日500MiB、期間5GiB。APIは2req/s、burst40。アカウント全体の金額上限ではない。
+CloudFormation stack: bzx-public-7ffd2117。instance: i-0f4e51fb0c8e704a5。
+API: 8cojy59x54。private source bucket: bzx-public-7ffd2117-510266171733。
+source objectは45日で削除。残る無課金メタデータは当該stackだけを対象に後日整理する。
+bootstrap commit: f93937b04cbdcce3abe61f31a2706e6c63d66aee。
+SHA256確認後の静的ファイル更新によるruntime revision:
+ b303e8a1e31e8f46e77ed3735fe21b2cb7dc4fa6。
+HTTP APIのヘッダ固定値に余分な引用符を含めない修正をCloudFormationへ適用済み。
+stackはUPDATE_COMPLETE。原点トークンや認証情報をテンプレート出力へ含めない。
+確認した実ホスト情報: operator認証行0、ACTIVE judgeのみ、非公開capture PNG 0、
+実行ユーザーbzx、ProtectSystem=strict、ProtectHome=yes、メモリ/CPU制限、token権限0600。
+未認証API/デモ画像401、HSTS/CSP/Secure Cookie/no-store、内部ALBとSG限定経路を確認。
+実行証拠はruntime/evidence/aws-public-deployment.json。公開ソースには入れない。
+配布取得の最新コードはRSA4096 OAEP/SHA256でSSM出力を暗号化し、一時鍵を削除。
+実際のEC2→SSM→CloudShell復号を往復検証済み。
+初回bootstrapの配布取得はbase64をSSM出力に返した。AWS管理者のみが扱えるが、
+このSSM履歴も認証情報として扱う。一般公開、ログ転記、第三者共有をしない。
+ChromeではPrimary sheetsを5領域解析し、2束に分割、PREPARE→配置→十字掛け→
+二重の最初の結びと逆向きの結びを確認。画像はruntime/demo-results/aws-*.png。
+補完は斜線付き仮説。デモ完了は実物の摩擦・保持力・持ち上げの検証完了を意味しない。

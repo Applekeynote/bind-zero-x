@@ -83,6 +83,6 @@ See [HANDOVER.txt](HANDOVER.txt) for the detailed Japanese operational and devel
 
 ## Public judge deployment
 
-Localhost works only on the hosting PC. The isolated AWS public-HTTPS deployment workflow is documented in [aws-public-demo.md](docs/aws-public-demo.md). Preparation does not mean the public URL is operational.
+The live, isolated Tokyo judge demo is available at [Public judge login](https://8cojy59x54.execute-api.ap-northeast-1.amazonaws.com/judge). It was verified in Chrome with password-only judge login and OpenCV 5.0.0 segmentation. The private login handout is supplied separately. This temporary deployment expires on 23 November 2026 at 18:31 JST. Deployment, security boundaries and operating costs are documented in [aws-public-demo.md](docs/aws-public-demo.md).
 
 The latest packing guide completes occluded outlines as striped, reviewable hypotheses; folds flaps to compact panels; groups compatible footprints between a broad base/cap; and renders wraps and knot from one continuous twine model. V4 exports preserve those decisions. Physical friction and lifting strength are not inferred from a photo.
