@@ -45,9 +45,13 @@ test('twine wraps and knot are the same two connected halves in every stage',()=
   const p=model.bindingPaths(l,stage,2);assert.deepEqual(p.a[0],p.b[0]);
   assert.ok(p.a.some(v=>v[1]<0));assert.ok(p.b.some(v=>v[1]<0));
   if(stage.startsWith('KNOT')){
-   const first=model.halfKnot(2,1,l.height+.055+.08,-.13);
+   const first=model.halfKnot(2,1,l.height+.014+.042,-.13);
    assert.deepEqual(p.a[p.knotStartA],first.a[0]);assert.deepEqual(p.b[p.knotStartB],first.b[0]);
   }
   assert.equal(p.continuous.length,p.a.length+p.b.length-1);
  }
+ const tied=model.bindingPaths(l,'CHECK',2),knot=model.halfKnot(2,1,l.height+.014+.042,-.13);
+ assert.ok(knot.a.every(p=>p[1]-.012>=l.height),'knot must stay above the top panel');
+ assert.ok(Math.min(...knot.a.map(p=>p[1]-.012-l.height))<.004,'knot seats at the panel instead of floating');
+ assert.ok(tied.a.some(p=>p[1]===-.014)&&tied.a.some(p=>p[1]<-.035),'under-wrap has contact and an over/under crossing');
 });

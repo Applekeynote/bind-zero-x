@@ -46,7 +46,7 @@ function updateCamera(){
   if(!camera||!state)return;
   const height=currentLayout?.height||.12;
   const knot=state.step.kind.startsWith('KNOT');
-  const center=new THREE.Vector3(0,knot?height+.14:height/2,0),r=knot?distance*.38:state.step.kind==='PREPARE'?distance*1.7:distance;
+  const center=new THREE.Vector3(0,knot?height+.06:height/2,0),r=knot?distance*.38:state.step.kind==='PREPARE'?distance*1.7:distance;
   camera.position.set(center.x+r*Math.sin(yaw)*Math.cos(pitch),center.y+r*Math.sin(pitch),center.z+r*Math.cos(yaw)*Math.cos(pitch));
   camera.lookAt(center);floor.visible=pitch>0;undersideLight.visible=pitch<0;
 }

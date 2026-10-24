@@ -77,21 +77,21 @@ globalThis.BZXModel=(()=>{
     }return {a,b};
   }
   function bindingPaths(l,kind,turns=1){
-    const y=l.height+.055,w=l.width/2+.025,d=l.depth/2+.025,b=-.045,mid=[0,b,0];
+    const y=l.height+.014,w=l.width/2+.025,d=l.depth/2+.025,b=-.014,mid=[0,b,0];
     let a=[mid,[0,b,d],[0,y,d],[0,y,.14]],bpath=[mid,[0,b,-d],[0,y,-d],[0,y,-.16]];
-    if(kind!=='WRAP_LONG')a.push([-.24,y,.14],[-w,y,.14],[-w,b+.035,.14],[w,b+.035,.14],[w,y,.14],[.5,y+.035,-.13]);
+    if(kind!=='WRAP_LONG')a.push([-.24,y,.14],[-w,y,.14],[-w,b,.14],[-.06,b,.14],[0,b-.026,.14],[.06,b,.14],[w,b,.14],[w,y,.14],[.5,y+.035,-.13]);
     else a.push([.5,y+.035,-.13]);
     bpath.push([-.5,y+.035,-.13]);
-    const first=halfKnot(turns,1,y+.08,-.13),firstA=first.a[0],firstB=first.b[0];
+    const first=halfKnot(turns,1,y+.042,-.13),firstA=first.a[0],firstB=first.b[0];
     a.push(firstA);bpath.push(firstB);
     const knotStartA=a.length-1,knotStartB=bpath.length-1;
     if(['KNOT_FIRST','KNOT_SECOND','CHECK'].includes(kind)){
       a.push(...first.a.slice(1));bpath.push(...first.b.slice(1));
       if(['KNOT_SECOND','CHECK'].includes(kind)){
-        const second=halfKnot(1,-1,y+.08,.13);
-        a.push([-.44,y+.10,0],...second.b,[.65,y+.13,.32]);
-        bpath.push([.44,y+.10,0],...second.a,[-.65,y+.13,.32]);
-      }else{a.push([-.65,y+.13,.32]);bpath.push([.65,y+.13,.32]);}
+        const second=halfKnot(1,-1,y+.042,.13);
+        a.push([-.44,y+.055,0],...second.b,[.65,y+.015,.32]);
+        bpath.push([.44,y+.055,0],...second.a,[-.65,y+.015,.32]);
+      }else{a.push([-.65,y+.015,.32]);bpath.push([.65,y+.015,.32]);}
     }
     return {a,b:bpath,knotStartA,knotStartB,midpoint:mid,continuous:[...a].reverse().concat(bpath.slice(1)),kind};
   }
