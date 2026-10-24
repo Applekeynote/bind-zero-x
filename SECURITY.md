@@ -11,3 +11,7 @@ Photo-textured rendering must not fabricate unseen image evidence, calibrated di
 Do not commit runtime data, captures, real GT, credentials, private keys, local environment files, or account-specific cloud evidence. Source publication and release packaging use `scripts/release-files.json`; newly added files require explicit review before adding to that allowlist. Never turn source packaging into a recursive workspace export. Test fixtures must use disposable secrets.
 
 Report suspected vulnerabilities through GitHub's private vulnerability reporting when enabled, or privately contact the repository owner. Avoid putting credentials or live exploit data in public issues.
+
+Public AWS mode is isolated from local operator data. Require the gateway origin secret before trusting overwritten viewer context, disable operator login/setup, retain CSRF and ownership enforcement, and use private origin security groups. Durable egress quotas must survive restarts. See docs/aws-public-demo.md.
+
+Amodal shape completion is an unverified hypothesis, stored separately from observed labels. Never relabel hidden pixels as observed evidence or claim friction/lift safety from footprint containment. Every transport guide requires preparation, snug-loop checks and a low lift supported from beneath with both hands; twine is not a lifting handle.

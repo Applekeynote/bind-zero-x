@@ -8,6 +8,7 @@ import hashlib
 import struct
 import cv2
 import numpy as np
+from packing_completion import complete_surface
 
 PALETTE = ['#61dcb1','#79b7ff','#efb45f','#cb9ef5','#f38c99','#8bd3e1',
            '#c7d76e','#ec9cc7','#8fc4a2','#a8b7fa','#dbac8b','#b7dbed']
@@ -115,6 +116,8 @@ def segment_cardboard(raw):
         box,features,kind=shape_features(image,region)
         candidates.append((area,region,box,features,kind))
     candidates.sort(key=lambda item:item[0],reverse=True)
+    all_regions=np.zeros((h,w),np.uint8)
+    for _,region,*_ in candidates[:12]:all_regions[region>0]=255
     output=image.copy();regions=[];label_map=np.zeros((h,w),np.uint8)
     for number,(area,region,(x,y,rw,rh),features,kind) in enumerate(candidates[:12],1):
         color=PALETTE[number-1];rgb=tuple(int(color[i:i+2],16) for i in (1,3,5));bgr=np.array(rgb[::-1])
@@ -141,7 +144,7 @@ def segment_cardboard(raw):
         regions.append(dict(id=number,color=color,pixel_area=area,area_fraction=round(area/(w*h),4),
             bbox=[round(v,5) for v in (x/w,y/h,rw/w,rh/h)],centroid=[cx/w,cy/h],
             polygon=[[round(float(px)/w,5),round(float(py)/h,5)] for px,py in polygon],
-            holes=holes,
+            holes=holes,completion=complete_surface(image,region,cv2.bitwise_and(all_regions,cv2.bitwise_not(region))),
             shape_hypothesis=kind,shape_evidence=features,review_required=True,
             instruction='Fold this box' if kind=='OPEN_BOX_CANDIDATE' else 'Check flat / open'))
     jpeg=cv2.imencode('.jpg',output,[cv2.IMWRITE_JPEG_QUALITY,88])[1].tobytes()

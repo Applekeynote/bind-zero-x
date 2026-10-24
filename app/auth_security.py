@@ -92,12 +92,13 @@ class SecretBox:
 
 
 class AuthStore:
-    def __init__(self, directory, clock=time.time):
+    def __init__(self, directory, clock=time.time, judge_only=False):
         self.directory = Path(directory)
         self.directory.mkdir(mode=0o700, parents=True, exist_ok=True)
         self.path = self.directory / 'auth.db'
         self.box = SecretBox(self.directory)
         self.clock = clock
+        self.judge_only=judge_only
         self.login_gate = threading.BoundedSemaphore(2)
         with connect(self.path) as db:
             db.executescript('''
@@ -121,6 +122,7 @@ class AuthStore:
 
     def configured(self):
         with connect(self.path) as db:
+            if self.judge_only:return db.execute("SELECT 1 FROM accounts WHERE status='ACTIVE' AND expires>?",(self.clock(),)).fetchone() is not None
             return db.execute('SELECT 1 FROM credentials WHERE id=1').fetchone() is not None
 
     def challenge(self, token, peer):
@@ -193,6 +195,8 @@ class AuthStore:
 
     def login(self, password, code, peer, username='operator'):
         self._attempt_allowed(peer)
+        if self.judge_only and username=='operator':
+            self._failure(peer);raise AuthError('INVALID_CREDENTIALS')
         if not self.login_gate.acquire(blocking=False):
             raise AuthError('LOGIN_BUSY')
         try:
@@ -231,6 +235,7 @@ class AuthStore:
             self.login_gate.release()
 
     def issue_session(self, label='Device', username='operator'):
+        if self.judge_only and username=='operator':raise AuthError('INVALID_CREDENTIALS')
         token, csrf, now = secrets.token_urlsafe(48), secrets.token_urlsafe(32), self.clock()
         with connect(self.path) as db:
             if username!='operator' and not db.execute("SELECT 1 FROM accounts WHERE username=? AND status='ACTIVE' AND expires>?",(username,now)).fetchone():
@@ -273,7 +278,7 @@ class AuthStore:
         return f'otpauth://totp/{quote("BIND ZERO-X:"+username)}?secret={secret}&issuer=BIND%20ZERO-X&algorithm=SHA1&digits=6&period=30'
 
     def create_password_judge(self,username='judge',days=30):
-        if not self.configured():raise AuthError('OWNER_MFA_REQUIRED')
+        if not self.configured() and not self.judge_only:raise AuthError('OWNER_MFA_REQUIRED')
         if not re.fullmatch(r'[a-z][a-z0-9_-]{2,31}',username) or username=='operator':raise AuthError('INVALID_USERNAME')
         if not 1<=days<=90:raise AuthError('INVALID_ACCOUNT_LIFETIME')
         password=secrets.token_urlsafe(24);salt=secrets.token_bytes(16);key=password_key(password,salt)

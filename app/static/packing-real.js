@@ -46,7 +46,7 @@ function updateCamera(){
   if(!camera||!state)return;
   const height=currentLayout?.height||.12;
   const knot=state.step.kind.startsWith('KNOT');
-  const center=new THREE.Vector3(0,knot?height+.14:height/2,0),r=knot?distance*.28:distance;
+  const center=new THREE.Vector3(0,knot?height+.14:height/2,0),r=knot?distance*.38:state.step.kind==='PREPARE'?distance*1.7:distance;
   camera.position.set(center.x+r*Math.sin(yaw)*Math.cos(pitch),center.y+r*Math.sin(pitch),center.z+r*Math.cos(yaw)*Math.cos(pitch));
   camera.lookAt(center);floor.visible=pitch>0;undersideLight.visible=pitch<0;
 }
@@ -71,18 +71,33 @@ async function cutout(piece,input){
   }else{
     ctx.globalCompositeOperation='destination-in';ctx.beginPath();region.polygon.forEach(([x,y],i)=>i?ctx.lineTo(x*width,y*height):ctx.moveTo(x*width,y*height));ctx.closePath();ctx.fill();
   }
-  return {canvas,region,width,height};
+  const completion=region.completion;
+  if(completion&&piece.completionMode!=='OBSERVED'){
+    const mask=await image(completion.mask_png),mc=document.createElement('canvas');mc.width=width;mc.height=height;
+    const mm=mc.getContext('2d',{willReadFrequently:true});mm.drawImage(mask,0,0,width,height);
+    const md=mm.getImageData(0,0,width,height).data,data=ctx.getImageData(0,0,width,height);
+    for(let i=0;i<data.data.length;i+=4)if(md[i]>0&&data.data[i+3]===0){
+      const x=(i/4)%width,y=Math.floor(i/4/width),stripe=(x+y)%20<3?22:0;
+      for(let c=0;c<3;c++)data.data[i+c]=Math.min(255,completion.fill_rgb[c]+stripe);data.data[i+3]=255;
+    }
+    ctx.putImageData(data,0,0);
+  }
+  return {canvas,region:{...region,polygon:completion&&piece.completionMode!=='OBSERVED'?completion.polygon:region.polygon},width,height};
 }
-function surface(piece,asset,layer){
+function surface(piece,asset,layer,prepared=true){
   const {region,width,height,canvas}=asset;
-  const angle=(region.shape_evidence?.image_long_axis_degrees||0)*Math.PI/180;
-  const c=Math.cos(angle),s=Math.sin(angle),polygon=region.polygon;
+  const completion=region.completion,panel=piece.geometryMode!=='FULL_OUTLINE'&&completion;
+  const angle=(completion?.image_long_axis_degrees||region.shape_evidence?.image_long_axis_degrees||0)*Math.PI/180;
+  const c=Math.cos(angle),s=Math.sin(angle),polygon=panel&&prepared?completion.body_polygon:region.polygon;
   let points=polygon.map(([x,y])=>{const px=x*width,py=y*height;return {x:px*c+py*s,y:-px*s+py*c};});
-  const minX=Math.min(...points.map(p=>p.x)),maxX=Math.max(...points.map(p=>p.x)),minY=Math.min(...points.map(p=>p.y)),maxY=Math.max(...points.map(p=>p.y));
+  const bounds=(panel?completion.body_polygon:polygon).map(([x,y])=>({x:x*width*c+y*height*s,y:-x*width*s+y*height*c}));
+  const minX=Math.min(...bounds.map(p=>p.x)),maxX=Math.max(...bounds.map(p=>p.x)),minY=Math.min(...bounds.map(p=>p.y)),maxY=Math.max(...bounds.map(p=>p.y));
   const long=piece.orientation===90?layer.depth:layer.width,short=piece.orientation===90?layer.width:layer.depth;
   const sx=long/Math.max(1,maxX-minX),sy=short/Math.max(1,maxY-minY),cx=(minX+maxX)/2,cy=(minY+maxY)/2;
   const shape=new THREE.Shape();points.forEach((p,i)=>{const x=(p.x-cx)*sx,y=-(p.y-cy)*sy;i?shape.lineTo(x,y):shape.moveTo(x,y);});shape.closePath();
   for(const hole of region.holes||[]){
+    const hx=hole.reduce((n,p)=>n+p[0],0)/hole.length,hy=hole.reduce((n,p)=>n+p[1],0)/hole.length;
+    let inside=false;for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){const a=polygon[i],b=polygon[j];if((a[1]>hy)!==(b[1]>hy)&&hx<(b[0]-a[0])*(hy-a[1])/(b[1]-a[1])+a[0])inside=!inside;}if(!inside)continue;
     const path=new THREE.Path();hole.forEach(([x,y],i)=>{const px=x*width,py=y*height,hx=(px*c+py*s-cx)*sx,hy=-(-px*s+py*c-cy)*sy;i?path.lineTo(hx,hy):path.moveTo(hx,hy);});path.closePath();shape.holes.push(path);
   }
   const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
@@ -101,14 +116,15 @@ function surface(piece,asset,layer){
   // The measured thickness is extruded; no unseen back photograph is fabricated.
   return wrapper;
 }
-function tube(points,color,radius=.014,closed=false){
+function tube(points,color,radius=.014,closed=false,knotIndex=null){
   const curve=new THREE.CatmullRomCurve3(points.map(v),closed,'centripetal',.1);
-  const geometry=new THREE.TubeGeometry(curve,Math.min(256,Math.max(96,points.length*12)),radius,8,closed);
+  const geometry=new THREE.TubeGeometry(curve,Math.min(768,Math.max(128,points.length*5)),radius,8,closed);
   const fiber=document.createElement('canvas');fiber.width=256;fiber.height=64;const ctx=fiber.getContext('2d');ctx.fillStyle='#fff6df';ctx.fillRect(0,0,256,64);
   for(let i=-64;i<320;i+=8){ctx.strokeStyle=i%16?'#baad8d':'#e8dcba';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i+30,64);ctx.stroke();}
   const texture=new THREE.CanvasTexture(fiber);texture.colorSpace=THREE.SRGBColorSpace;texture.wrapS=THREE.RepeatWrapping;texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(14,1);
   const mesh=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({color,map:texture,roughness:.87,metalness:0}));mesh.castShadow=true;mesh.receiveShadow=true;group.add(mesh);
-  return {mesh,curve,count:geometry.index.count};
+  const lengths=curve.getLengths(2000),base=knotIndex===null?0:lengths[Math.round(knotIndex/(points.length-1)*2000)]/lengths.at(-1);
+  return {mesh,curve,count:geometry.index.count,baseCount:Math.floor(geometry.index.count*base/3)*3};
 }
 function roundedRoute(points){
   // Small corner neighborhoods stop a smooth curve cutting through the bundle.
@@ -118,19 +134,13 @@ function roundedRoute(points){
     const fraction=.04;result.push(p.clone().lerp(prev,fraction).toArray(),points[i],p.clone().lerp(next,fraction).toArray());
   }result.push(points.at(-1));return result;
 }
-function knotStrands(kind,policy,height){
-  const y=height+.10,complete=kind==='KNOT_SECOND';
-  const firstHalf=model.halfKnot(policy.firstTurns||1,1,y,-.13);
-  const a=[[.7,y+.09,-.35],...firstHalf.a],b=[[-.7,y+.09,-.35],...firstHalf.b];
-  if(complete){
-    const reverseHalf=model.halfKnot(1,-1,y,.13);
-    // Keep the completed first half; each SAME strand returns through the
-    // opposite second crossing. Separate depth lanes show over/under contact.
-    a.push([-.44,y+.02,0],...reverseHalf.b,[.7,y+.09,.35]);
-    b.push([.44,y+.02,0],...reverseHalf.a,[-.7,y+.09,.35]);
-  }else{a.push([-.7,y+.09,.35]);b.push([.7,y+.09,.35]);}
-  const first=tube(a,'#c88b39',.018),second=tube(b,'#457c95',.018);
-  ropeMeshes.push(first,second);
+function drawBinding(layout,kind,policy){
+  const paths=model.bindingPaths(layout,kind,policy.firstTurns),knot=kind.startsWith('KNOT')||kind==='CHECK';
+  for(const [key,start,color] of [['a',paths.knotStartA,'#c88b39'],['b',paths.knotStartB,'#457c95']]){
+    const prefix=roundedRoute(paths[key].slice(0,start+1)),points=[...prefix,...paths[key].slice(start+1)];
+    const rope=tube(points,color,.012,false,knot?prefix.length-1:null);ropeMeshes.push(rope);
+  }
+  host.dataset.ropeModel='ONE_CONTINUOUS_TWINE';
 }
 function renderPhotoFold(input){
   cancelAnimationFrame(frame);
@@ -151,26 +161,25 @@ async function show(input){
     initialize();host.classList.remove('photo-fold-stage');
     host.replaceChildren(renderer.domElement);host.dataset.renderer='PHOTO_TEXTURED_WEBGL';
     resetGroup();currentLayout=model.layout(input.pieces);const layout=currentLayout;
-    const visible=input.step.kind==='PLACE'?input.pieces.slice(0,input.pieces.findIndex(p=>p.id===input.step.piece.id)+1):input.pieces;
+    const visible=input.step.kind==='PREPARE'?[input.step.piece]:input.step.kind==='PLACE'?input.pieces.slice(0,input.pieces.findIndex(p=>p.id===input.step.piece.id)+1):input.pieces;
     assets=await Promise.all(visible.map(p=>cutout(p,input)));if(ticket!==generation)return;
     for(let i=0;i<visible.length;i++){
       const p=visible[i];if(p.review==='OPEN'&&!p.flatCapture)continue;
-      const g=surface(p,assets[i],layout.layers[i]);group.add(g);
+      const layer=layout.layers.find(l=>l.id===p.id);
+      const g=surface(p,assets[i],input.step.kind==='PREPARE'?{...layer,y:0}:layer,input.step.kind!=='PREPARE');group.add(g);
+      if(input.step.kind==='PREPARE'){
+        const y=layer.thickness+.025,w=layer.width/2,d=layer.depth/2;
+        const frameGeometry=new THREE.BufferGeometry().setFromPoints([v([-w,y,-d]),v([w,y,-d]),v([w,y,d]),v([-w,y,d]),v([-w,y,-d])]);
+        const outline=new THREE.Line(frameGeometry,new THREE.LineDashedMaterial({color:'#fff4a8',dashSize:.09,gapSize:.045}));outline.computeLineDistances();group.add(outline);
+        for(const [from,to] of [[[w*1.45,y,.0],[w*.9,y,0]],[[-w*1.45,y,0],[-w*.9,y,0]],[[0,y,d*1.45],[0,y,d*.9]],[[0,y,-d*1.45],[0,y,-d*.9]]]){
+          const origin=v(from),direction=v(to).sub(origin);group.add(new THREE.ArrowHelper(direction.clone().normalize(),origin,direction.length(),0xffef9a,.10,.06));
+        }
+      }
       if(input.step.kind==='PLACE'&&p.id===input.step.piece.id){const tag=label('REGION '+String(p.id).padStart(2,'0'));tag.position.set(-layout.layers[i].width/2-.18,layout.layers[i].y+.28,.1);group.add(tag);}
       if(input.step.kind==='PLACE'&&p.id===input.step.piece.id)moving={object:g,y:layout.layers[i].y,rotation:g.rotation.y};
     }
     const policy=model.knotPolicy(input.condition);
-    const ropeKinds=['WRAP_LONG','WRAP_CROSS','KNOT_FIRST','KNOT_SECOND','CHECK'];
-    if(ropeKinds.includes(input.step.kind)){
-      const long=tube(roundedRoute(model.route(layout,'LONG')),'#e9dcc0');
-      if(input.step.kind==='WRAP_LONG')ropeMeshes.push(long);
-    }
-    if(['WRAP_CROSS','KNOT_FIRST','KNOT_SECOND','CHECK'].includes(input.step.kind)){
-      const cross=tube(roundedRoute(model.route(layout,'CROSS')),'#dfd0ad');
-      if(input.step.kind==='WRAP_CROSS')ropeMeshes.push(cross);
-    }
-    if(input.step.kind.startsWith('KNOT'))knotStrands(input.step.kind,policy,layout.height);
-    if(input.step.kind==='CHECK')knotStrands('KNOT_SECOND',policy,layout.height);
+    if(['WRAP_LONG','WRAP_CROSS','KNOT_FIRST','KNOT_SECOND','CHECK','LIFT_CHECK'].includes(input.step.kind))drawBinding(layout,input.step.kind==='LIFT_CHECK'?'CHECK':input.step.kind,policy);
     const front=label('FRONT / YOU');front.position.set(0,-.015,layout.depth/2+.4);group.add(front);
     host.dataset.units=layout.units;host.dataset.visiblePieces=String(visible.length);
     host.dataset.knot=policy.id;
@@ -192,7 +201,7 @@ function tick(time){
   if(playing)document.getElementById('packing-scrub').value=Math.round(phase*100);
   const t=reduced?1:ease(Math.min(1,phase/.72));
   if(moving){moving.object.position.y=moving.y+(1-t)*1.3;moving.object.position.x=(1-t)*-.7;moving.object.rotation.y=moving.rotation+(1-t)*.45;}
-  for(const rope of ropeMeshes){const count=Math.max(3,Math.floor(rope.count*(playing?t:Math.max(t,.02))/3)*3);rope.mesh.geometry.setDrawRange(0,reduced?rope.count:count);}
+  for(const rope of ropeMeshes){const count=rope.baseCount+Math.max(3,Math.floor((rope.count-rope.baseCount)*(playing?t:Math.max(t,.02))/3)*3);rope.mesh.geometry.setDrawRange(0,reduced?rope.count:Math.min(rope.count,count));}
   renderer.render(scene,camera);frame=requestAnimationFrame(tick);
 }
 function setView(value){

@@ -80,3 +80,9 @@ The supplied still photos are demo material. Paired capture analysis still uses 
 ## Handover
 
 See [HANDOVER.txt](HANDOVER.txt) for the detailed Japanese operational and development handover, including data flow, MFA/TLS, demo catalog, orientation conventions, tests, publication and remaining validation.
+
+## Public judge deployment
+
+Localhost works only on the hosting PC. The isolated AWS public-HTTPS deployment workflow is documented in [aws-public-demo.md](docs/aws-public-demo.md). Preparation does not mean the public URL is operational.
+
+The latest packing guide completes occluded outlines as striped, reviewable hypotheses; folds flaps to compact panels; groups compatible footprints between a broad base/cap; and renders wraps and knot from one continuous twine model. V4 exports preserve those decisions. Physical friction and lifting strength are not inferred from a photo.

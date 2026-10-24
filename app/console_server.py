@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT / 'bind-zero-x' / 'code'))
 import cv2
 import numpy as np
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from pydantic import BaseModel, ConfigDict, Field
@@ -46,10 +46,14 @@ os.environ.setdefault('BZX_RESEARCH_LOOP_DB', str(DATA / 'research.db'))
 os.environ.setdefault('BZX_CAPTURE_ARCHIVE_DIR', str(DATA / 'captures'))
 os.environ.setdefault('BZX_RESEARCH_TOKEN', secrets.token_urlsafe(48))
 Path(os.environ['BZX_CAPTURE_ARCHIVE_DIR']).mkdir(parents=True, exist_ok=True)
-AUTH = AuthStore(DATA / 'security')
+PUBLIC_MODE=os.environ.get('BZX_PUBLIC_DEMO')=='1'
+AUTH = AuthStore(DATA / 'security',judge_only=PUBLIC_MODE)
 SESSION_COOKIE = 'bzx_session'
 BOOT_COOKIE = 'bzx_preauth'
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+if PUBLIC_MODE:
+    from urllib.parse import urlsplit
+    ALLOWED_HOSTS.append(urlsplit(os.environ['BZX_PUBLIC_URL']).hostname)
 EXPENSIVE_GATE = threading.BoundedSemaphore(2)
 
 app = FastAPI(title='BIND ZERO-X Local Research Console', docs_url=None, redoc_url=None, openapi_url=None)
@@ -112,9 +116,9 @@ def security_headers(response, request):
 async def local_console_boundary(request: Request, call_next):
     def reject(code, status):
         return security_headers(JSONResponse({'detail': code}, status_code=status), request)
-    if app.state.mobile_mode and request.url.scheme != 'https' and not loopback(request):
+    if not PUBLIC_MODE and app.state.mobile_mode and request.url.scheme != 'https' and not loopback(request):
         return reject('HTTPS_REQUIRED', 403)
-    if not app.state.mobile_mode and not loopback(request):
+    if not PUBLIC_MODE and not app.state.mobile_mode and not loopback(request):
         return reject('LOCAL_ONLY', 403)
     request.state.session = AUTH.session(request.cookies.get(SESSION_COOKIE))
     path = request.url.path
@@ -159,8 +163,8 @@ def auth_status(request: Request):
     if state:
         return dict(authenticated=True, configured=True, csrf=state['csrf'], expires=state['expires'],username=state['username'],role=state['role'])
     token, csrf = AUTH.challenge(request.cookies.get(BOOT_COOKIE), request.client.host)
-    response = JSONResponse(dict(authenticated=False, configured=AUTH.configured(),
-                                 setup_allowed=loopback(request) and not AUTH.configured(), csrf=csrf))
+    response = JSONResponse(dict(authenticated=False, configured=PUBLIC_MODE or AUTH.configured(),
+                                 setup_allowed=not PUBLIC_MODE and loopback(request) and not AUTH.configured(), csrf=csrf))
     response.set_cookie(BOOT_COOKIE, token, httponly=True, secure=request.url.scheme == 'https',
                         samesite='strict', max_age=600, path='/')
     return response
@@ -190,7 +194,7 @@ def auth_error(exc):
 
 @app.post('/auth/setup/begin')
 def setup_begin(request: Request, data: SetupRequest):
-    if not loopback(request) or AUTH.configured():
+    if PUBLIC_MODE or not loopback(request) or AUTH.configured():
         raise HTTPException(403, 'LOCAL_INITIAL_SETUP_ONLY')
     secret = AUTH.begin_setup(request.cookies.get(BOOT_COOKIE, ''), data.password)
     image = qrcode.make(AUTH.provisioning_uri(secret), image_factory=qrcode.image.svg.SvgPathImage)
@@ -200,7 +204,7 @@ def setup_begin(request: Request, data: SetupRequest):
 
 @app.post('/auth/setup/finish')
 def setup_finish(request: Request, data: CodeRequest):
-    if not loopback(request) or AUTH.configured():
+    if PUBLIC_MODE or not loopback(request) or AUTH.configured():
         raise HTTPException(403, 'LOCAL_INITIAL_SETUP_ONLY')
     try:
         AUTH.finish_setup(request.cookies.get(BOOT_COOKIE, ''), data.code)
@@ -211,6 +215,7 @@ def setup_finish(request: Request, data: CodeRequest):
 
 @app.post('/auth/login')
 def login(request: Request, data: LoginRequest):
+    if PUBLIC_MODE and data.username=='operator':raise HTTPException(401,'INVALID_CREDENTIALS')
     try:
         token = AUTH.login(data.password, data.code, request.client.host,username=data.username)
     except AuthError as exc:
@@ -246,6 +251,7 @@ async def model_error(request, exc):
 @app.get('/')
 @app.get('/judge')
 def index(request: Request):
+    if PUBLIC_MODE and request.state.session is None and request.url.path=='/':return RedirectResponse('/judge',status_code=303)
     name = 'index.html' if request.state.session else 'login.html'
     return FileResponse(ROOT / 'app' / 'static' / name)
 
@@ -575,7 +581,11 @@ if __name__ == '__main__':
         if not tls_server.started:
             raise SystemExit('HTTPS_LISTENER_FAILED')
     try:
-        uvicorn.run(app,host='127.0.0.1',port=args.port,proxy_headers=False,
+        served=app
+        if PUBLIC_MODE:
+            from public_origin import load_public_origin
+            served=load_public_origin(app,os.environ['BZX_PUBLIC_URL'],os.environ['BZX_ORIGIN_TOKEN_FILE'])
+        uvicorn.run(served,host='0.0.0.0' if PUBLIC_MODE else '127.0.0.1',port=args.port,proxy_headers=False,
                     limit_concurrency=24,timeout_keep_alive=5,log_level='warning')
     finally:
         if args.mobile:

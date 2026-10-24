@@ -31,3 +31,23 @@ test('knot strands keep their separate over/under depth lanes',()=>{
   assert.ok(minimum>.036,`rope centers must not intersect: ${minimum}`);
  }
 });
+test('base and cap enclose every inner folded panel and incompatible panels split',()=>{
+ const p=(id,long,short)=>({id,longMm:long,shortMm:short,thicknessMm:4});
+ const plan=model.plan([p(1,600,400),p(2,550,380),p(3,350,220),p(4,900,100)]);
+ assert.equal(plan.bundles.length,2);
+ assert.deepEqual(plan.bundles[0].pieces.map(p=>p.id),[1,3,2]);
+ for(const b of plan.bundles){assert.equal(b.layout.support.ready,true);assert.ok(b.layout.support.minimum_cover>=.98);assert.equal(b.layout.support.lifting_verified,false);}
+ const invalid=model.layout([p(1,300,200),p(2,600,400)]);assert.equal(invalid.support.ready,false);
+});
+test('twine wraps and knot are the same two connected halves in every stage',()=>{
+ const l=model.layout([{id:1,longMm:600,shortMm:400,thicknessMm:8}]);
+ for(const stage of ['WRAP_LONG','WRAP_CROSS','KNOT_FIRST','KNOT_SECOND','CHECK']){
+  const p=model.bindingPaths(l,stage,2);assert.deepEqual(p.a[0],p.b[0]);
+  assert.ok(p.a.some(v=>v[1]<0));assert.ok(p.b.some(v=>v[1]<0));
+  if(stage.startsWith('KNOT')){
+   const first=model.halfKnot(2,1,l.height+.055+.08,-.13);
+   assert.deepEqual(p.a[p.knotStartA],first.a[0]);assert.deepEqual(p.b[p.knotStartB],first.b[0]);
+  }
+  assert.equal(p.continuous.length,p.a.length+p.b.length-1);
+ }
+});

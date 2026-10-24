@@ -39,3 +39,11 @@ Judge sessions bind to a principal. Their synthetic sessions have an explicit ow
 ## Verification
 
 The updated suites cover password-only judge login, mandatory operator MFA, password failure limits, account expiration/revocation, cross-principal session access, owner-session isolation, measured-versus-relative scale, orientation support, under-stack rope routing, and knot-strand separation. Normal operator enrollment/login/replay/CSRF tests remain enabled. Browser checks and exact final counts are recorded in the handover and the local execution record; real physical bundle testing remains a separate task.
+
+## Supported panels and continuous binding update (2026-10-24)
+
+Completion masks are separate unverified hypotheses: rotated envelopes fill only pixels occupied by other visible regions, never empty background. Inferred pixels receive their own surface's median color and stripes. The observed label map is untouched. An inscribed panel estimates the footprint after flaps are folded inward; PREPARE requires checking it against the real sheet. Individual captures, completion off/full-outline mode and finished dimensions provide corrections.
+
+The planner groups panels by containment, uses broad base/cap panels around smaller centered panels, alternates bulky fold edges, and splits incompatible footprints. Support below 98% or height/short-edge above 0.25 blocks the planning confirmation. These are geometric heuristics, not measured friction or load ratings. Final checks press/release the stack, test accessible sheets for motion, then lift 2 cm with both hands supporting the underside and set down. Twine is never presented as a carrying handle.
+
+The renderer consumes one bindingPaths model for both wraps and the knot. Amber A and blue B meet at the twine midpoint under the stack and extend continuously into opposite knot crossings. Independent white loops/floating knot strands are removed. V4 exports bundle membership, support evidence and exact paths, with lifting_verified=false.

@@ -9,9 +9,27 @@ from fastapi.testclient import TestClient
 import cv2
 import numpy as np
 from packing_vision import segment_cardboard,decode_png,shape_features
+from packing_completion import complete_surface
 
 class PackingVision(unittest.TestCase):
     def png(self,image):return cv2.imencode('.png',image)[1].tobytes()
+    def test_occlusion_is_completed_without_relabelling_observed_pixels(self):
+        image=np.full((200,240,3),170,np.uint8)
+        visible=np.zeros((200,240),np.uint8);visible[30:170,30:200]=255;visible[95:170,30:105]=0
+        other=np.zeros_like(visible);other[95:170,30:105]=255
+        image[visible>0]=(210,80,20);image[other>0]=(20,160,60)
+        result=complete_surface(image,visible,other)
+        completed=cv2.imdecode(np.frombuffer(base64.b64decode(result['mask_png'].split(',')[1]),np.uint8),cv2.IMREAD_GRAYSCALE)
+        self.assertGreater(result['inferred_pixels'],4000)
+        self.assertEqual(completed[130,60],255)
+        self.assertEqual(visible[130,60],0)
+        self.assertEqual(completed[10,10],0)
+        self.assertFalse(result['verified']);self.assertTrue(result['review_required'])
+        self.assertEqual(result['fill_rgb'],[20,80,210])
+    def test_an_actual_background_notch_is_not_filled(self):
+        visible=np.zeros((180,220),np.uint8);visible[20:160,20:200]=255;visible[100:160,20:70]=0
+        result=complete_surface(np.full((180,220,3),120,np.uint8),visible,np.zeros_like(visible))
+        self.assertEqual(result['inferred_pixels'],0)
     def test_non_cardboard_background_has_no_invented_regions(self):
         image=np.full((200,300,3),170,np.uint8)
         result=segment_cardboard(self.png(image))
