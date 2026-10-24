@@ -27,7 +27,7 @@ function initialize(){
   renderer.domElement.setAttribute('aria-label','Actual photo cutouts with 3D stacking and twine routing');
   renderer.domElement.setAttribute('role','img');renderer.domElement.tabIndex=0;
   scene=new THREE.Scene();scene.background=new THREE.Color('#ddd9cb');
-  camera=new THREE.PerspectiveCamera(42,1,.01,100);
+  camera=new THREE.PerspectiveCamera(42,1,.05,60);
   scene.add(new THREE.HemisphereLight('#fffbed','#7b6d59',1.6));
   lights=new THREE.DirectionalLight('#fff7e8',2.1);lights.position.set(-3,7,4);lights.castShadow=true;
   lights.shadow.mapSize.set(1024,1024);lights.shadow.camera.left=-4;lights.shadow.camera.right=4;lights.shadow.camera.top=4;lights.shadow.camera.bottom=-4;lights.shadow.normalBias=.015;scene.add(lights);
@@ -108,8 +108,8 @@ function surface(piece,asset,layer,prepared=true){
     uv.setXY(i,originalX/width,1-originalY/height);
   }
   uv.needsUpdate=true;
-  const top=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({map:texture,roughness:.97,metalness:0,alphaTest:.4,side:THREE.DoubleSide}));
-  top.position.z=layer.thickness+.0003;
+  const top=new THREE.Mesh(geometry,new THREE.MeshStandardMaterial({map:texture,roughness:.97,metalness:0,alphaTest:.4,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-4}));
+  top.position.z=layer.thickness+.001;
   const side=new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{depth:layer.thickness,bevelEnabled:false,steps:1}),new THREE.MeshStandardMaterial({color:'#ad8c5d',roughness:1}));
   const g=new THREE.Group();g.add(side,top);g.rotation.x=-Math.PI/2;
   const wrapper=new THREE.Group();wrapper.add(g);wrapper.rotation.y=-(piece.orientation||0)*Math.PI/180;wrapper.position.y=layer.y;wrapper.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});

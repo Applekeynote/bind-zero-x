@@ -159,7 +159,7 @@ systemctl enable --now bzx bzx-expire.timer
     resource('Targets','AWS::ElasticLoadBalancingV2::TargetGroup',dict(Name=name,Port=8080,Protocol='HTTP',VpcId=vpc,TargetType='instance',Targets=[{'Id':ref('Instance'),'Port':8080}],HealthCheckPath='/healthz',HealthCheckIntervalSeconds=15,HealthyThresholdCount=2,Tags=tags))
     resource('Listener','AWS::ElasticLoadBalancingV2::Listener',dict(LoadBalancerArn=ref('Balancer'),Port=80,Protocol='HTTP',DefaultActions=[{'Type':'forward','TargetGroupArn':ref('Targets')}]))
     resource('Integration','AWS::ApiGatewayV2::Integration',dict(ApiId=ref('Api'),IntegrationType='HTTP_PROXY',IntegrationMethod='ANY',IntegrationUri=ref('Listener'),ConnectionType='VPC_LINK',ConnectionId=ref('Link'),PayloadFormatVersion='1.0',TimeoutInMillis=29000,
-        RequestParameters={'overwrite:path':'$request.path','overwrite:header.x-bzx-origin':sub("'${OriginToken}'"),'overwrite:header.x-bzx-edge-proto':"'https'",'overwrite:header.x-bzx-viewer-ip':'$context.identity.sourceIp'}))
+        RequestParameters={'overwrite:path':'$request.path','overwrite:header.x-bzx-origin':sub('${OriginToken}'),'overwrite:header.x-bzx-edge-proto':'https','overwrite:header.x-bzx-viewer-ip':'$context.identity.sourceIp'}))
     resource('Route','AWS::ApiGatewayV2::Route',dict(ApiId=ref('Api'),RouteKey='$default',Target={'Fn::Join':['',['integrations/',ref('Integration')]]}))
     resource('Stage','AWS::ApiGatewayV2::Stage',dict(ApiId=ref('Api'),StageName='$default',AutoDeploy=True,DefaultRouteSettings={'ThrottlingBurstLimit':40,'ThrottlingRateLimit':2.0}))
     r['Stage']['DependsOn']='Route'
