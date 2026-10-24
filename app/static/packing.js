@@ -26,7 +26,7 @@ async function packingSegment(body,generation,button){
       const job=result.job_id;let finished=false;
       for(let attempt=0;attempt<120;attempt++){
         if(generation!==packing.generation)return;
-        await new Promise(resolve=>setTimeout(resolve,1500));
+        await new Promise(resolve=>setTimeout(resolve,attempt===0?700:Math.min(5000,1500+attempt*1000)));
         const status=await api('segment/jobs/'+encodeURIComponent(job));
         if(status.status==='FAILED')throw Error(status.error);
         if(status.status==='DONE'){result=status.result;finished=true;break;}

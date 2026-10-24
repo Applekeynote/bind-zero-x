@@ -17,6 +17,14 @@ test('an unreviewed surface cannot silently become a packing piece',()=>{
  const h=harness();h.run(`packing.pieces=[{id:1,pixel_area:100,selected:true,review:'REVIEW'}]`);
  h.element('packing-build').onclick();assert.equal(h.run('packing.steps.length'),0);
 });
+test('private segmentation polling returns its result without completing physical steps',async()=>{
+ const h=harness();let polls=0;
+ h.context.setTimeout=callback=>callback();
+ h.context.api=async(path)=>path==='segment'?{job_id:'fixture-job'}:++polls<3?{status:'PENDING'}:{status:'DONE',result:{regions:[{id:1}]}};
+ const result=await h.run('packingSegment({},packing.generation)');assert.equal(result.regions[0].id,1);assert.equal(polls,3);assert.equal(h.run('packing.steps.length'),0);
+ h.context.api=async path=>path==='segment'?{job_id:'fixture-job'}:{status:'FAILED',error:'SEGMENTATION_FAILED'};
+ await assert.rejects(h.run('packingSegment({},packing.generation)'),/SEGMENTATION_FAILED/);
+});
 test('all selected pieces stay in inventory and finishing a bundle advances to the blue piece',()=>{
  const h=harness();h.run(`packing.result={input_tier:'USER_PROVIDED_DEMO_ONLY'};packing.pieces=[{id:1,selected:true,review:'FLAT',longMm:600,shortMm:400},{id:2,selected:true,review:'FLAT',longMm:500,shortMm:300},{id:3,selected:true,review:'FLAT',longMm:900,shortMm:100}];`);
  h.element('packing-build').onclick();assert.match(h.element('packing-inventory').innerHTML,/ALL 3 PIECES INCLUDED/);

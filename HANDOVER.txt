@@ -432,6 +432,7 @@ APIはasync_job=trueで202を返し、/segment/jobs/{id}を認証付きでポー
 密集・強い遮蔽の写真は領域確認が必要。隠れた全個数や完全形状の保証はしない。
 実装・重み・検証条件の詳細はdocs/instance-segmentation.md。
 自動検証: 研究397成功+1skip、アプリ52成功、JS28成功、合計477成功+1skip。
+非同期ポーリングの完了/失敗・実物工程非承認の追加回帰を含む最終JSは29成功、総計478成功+1skip。
 
 AWS実行コントローラーはruntime/security/aws-public-controller.pyに非公開保存。
 元の固定アカウントチェックを変更していない。公開deploy/aws_public_demo.pyは実行を拒否する案内のみ。
